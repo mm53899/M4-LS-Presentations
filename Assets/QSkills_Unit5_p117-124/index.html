@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Q: Skills for Success 3 — Unit 5, pp. 117–124</title>
+<style>
+  :root{
+    --brand-green:#78BE21;
+    --brand-green-dark:#5C8A1E;
+    --accent-lime:#A7CB47;
+    --ink:#0B0F14;
+    --paper:#FFFFFF;
+    --text:#181818;
+    --line:#D9D9D9;
+    --panel:#F4F6EF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#e7e9e4;font-family:'Segoe UI',Helvetica,Arial,sans-serif;color:var(--text);}
+
+  /* ---------- TOP NAV ---------- */
+  #topnav{
+    position:fixed; top:0; left:0; right:0; height:56px; z-index:100;
+    background:var(--ink); display:flex; align-items:center;
+    padding:0 16px; gap:6px; overflow-x:auto; white-space:nowrap;
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+  }
+  #topnav .brand{
+    color:var(--accent-lime); font-weight:800; letter-spacing:.5px;
+    font-size:13px; margin-right:14px; flex:0 0 auto;
+  }
+  #topnav .brand small{display:block; color:#cfcfcf; font-weight:400; font-size:10px;}
+  .navbtn{
+    flex:0 0 auto; background:transparent; border:1px solid #333; color:#eee;
+    padding:7px 13px; border-radius:18px; font-size:12.5px; cursor:pointer;
+    font-weight:600; transition:.15s;
+  }
+  .navbtn:hover{border-color:var(--brand-green);}
+  .navbtn.active{background:var(--brand-green); color:var(--ink); border-color:var(--brand-green);}
+
+  /* ---------- DECK ---------- */
+  #deck{
+    margin-top:56px; min-height:calc(100vh - 56px);
+    display:flex; align-items:center; justify-content:center;
+    padding:14px 70px;
+  }
+  .slide{
+    display:none;
+    width:100%; max-width:1380px; aspect-ratio:16/9;
+    background:var(--paper); position:relative;
+    box-shadow:0 8px 30px rgba(0,0,0,.25);
+    padding:22px 40px 18px; overflow-y:auto; overflow-x:hidden;
+    flex-direction:column;
+  }
+  .slide.active{display:flex;}
+
+  .eyebrow{
+    font-size:12px; font-weight:700; letter-spacing:1px; color:#888;
+    text-transform:uppercase; margin-bottom:2px;
+  }
+  .section-title{
+    display:flex; align-items:center; gap:12px; margin-bottom:8px;
+  }
+  .section-title .icon{
+    width:34px; height:34px; border-radius:50%; background:var(--brand-green);
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .section-title .icon svg{width:15px; height:15px; fill:#fff;}
+  .section-title h1{
+    font-size:24px; font-weight:800; text-transform:uppercase; margin:0;
+    letter-spacing:.5px; color:var(--ink);
+  }
+  .activity-tag{
+    display:flex; align-items:center; color:var(--brand-green-dark); font-weight:800;
+    font-size:18px; letter-spacing:.5px; margin:4px 0 8px;
+    text-transform:uppercase;
+  }
+  .activity-tag .letter{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; background:var(--accent-lime);
+    color:var(--ink); margin-right:8px; font-size:15px; flex:0 0 auto;
+  }
+  .prompt{
+    font-size:18px; line-height:1.35; color:var(--ink); margin:0 0 10px; font-weight:500;
+  }
+  .body-text{font-size:15.5px; line-height:1.45; margin:0 0 8px; color:#262626;}
+
+  .content-row{display:flex; gap:22px; flex:1; align-items:flex-start; min-height:0;}
+  .content-side{flex:1; min-width:0;}
+  .content-image{flex:1; min-width:0; display:flex; align-items:center; justify-content:center;}
+  .content-image img{max-width:100%; max-height:330px; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.25);}
+
+  .vocab-box{
+    background:var(--panel); border-left:5px solid var(--brand-green);
+    border-radius:6px; padding:12px 16px;
+  }
+  .vocab-box h3{
+    margin:0 0 8px; font-size:13px; letter-spacing:.5px; color:var(--brand-green-dark);
+    text-transform:uppercase; font-weight:800;
+  }
+
+  .grammar-box{
+    background:var(--panel); border-left:5px solid var(--brand-green);
+    border-radius:6px; padding:10px 16px; margin-bottom:10px; font-size:14px; line-height:1.4;
+  }
+  .grammar-box h3{margin:0 0 6px; font-size:12.5px; letter-spacing:.5px; color:var(--brand-green-dark); text-transform:uppercase; font-weight:800;}
+  .grammar-cols{display:flex; gap:18px;}
+  .grammar-cols > div{flex:1;}
+  .grammar-cols .colhead{font-weight:700; font-size:12.5px; color:var(--ink); margin-bottom:3px;}
+  .grammar-cols p{margin:2px 0; font-size:13.5px;}
+
+  .num-list{margin:0; padding-left:0; list-style:none; font-size:14.5px; line-height:1.5;}
+  .num-list li{margin-bottom:6px; display:flex; align-items:baseline; gap:6px;}
+  .num-list .n{font-weight:700; color:var(--brand-green-dark); flex:0 0 18px;}
+  .num-list .blank{border-bottom:1px solid #999; display:inline-block; min-width:70px;}
+  .num-list .blank.hide{display:none;}
+  .num-list .ans{display:none; color:var(--brand-green-dark); font-weight:700; background:#eef6e0; padding:0 4px; border-radius:3px;}
+  .num-list .ans.shown{display:inline;}
+
+  .item-block{margin-bottom:8px; font-size:14px; line-height:1.4;}
+  .item-block .lead{margin:0 0 2px;}
+  .item-block .cond{font-style:italic; color:#444; margin:0 0 2px;}
+  .item-block .ans-line{display:none; color:var(--brand-green-dark); font-weight:600; background:#eef6e0; padding:3px 8px; border-radius:4px; margin-top:2px;}
+  .item-block .ans-line.shown{display:block;}
+
+  .two-col{display:flex; gap:24px; flex:1; min-height:0;}
+  .col{flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;}
+
+  .reveal-btn{
+    margin-top:10px; align-self:flex-start; background:var(--ink); color:#fff;
+    border:none; padding:9px 18px; border-radius:20px; font-size:13.5px; font-weight:700;
+    cursor:pointer; display:flex; align-items:center; gap:7px; transition:.15s; flex:0 0 auto;
+  }
+  .reveal-btn:hover{background:var(--brand-green-dark);}
+  .reveal-btn .dot{width:7px; height:7px; border-radius:50%; background:var(--brand-green);}
+
+  /* audio slide */
+  .audio-slide{justify-content:center; align-items:center; text-align:center; background:var(--ink);}
+  .audio-slide .eyebrow{color:var(--accent-lime); text-align:center;}
+  .audio-slide h1{color:#fff; font-size:28px; text-transform:uppercase; margin:4px 0 14px; font-weight:800;}
+  .audio-slide audio{width:100%; max-width:560px;}
+  .audio-slide .cap{color:#cfcfcf; margin-top:14px; font-size:13.5px; font-style:italic; max-width:640px;}
+  .audio-slide .ico{width:64px; height:64px; border-radius:50%; background:var(--brand-green); display:flex; align-items:center; justify-content:center; margin-bottom:10px;}
+  .audio-slide .ico svg{width:30px; height:30px; fill:#fff;}
+
+  .photo-wrap{display:flex; justify-content:center; margin:6px 0 10px;}
+  .photo-wrap img{max-width:78%; max-height:230px; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.25);}
+
+  .checklist{list-style:none; margin:0; padding:0; font-size:14px; line-height:1.5;}
+  .checklist li{margin-bottom:5px; padding-left:20px; position:relative;}
+  .checklist li:before{content:"☐"; position:absolute; left:0; color:var(--brand-green-dark);}
+
+  .self-assess{width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px;}
+  .self-assess th{background:var(--brand-green-dark); color:#fff; padding:6px 10px; text-align:left; font-size:12.5px; text-transform:uppercase;}
+  .self-assess td{border:1px solid var(--line); padding:6px 10px;}
+  .self-assess td.yn{text-align:center; width:50px;}
+
+  .scroll-area{flex:1; padding-right:4px; min-height:0;}
+
+  .lines-box{border:1px dashed #bbb; border-radius:6px; padding:8px 12px; min-height:46px; font-size:13.5px; color:#999; font-style:italic; margin-bottom:8px;}
+  .lines-box .answer-fill{display:none; color:var(--ink); font-style:normal; font-weight:500;}
+  .lines-box .answer-fill.shown{display:block;}
+
+  /* ---------- VERTICAL SIDE CONTROLS ---------- */
+  #controls{
+    position:fixed; right:14px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px; z-index:90; align-items:center;
+  }
+  #controls button{
+    background:var(--ink); color:#fff; border:none; width:46px; height:46px; border-radius:50%;
+    font-size:18px; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.3);
+  }
+  #controls button:hover{background:var(--brand-green-dark);}
+  #counter{
+    background:#fff; color:var(--ink); padding:6px 10px; border-radius:14px; font-weight:700;
+    box-shadow:0 4px 12px rgba(0,0,0,.15); font-size:12.5px; writing-mode:horizontal-tb;
+  }
+
+  /* ---------- LEFT FONT-SIZE CONTROLS ---------- */
+  #fontControls{
+    position:fixed; left:14px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px; z-index:90; align-items:center;
+  }
+  #fontControls button{
+    background:var(--ink); color:#fff; border:none; width:46px; height:46px; border-radius:50%;
+    font-size:17px; font-weight:800; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.3);
+  }
+  #fontControls button:hover{background:var(--brand-green-dark);}
+  #fontLabel{
+    background:#fff; color:var(--ink); padding:6px 8px; border-radius:14px; font-weight:700;
+    box-shadow:0 4px 12px rgba(0,0,0,.15); font-size:11.5px;
+  }
+
+  @media (max-width:900px){
+    .slide{padding:16px; aspect-ratio:auto; min-height:560px;}
+    .content-row,.two-col{flex-direction:column;}
+    .section-title h1{font-size:19px;}
+    .prompt{font-size:16px;}
+    #deck{padding:10px 56px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="topnav">
+  <div class="brand">Q: SKILLS FOR SUCCESS 3<small>Unit 5 · Behavioral Science · pp. 117–124</small></div>
+  <button class="navbtn" data-target="gramA1">Grammar A.1</button>
+  <button class="navbtn" data-target="gramA28">Grammar A.2–8</button>
+  <button class="navbtn" data-target="gramB">Grammar B. Apply</button>
+  <button class="navbtn" data-target="pronintro">Pronunciation</button>
+  <button class="navbtn" data-target="pronA">Pron. A. Identify</button>
+  <button class="navbtn" data-target="pronB">Pron. B. Identify</button>
+  <button class="navbtn" data-target="speakskill">Speaking Skill</button>
+  <button class="navbtn" data-target="speakA">Sp.Skill A. Identify</button>
+  <button class="navbtn" data-target="speakB">Sp.Skill B. Categorize</button>
+  <button class="navbtn" data-target="speakC">Sp.Skill C. Discuss</button>
+  <button class="navbtn" data-target="uaintro">Unit Assignment</button>
+  <button class="navbtn" data-target="investigate">Consider the Ideas</button>
+  <button class="navbtn" data-target="gatherideas">A. Gather Ideas</button>
+  <button class="navbtn" data-target="organizeideas">B. Organize Ideas</button>
+  <button class="navbtn" data-target="speakfinal">C. Speak</button>
+  <button class="navbtn" data-target="checkassess">A. Check</button>
+  <button class="navbtn" data-target="reflect">B. Reflect</button>
+</div>
+
+<div id="deck">
+
+  <!-- SLIDE: GRAMMAR A.1 -->
+  <section class="slide" id="slide-gramA1">
+    <div class="eyebrow">Speaking · Unit 5, pp. 117–118</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Grammar — Past Perfect</h1>
+    </div>
+
+    <div class="grammar-box">
+      <h3>Past Perfect</h3>
+      <p style="margin:0 0 6px;">Use the past perfect to show the relationship between two events or actions that happened in the past. Use the past perfect to describe the first event or action that happened. Use the simple past to describe the second event or action.</p>
+      <div class="grammar-cols">
+        <div>
+          <div class="colhead">Past perfect (1st event)</div>
+          <p>I had driven for five hours.</p>
+          <p>The match had already started.</p>
+        </div>
+        <div>
+          <div class="colhead">Simple past (2nd event)</div>
+          <p>I went straight to bed without dinner.</p>
+          <p>We arrived late.</p>
+        </div>
+      </div>
+      <p style="margin:8px 0 4px;">Use the past perfect with past time clauses that begin with <i>when, before, by the time,</i> and <i>until</i>.</p>
+      <div class="grammar-cols">
+        <div>
+          <div class="colhead">Past perfect (1st event)</div>
+          <p>He had been at work for hours</p>
+          <p>Paul had driven for an hour</p>
+          <p>They had already eaten dinner</p>
+          <p>I hadn't heard anything about it</p>
+        </div>
+        <div>
+          <div class="colhead">Simple past (2nd event)</div>
+          <p>when we called him.</p>
+          <p>before he noticed he had a flat tire.</p>
+          <p>by the time I got home.</p>
+          <p>until I read the paper this morning.</p>
+        </div>
+      </div>
+      <p style="margin:6px 0 0; font-size:12.5px; color:#555;">Note: The past perfect is often used with the adverbs <i>already, yet, never, ever,</i> and <i>just</i>.</p>
+    </div>
+
+    <div class="activity-tag"><span class="letter">A</span>Compose</div>
+    <p class="prompt" style="font-size:14.5px;">Read the pairs of sentences. Write 1 next to the sentence that happened first. Then write one sentence. Use the past time clause in parentheses.</p>
+
+    <div class="item-block">
+      <p class="lead">1. The scientist retired. <span class="blank" id="g1a-b">&nbsp;&nbsp;</span><span class="ans" id="g1a-a">1</span> &nbsp; He began research on a new area of interest. <span class="blank" id="g1b-b">&nbsp;&nbsp;</span><span class="ans" id="g1b-a">2</span></p>
+      <p class="cond">(before)</p>
+      <div class="ans-line" id="g1-ans">The scientist had retired before he began research on a new area of interest.</div>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleGroup(this,['g1a','g1b'],['g1-ans'])"><span class="dot"></span>Show Answer</button>
+  </section>
+
+  <!-- SLIDE: GRAMMAR A.2-8 -->
+  <section class="slide" id="slide-gramA28">
+    <div class="eyebrow">Speaking · Unit 5, p. 118</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Grammar — Past Perfect</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">A</span>Compose <span style="font-size:13px; font-weight:400; text-transform:none; margin-left:8px; color:#666;">(continued)</span></div>
+
+    <div class="scroll-area">
+      <div class="two-col">
+        <div class="col">
+          <div class="item-block">
+            <p class="lead">2. I didn't know about the research. <span class="blank" id="g2a-b">&nbsp;&nbsp;</span><span class="ans" id="g2a-a">1</span> &nbsp; I heard the podcast. <span class="blank" id="g2b-b">&nbsp;&nbsp;</span><span class="ans" id="g2b-a">2</span></p>
+            <p class="cond">(until)</p>
+            <div class="ans-line" id="g2-ans">I didn't know about the research until I heard the podcast.</div>
+          </div>
+          <div class="item-block">
+            <p class="lead">3. It started to rain. <span class="blank" id="g3a-b">&nbsp;&nbsp;</span><span class="ans" id="g3a-a">2</span> &nbsp; We finished hiking. <span class="blank" id="g3b-b">&nbsp;&nbsp;</span><span class="ans" id="g3b-a">1</span></p>
+            <p class="cond">(before)</p>
+            <div class="ans-line" id="g3-ans">We had finished hiking before it started to rain.</div>
+          </div>
+          <div class="item-block">
+            <p class="lead">4. Mari picked up the phone. <span class="blank" id="g4a-b">&nbsp;&nbsp;</span><span class="ans" id="g4a-a">2</span> &nbsp; It stopped ringing. <span class="blank" id="g4b-b">&nbsp;&nbsp;</span><span class="ans" id="g4b-a">1</span></p>
+            <p class="cond">(by the time)</p>
+            <div class="ans-line" id="g4-ans">By the time Mari picked up the phone, it had stopped ringing.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="item-block">
+            <p class="lead">5. My sister told me. <span class="blank" id="g5a-b">&nbsp;&nbsp;</span><span class="ans" id="g5a-a">2</span> &nbsp; I didn't realize my sweater was on backwards. <span class="blank" id="g5b-b">&nbsp;&nbsp;</span><span class="ans" id="g5b-a">1</span></p>
+            <p class="cond">(until)</p>
+            <div class="ans-line" id="g5-ans">I hadn't realized my sweater was on backwards until my sister told me.</div>
+          </div>
+          <div class="item-block">
+            <p class="lead">6. Nawaf left his house. <span class="blank" id="g6a-b">&nbsp;&nbsp;</span><span class="ans" id="g6a-a">1</span> &nbsp; His mother called. <span class="blank" id="g6b-b">&nbsp;&nbsp;</span><span class="ans" id="g6b-a">2</span></p>
+            <p class="cond">(when)</p>
+            <div class="ans-line" id="g6-ans">Nawaf had left his house when his mother called.</div>
+          </div>
+          <div class="item-block">
+            <p class="lead">7. I drank the cup of coffee. <span class="blank" id="g7a-b">&nbsp;&nbsp;</span><span class="ans" id="g7a-a">1</span> &nbsp; I realized it wasn't mine. <span class="blank" id="g7b-b">&nbsp;&nbsp;</span><span class="ans" id="g7b-a">2</span></p>
+            <p class="cond">(before)</p>
+            <div class="ans-line" id="g7-ans">I had drunk the cup of coffee before I realized it wasn't mine.</div>
+          </div>
+          <div class="item-block">
+            <p class="lead">8. We arrived at the airport. <span class="blank" id="g8a-b">&nbsp;&nbsp;</span><span class="ans" id="g8a-a">2</span> &nbsp; Our plane departed. <span class="blank" id="g8b-b">&nbsp;&nbsp;</span><span class="ans" id="g8b-a">1</span></p>
+            <p class="cond">(by the time)</p>
+            <div class="ans-line" id="g8-ans">By the time we arrived at the airport, our plane had departed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleGroup(this,['g2a','g2b','g3a','g3b','g4a','g4b','g5a','g5b','g6a','g6b','g7a','g7b','g8a','g8b'],['g2-ans','g3-ans','g4-ans','g5-ans','g6-ans','g7-ans','g8-ans'])"><span class="dot"></span>Show Answers</button>
+  </section>
+
+  <!-- SLIDE: GRAMMAR B. APPLY -->
+  <section class="slide" id="slide-gramB">
+    <div class="eyebrow">Speaking · Unit 5, p. 118</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Grammar — Past Perfect</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">B</span>Apply</div>
+    <p class="prompt">Complete the sentences with information that is true for you. Then take turns reading your sentences with a partner.</p>
+
+    <ol class="num-list">
+      <li><span class="n">1.</span>I <span class="blank" id="ap1-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="ap1-a">had already eaten dinner</span> when I got home yesterday.</li>
+      <li><span class="n">2.</span>I <span class="blank" id="ap2-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="ap2-a">hadn't studied English</span> until I started this class.</li>
+      <li><span class="n">3.</span>I <span class="blank" id="ap3-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="ap3-a">had already decided on a career</span> by the time I graduated from high school.</li>
+      <li><span class="n">4.</span>I <span class="blank" id="ap4-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="ap4-a">hadn't been born yet</span> by the year 2000.</li>
+      <li><span class="n">5.</span>I <span class="blank" id="ap5-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="ap5-a">had never traveled abroad</span> before I <span class="blank" id="ap5b-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="ap5b-a">took this class</span>.</li>
+    </ol>
+    <p class="body-text" style="margin-top:8px; font-style:italic; color:#666; font-size:13px;">Students' own answers. Model answers shown.</p>
+    <button class="reveal-btn" onclick="toggleGroup(this,['ap1','ap2','ap3','ap4','ap5','ap5b'],[])"><span class="dot"></span>Show Model Answers</button>
+  </section>
+
+  <!-- SLIDE: PRONUNCIATION INTRO -->
+  <section class="slide" id="slide-pronintro">
+    <div class="eyebrow">Speaking · Unit 5, p. 119</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Pronunciation — Contraction of <i>had</i></h1>
+    </div>
+
+    <div class="scroll-area">
+      <p class="body-text">The contraction 'd is frequently used instead of <i>had</i> in affirmative statements in the past perfect. Noticing <i>had</i> and the contraction 'd can help you better understand the order of past events.</p>
+      <p class="body-text">Listen to these examples. The speaker joins 'd to words that follow beginning with vowel sounds and certain consonant sounds (l, r). Notice that 'd is not stressed.</p>
+
+      <div class="grammar-box" style="font-size:13.5px;">
+        I'd already finished the test when the teacher collected our papers.<br>
+        He'd eaten at that restaurant before.<br>
+        We'd often talked about getting married.<br>
+        You'd left when we got there.<br>
+        She'd written her email before she received mine.
+      </div>
+
+      <p class="body-text">Do not use a contraction with questions. Had is not stressed in these questions.</p>
+      <div class="grammar-box" style="font-size:13.5px;">
+        Had you heard from him by the time you left?<br>
+        Had everyone finished the test by 2:00?
+      </div>
+
+      <p class="body-text">The contraction with negatives is <i>hadn't</i>.</p>
+      <div class="grammar-box" style="font-size:13.5px;">
+        I hadn't finished my phone call by the time the train arrived.<br>
+        They hadn't gone to the mall before they ate dinner.
+      </div>
+
+      <div style="display:flex; align-items:center; gap:14px; margin-top:6px;">
+        <audio controls preload="metadata" style="flex:1; max-width:480px;">
+          <source src="media/Q3e_LS3_U05_09_Pronunciation_Examples.mp3" type="audio/mpeg">
+          Your browser does not support audio playback. The file is located at media/Q3e_LS3_U05_09_Pronunciation_Examples.mp3.
+        </audio>
+        <span style="font-size:12.5px; color:#666; font-style:italic;">Listen to the examples above.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE: PRONUNCIATION A. IDENTIFY -->
+  <section class="slide" id="slide-pronA">
+    <div class="eyebrow">Speaking · Unit 5, p. 119</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Pronunciation — Contraction of <i>had</i></h1>
+    </div>
+    <div class="activity-tag"><span class="letter">A</span>Identify</div>
+    <p class="prompt" style="font-size:15px;">Listen to the sentences. Check (✓) the sentence you hear.</p>
+
+    <audio controls preload="metadata" style="width:100%; max-width:480px; margin-bottom:8px;">
+      <source src="media/Q3e_LS3_U05_10_Pronunciation_ActivitiesA_B.mp3" type="audio/mpeg">
+      Your browser does not support audio playback. The file is located at media/Q3e_LS3_U05_10_Pronunciation_ActivitiesA_B.mp3.
+    </audio>
+
+    <div class="two-col">
+      <div class="col" style="font-size:13px;">
+        <div>1. ☐ He worked at a bookstore.<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa1">☑</span> He'd worked at a bookstore.</div>
+        <div>2. ☐ We left when it started raining.<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa2">☑</span> We'd left when it started raining.</div>
+        <div>3. ☐ They answered the questions.<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa3">☑</span> They'd answered the questions.</div>
+        <div>4. ☐ I've eaten my lunch.<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa4">☑</span> I'd eaten my lunch.</div>
+        <div>5. ☐ You've already taken the test.<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa5">☑</span> You'd already taken the test.</div>
+      </div>
+      <div class="col" style="font-size:13px;">
+        <div>6. ☐ She didn't work there.<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa6">☑</span> She hadn't worked there.</div>
+        <div>7. ☐ It hasn't started to rain.<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa7">☑</span> It hadn't started to rain.</div>
+        <div>8. ☐ Has he found it?<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa8">☑</span> Had he found it?</div>
+        <div>9. ☐ Have you called Alex?<br>&nbsp;&nbsp;&nbsp;<span class="ans" id="pa9">☑</span> Had you called Alex?</div>
+      </div>
+    </div>
+
+    <style>.ans{display:none; color:var(--brand-green-dark); font-weight:700;} .ans.shown{display:inline;}</style>
+    <button class="reveal-btn" onclick="toggleClassShown(this,'#slide-pronA .ans')"><span class="dot"></span>Show Answers</button>
+  </section>
+
+  <!-- SLIDE: PRONUNCIATION B. IDENTIFY (repeat) -->
+  <section class="slide" id="slide-pronB">
+    <div class="eyebrow">Speaking · Unit 5, p. 119</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Pronunciation — Contraction of <i>had</i></h1>
+    </div>
+    <div class="activity-tag"><span class="letter">B</span>Identify</div>
+    <p class="prompt">Listen again. Repeat the sentences. Then take turns saying and identifying the sentences from Activity A with a partner.</p>
+
+    <div class="photo-wrap" style="margin-top:10px;">
+      <audio controls preload="metadata" style="width:100%; max-width:560px;">
+        <source src="media/Q3e_LS3_U05_10_Pronunciation_ActivitiesA_B.mp3" type="audio/mpeg">
+        Your browser does not support audio playback. The file is located at media/Q3e_LS3_U05_10_Pronunciation_ActivitiesA_B.mp3.
+      </audio>
+    </div>
+  </section>
+
+  <!-- SLIDE: SPEAKING SKILL -->
+  <section class="slide" id="slide-speakskill">
+    <div class="eyebrow">Speaking · Unit 5, p. 120</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Speaking Skill — Giving a Short Presentation</h1>
+    </div>
+
+    <div class="content-row">
+      <div class="content-side">
+        <p class="body-text">When you give a short presentation in class or at work, start by introducing your topic clearly.</p>
+        <p class="body-text" style="margin-bottom:4px;">Here are some phrases you can use to introduce your topic.</p>
+        <div class="grammar-box" style="font-size:13.5px; margin-bottom:8px;">
+          I want to talk about . . .<br>
+          My topic is . . .<br>
+          This presentation is on . . .<br>
+          I'm going to talk about . . .
+        </div>
+        <p class="body-text" style="margin-bottom:4px;">During your presentation, it is important to use words and phrases that help your audience understand the order of events and the reasons for them.</p>
+        <table class="self-assess" style="margin-top:4px;">
+          <tr><th>Order of events</th><th>Purpose/reason</th></tr>
+          <tr><td>First,</td><td>so . . .</td></tr>
+          <tr><td>Second,</td><td>so that . . .</td></tr>
+          <tr><td>After that,</td><td>in order to . . .</td></tr>
+          <tr><td>Then,</td><td>The reason I took this risk was . . .</td></tr>
+          <tr><td>Before</td><td></td></tr>
+          <tr><td>By the time</td><td></td></tr>
+        </table>
+      </div>
+      <div class="content-image">
+        <img src="media/japan-street-p120.png" alt="Young man looking up at buildings on a busy street in Japan, p.120">
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE: SPEAKING SKILL A. IDENTIFY -->
+  <section class="slide" id="slide-speakA">
+    <div class="eyebrow">Speaking · Unit 5, p. 121</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Speaking Skill — Giving a Short Presentation</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">A</span>Identify</div>
+    <p class="prompt" style="font-size:15px;">Listen to this presentation. Complete the sentences with the words and phrases you hear.</p>
+
+    <audio controls preload="metadata" style="width:100%; max-width:480px; margin-bottom:8px;">
+      <source src="media/Q3e_LS3_U05_11_SpeakingSkill_ActivityA.mp3" type="audio/mpeg">
+      Your browser does not support audio playback. The file is located at media/Q3e_LS3_U05_11_SpeakingSkill_ActivityA.mp3.
+    </audio>
+
+    <div class="grammar-box" style="background:#fdeceb; border-left:5px solid #c0392b; font-size:13.5px; line-height:1.55;">
+      <b style="text-transform:uppercase; letter-spacing:.5px; color:#c0392b;">Learning Japanese</b><br><br>
+      <span class="blank" id="lj1-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="lj1-a">I'm going to talk about</span> a time I took a risk and it turned out well. I'd always wanted to learn to speak Japanese. When I was in high school, I started to take classes in Japanese. <span class="blank" id="lj2-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="lj2-a">By the time</span> I graduated from college, I had studied the language for eight years, but I still couldn't speak it very well, <span class="blank" id="lj3-b">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="lj3-a">so</span> I decided to go to Japan to study. I didn't know anyone there. My grandmother had given me money the year before, <span class="blank" id="lj4-b">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="lj4-a">so</span> I used that for the trip. <span class="blank" id="lj5-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="lj5-a">Before</span> I left, I'd done some research on language schools. I stayed in Japan for three months and met some great people there. My Japanese improved a lot. <span class="blank" id="lj6-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="lj6-a">By the time</span> I finally returned to my country, I had become fluent.
+    </div>
+
+    <button class="reveal-btn" onclick="toggleGroup(this,['lj1','lj2','lj3','lj4','lj5','lj6'],[])"><span class="dot"></span>Show Answers</button>
+  </section>
+
+  <!-- SLIDE: SPEAKING SKILL B. CATEGORIZE -->
+  <section class="slide" id="slide-speakB">
+    <div class="eyebrow">Speaking · Unit 5, p. 121</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Speaking Skill — Giving a Short Presentation</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">B</span>Categorize</div>
+    <p class="prompt" style="font-size:15px;">Check (✓) the risks you would take to learn English. Add some of your own ideas.</p>
+
+    <div class="grammar-box" style="font-size:13px; margin-bottom:10px;">
+      <b>Tip for Success:</b> When listening, make sure you maintain eye contact. This encourages the speaker and shows that you are interested.
+    </div>
+
+    <ul class="checklist">
+      <li>Join a club or sports team where people speak English</li>
+      <li>Take classes in other subjects with native English speakers</li>
+      <li>Move to a new city or country</li>
+      <li>Meet and talk to native speakers</li>
+      <li>Travel in English-speaking countries</li>
+      <li>(your idea) <span class="blank" id="catB1-b" style="min-width:160px;">&nbsp;</span></li>
+      <li>(your idea) <span class="blank" id="catB2-b" style="min-width:160px;">&nbsp;</span></li>
+    </ul>
+  </section>
+
+  <!-- SLIDE: SPEAKING SKILL C. DISCUSS -->
+  <section class="slide" id="slide-speakC">
+    <div class="eyebrow">Speaking · Unit 5, p. 121</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Speaking Skill — Giving a Short Presentation</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">C</span>Discuss</div>
+    <p class="prompt">Work with a partner. Take turns talking about the risks you checked in Activity B. Use words and phrases from the Speaking Skill box on page 120.</p>
+  </section>
+
+  <!-- SLIDE: UNIT ASSIGNMENT INTRO -->
+  <section class="slide" id="slide-uaintro">
+    <div class="eyebrow">Unit Assignment · Unit 5, p. 122</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2z"/></svg></div>
+      <h1>Unit Assignment — Give a Short Presentation</h1>
+    </div>
+    <p class="prompt" style="font-size:15px;">In this assignment, you are going to give a one-minute presentation on a risk you have taken. As you prepare your presentation, think about the Unit Question, "Does taking risks change our lives?" Use information from Listening 1, Listening 2, the unit video, and your work in this unit to support your presentation. Refer to the Self-Assessment checklist on page 124.</p>
+  </section>
+
+  <!-- SLIDE: CONSIDER THE IDEAS / INVESTIGATE -->
+  <section class="slide" id="slide-investigate">
+    <div class="eyebrow">Unit Assignment · Unit 5, p. 122</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2z"/></svg></div>
+      <h1>Consider the Ideas</h1>
+    </div>
+    <div class="activity-tag">Investigate</div>
+    <p class="prompt" style="font-size:14px;">Listen to one man talk about a risk he took and the reasons why he took it. Take notes as you listen. Then discuss the questions with a partner.</p>
+
+    <div class="content-row" style="align-items:flex-start; gap:20px; flex:1; min-height:0;">
+      <div style="flex:0 0 auto; width:230px;">
+        <img src="media/colosseum-p122.png" alt="Man photographing the Colosseum in Rome, p.122" style="width:100%; border-radius:6px;">
+      </div>
+      <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
+        <audio controls preload="metadata" style="width:100%; max-width:480px;">
+          <source src="media/Q3e_LS3_U05_12_UnitAssignment.mp3" type="audio/mpeg">
+          Your browser does not support audio playback.
+        </audio>
+        <ol class="num-list" style="font-size:13.5px; margin:0;">
+          <li><span class="n">1.</span>What had his life been like before?
+            <div class="inv-ans" id="inv1">Office job (9–6); shopping &amp; going out; nice house; good social life; failed backpacking trips</div>
+          </li>
+          <li><span class="n">2.</span>What did he risk by leaving?
+            <div class="inv-ans" id="inv2">Job, house, friends; comfortable "normal" life</div>
+          </li>
+          <li><span class="n">3.</span>Do you think it was a good risk to take? Why or why not?
+            <div class="inv-model" id="inv3">Yes — turned out best thing he ever did / No — no plan, impulsive</div>
+          </li>
+          <li><span class="n">4.</span>What do you think happened when he arrived in Rome?
+            <div class="inv-model" id="inv4">Struggled at first; met new people; built a new life</div>
+          </li>
+        </ol>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+          <button class="reveal-btn" onclick="toggleClassShown(this,'#slide-investigate .inv-ans')"><span class="dot"></span>Show Answers</button>
+          <button class="reveal-btn" onclick="toggleClassShown(this,'#slide-investigate .inv-model')"><span class="dot"></span>Show Model Answers</button>
+        </div>
+      </div>
+    </div>
+    <style>
+      .inv-ans,.inv-model{display:none; font-size:12.5px; font-weight:600; margin-top:3px; padding:3px 8px; border-radius:4px;}
+      .inv-ans{color:var(--brand-green-dark);}
+      .inv-model{color:var(--brand-green-dark); font-style:italic;}
+      .inv-ans.shown,.inv-model.shown{display:block;}
+    </style>
+  </section>
+
+  <!-- SLIDE: A. GATHER IDEAS -->
+  <section class="slide" id="slide-gatherideas">
+    <div class="eyebrow">Prepare and Speak · Unit 5, p. 122</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2z"/></svg></div>
+      <h1>Prepare and Speak</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">A</span>Gather Ideas</div>
+    <p class="prompt">Think about the experience of the speaker in the Consider the Ideas activity above. Have you had a similar experience? What risks in your own life do you feel were good to take? Make a list.</p>
+
+    <div class="lines-box">&nbsp;</div>
+    <div class="lines-box">&nbsp;</div>
+    <div class="lines-box">&nbsp;</div>
+  </section>
+
+  <!-- SLIDE: B. ORGANIZE IDEAS -->
+  <section class="slide" id="slide-organizeideas">
+    <div class="eyebrow">Prepare and Speak · Unit 5, p. 123</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2z"/></svg></div>
+      <h1>Prepare and Speak</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">B</span>Organize Ideas</div>
+    <p class="prompt" style="font-size:15px;">Choose one risk from your list in Activity A. Prepare to talk about it. Use the outline to help you organize your ideas.</p>
+
+    <div class="scroll-area">
+      <p class="body-text" style="margin-bottom:2px;"><b>The risk you took:</b></p>
+      <div class="lines-box" style="min-height:24px; margin-bottom:10px;"><span class="answer-fill" id="oi1">Moved abroad to study, didn't know the language</span>&nbsp;</div>
+
+      <p class="body-text" style="margin-bottom:2px;"><b>The reason why you took this risk:</b></p>
+      <div class="lines-box" style="min-height:36px; margin-bottom:10px;"><span class="answer-fill" id="oi2">Wanted new culture; never traveled before</span>&nbsp;</div>
+
+      <p class="body-text" style="margin-bottom:2px;"><b>Describe what happened:</b></p>
+      <div class="lines-box" style="min-height:36px; margin-bottom:10px;"><span class="answer-fill" id="oi3">Hard at first — new friends, language improved after a few months</span>&nbsp;</div>
+
+      <p class="body-text" style="margin-bottom:2px;"><b>What did you learn or gain from this experience?</b></p>
+      <div class="lines-box" style="min-height:36px; margin-bottom:14px;"><span class="answer-fill" id="oi4">More independent; more confident adapting</span>&nbsp;</div>
+
+      <button class="reveal-btn" onclick="toggleClassShown(this,'#slide-organizeideas .answer-fill')"><span class="dot"></span>Show Model Answers</button>
+    </div>
+  </section>
+
+  <!-- SLIDE: C. SPEAK -->
+  <section class="slide" id="slide-speakfinal">
+    <div class="eyebrow">Prepare and Speak · Unit 5, p. 124</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2 1 21h22L12 2z"/></svg></div>
+      <h1>Prepare and Speak</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">C</span>Speak</div>
+    <p class="prompt">Give a one-minute presentation to your group or class about a risk you have taken. Use your notes from Activities A and B. Refer to the Self-Assessment checklist before you speak.</p>
+
+    <ol class="num-list">
+      <li><span class="n">1.</span>Use an appropriate phrase to introduce your topic.</li>
+      <li><span class="n">2.</span>Use your notes from Activity B to help you, but do not read exactly what you wrote.</li>
+      <li><span class="n">3.</span>Try to talk continuously for the entire minute.</li>
+    </ol>
+  </section>
+
+  <!-- SLIDE: A. CHECK (SELF-ASSESSMENT) -->
+  <section class="slide" id="slide-checkassess">
+    <div class="eyebrow">Check and Reflect · Unit 5, p. 124</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+      <h1>Check and Reflect</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">A</span>Check</div>
+    <p class="prompt" style="font-size:15px;">Think about the Unit Assignment as you complete the Self-Assessment checklist.</p>
+
+    <table class="self-assess">
+      <tr><th>Self-Assessment</th><th>Yes</th><th>No</th></tr>
+      <tr><td>I was able to speak easily about the topic.</td><td class="yn">☐</td><td class="yn">☐</td></tr>
+      <tr><td>My group understood me.</td><td class="yn">☐</td><td class="yn">☐</td></tr>
+      <tr><td>I used vocabulary from the unit.</td><td class="yn">☐</td><td class="yn">☐</td></tr>
+      <tr><td>I used the past perfect and simple past.</td><td class="yn">☐</td><td class="yn">☐</td></tr>
+      <tr><td>I used contractions of <i>had</i>.</td><td class="yn">☐</td><td class="yn">☐</td></tr>
+      <tr><td>I used phrases to introduce my topic, explain the order of events, and give reasons for events.</td><td class="yn">☐</td><td class="yn">☐</td></tr>
+    </table>
+  </section>
+
+  <!-- SLIDE: B. REFLECT -->
+  <section class="slide" id="slide-reflect">
+    <div class="eyebrow">Check and Reflect · Unit 5, p. 124</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+      <h1>Check and Reflect</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">B</span>Reflect</div>
+    <p class="prompt">Discuss these questions with a partner or group.</p>
+
+    <ol class="num-list">
+      <li><span class="n">1.</span>What is something new you learned in this unit?</li>
+      <li><span class="n">2.</span>Look back at the Unit Question — Does taking risks change our lives? Is your answer different now than when you started this unit? If yes, how is it different?</li>
+    </ol>
+  </section>
+
+</div>
+
+<div id="fontControls">
+  <button id="fontPlus" title="Increase text size">A+</button>
+  <div id="fontLabel">100%</div>
+  <button id="fontMinus" title="Decrease text size">A−</button>
+</div>
+
+<div id="controls">
+  <button id="prevBtn" title="Previous">▲</button>
+  <div id="counter">1 / 17</div>
+  <button id="nextBtn" title="Next">▼</button>
+</div>
+
+<script>
+  const order = ['gramA1','gramA28','gramB','pronintro','pronA','pronB','speakskill','speakA','speakB','speakC','uaintro','investigate','gatherideas','organizeideas','speakfinal','checkassess','reflect'];
+  const navOrder = ['gramA1','gramA28','gramB','pronintro','pronA','pronB','speakskill','speakA','speakB','speakC','uaintro','investigate','gatherideas','organizeideas','speakfinal','checkassess','reflect'];
+  let idx = 0;
+
+  function showSlide(i){
+    idx = (i+order.length)%order.length;
+    order.forEach((id,n)=>{
+      document.getElementById('slide-'+id).classList.toggle('active', n===idx);
+    });
+    const navId = order[idx];
+    document.querySelectorAll('.navbtn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.target===navId);
+    });
+    document.getElementById('counter').textContent = (idx+1)+' / '+order.length;
+    if(typeof refreshFontLabel === 'function') refreshFontLabel();
+  }
+
+  document.querySelectorAll('.navbtn').forEach(b=>{
+    b.addEventListener('click', ()=> showSlide(order.indexOf(b.dataset.target)));
+  });
+  document.getElementById('prevBtn').addEventListener('click', ()=> showSlide(idx-1));
+  document.getElementById('nextBtn').addEventListener('click', ()=> showSlide(idx+1));
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight' || e.key==='ArrowDown') showSlide(idx+1);
+    if(e.key==='ArrowLeft' || e.key==='ArrowUp') showSlide(idx-1);
+  });
+
+  function toggleGroup(btn, blankIds, ansLineIds){
+    let anyShown = false;
+    if(blankIds.length){
+      const firstAns = document.getElementById(blankIds[0]+'-a');
+      if(firstAns) anyShown = firstAns.classList.contains('shown');
+    } else if(ansLineIds.length){
+      const firstAns = document.getElementById(ansLineIds[0]);
+      if(firstAns) anyShown = firstAns.classList.contains('shown');
+    }
+    blankIds.forEach(id=>{
+      const b = document.getElementById(id+'-b');
+      const a = document.getElementById(id+'-a');
+      if(b) b.classList.toggle('hide', !anyShown);
+      if(a) a.classList.toggle('shown', !anyShown);
+    });
+    ansLineIds.forEach(id=>{
+      const a = document.getElementById(id);
+      if(a) a.classList.toggle('shown', !anyShown);
+    });
+    btn.innerHTML = !anyShown ? '<span class="dot"></span>Hide Answer'+(blankIds.length+ansLineIds.length>1?'s':'') : '<span class="dot"></span>Show Answer'+(blankIds.length+ansLineIds.length>1?'s':'');
+  }
+
+  function toggleClassShown(btn, selector){
+    const anyShown = document.querySelector(selector+'.shown') !== null;
+    document.querySelectorAll(selector).forEach(el=> el.classList.toggle('shown', !anyShown));
+    btn.innerHTML = !anyShown ? '<span class="dot"></span>Hide Answers' : '<span class="dot"></span>Show Answers';
+  }
+
+  // ---- per-slide font size (zoom) controls ----
+  const BASE_ZOOM = 1.2;
+  const fontScale = {};
+  function applyZoom(id){
+    const s = fontScale[id] || 1;
+    const el = document.getElementById('slide-'+id);
+    if(el) el.style.zoom = s * BASE_ZOOM;
+  }
+  function refreshFontLabel(){
+    const s = fontScale[order[idx]] || 1;
+    document.getElementById('fontLabel').textContent = Math.round(s*100)+'%';
+  }
+  function adjustFont(delta){
+    const id = order[idx];
+    let s = (fontScale[id] || 1) + delta;
+    s = Math.min(1.5, Math.max(0.7, Math.round(s*100)/100));
+    fontScale[id] = s;
+    applyZoom(id);
+    refreshFontLabel();
+  }
+  document.getElementById('fontPlus').addEventListener('click', ()=> adjustFont(0.1));
+  document.getElementById('fontMinus').addEventListener('click', ()=> adjustFont(-0.1));
+
+  order.forEach(id => applyZoom(id));
+  showSlide(0);
+  refreshFontLabel();
+</script>
+
+</body>
+</html>

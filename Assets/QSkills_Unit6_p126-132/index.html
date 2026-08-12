@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Q: Skills for Success 3 &mdash; Unit 6 (pp. 126&ndash;132)</title>
+<style>
+:root{
+  --green:#78BE21;
+  --green-dark:#5C8A1E;
+  --lime:#A7CB47;
+  --ink:#0B0F14;
+  --lav:#EEF6E0;
+  --cream:#F4F6EF;
+  --creamborder:#d9e3c8;
+  --red:#c0392b;
+  --modelblue:#1d6f91;
+  --line:#c9ccd6;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:auto;}
+body{
+  margin:0;font-family:'Segoe UI',Arial,sans-serif;color:#222;background:#dfe3ea;
+  padding:46px 24px 90px;
+}
+
+/* ===== Top page controls: one icon per page ===== */
+#pagenav{
+  position:fixed;top:0;left:0;right:0;z-index:199;
+  background:var(--ink);padding:6px 16px;display:flex;flex-wrap:wrap;
+  gap:6px;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
+#pagenav span.lbl{font-size:11px;font-weight:700;color:var(--lime);margin-right:4px;}
+#pagenav a{
+  color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;
+  border:1px solid rgba(255,255,255,.5);border-radius:4px;padding:3px 9px;
+  background:rgba(255,255,255,.12);
+}
+#pagenav a:hover{background:rgba(255,255,255,.28);}
+#pagenav a.active{background:var(--green);color:var(--ink);border-color:var(--green);}
+
+/* ===== Right-edge control panel ===== */
+#rightctrl{
+  position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:198;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:12px 8px;box-shadow:0 3px 12px rgba(0,0,0,.22);
+}
+#rightctrl button.round{width:42px;height:42px;border-radius:50%;border:2px solid var(--green);background:var(--ink);color:#fff;font-size:15px;cursor:pointer;}
+#rightctrl button.round:hover{background:var(--green-dark);}
+#zoomlabel{color:#444;font-size:11px;margin:0 0 2px;}
+.toolsep{width:30px;height:1px;background:var(--line);margin:2px 0;}
+#rightctrl button.tool{width:42px;height:42px;border-radius:50%;border:2px solid #b8c0cc;background:#eef1f5;color:var(--ink);font-size:17px;cursor:pointer;}
+#rightctrl button.tool.on{background:var(--green);border-color:var(--green-dark);color:#fff;}
+#rightctrl button.tool#eraseBtn.on{background:#888;border-color:#888;color:#fff;}
+
+/* ===== Continuous content column ===== */
+#content{
+  max-width:980px;margin:0 auto;background:#fff;border-radius:8px;
+  box-shadow:0 2px 14px rgba(0,0,0,.2);padding:30px 40px 50px;
+  transform-origin:top center;font-size:15px;line-height:1.55;
+}
+#doctitle{
+  color:var(--ink);text-align:center;font-weight:800;font-size:22px;
+  line-height:1.4;margin:0 0 28px;padding-bottom:18px;border-bottom:3px solid var(--green);
+}
+.page-anchor{position:relative;top:-56px;visibility:hidden;height:0;}
+.exblock{clear:both;margin:0 0 22px;overflow:auto;}
+.page-divider{border:none;border-top:2px dashed var(--line);margin:34px 0 26px;position:relative;clear:both;}
+.page-divider span{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fff;padding:0 16px;font-family:Arial,sans-serif;font-size:11.5px;color:var(--green-dark);font-weight:800;letter-spacing:.5px;}
+
+h2.stitle{color:var(--green-dark);font-size:22px;margin:0 0 4px;font-weight:800;clear:both;}
+h3.exline{font-size:15px;margin:14px 0 8px;}
+.exlabel{color:var(--green-dark);font-weight:800;text-transform:uppercase;}
+.barhead{background:var(--green);color:var(--ink);font-weight:800;padding:7px 14px;border-radius:5px 5px 0 0;font-size:13px;letter-spacing:.3px;text-transform:uppercase;}
+.barhead span.sub{font-weight:400;text-transform:none;margin-left:8px;color:#2c3a17;}
+.barhead.dark{background:var(--ink);color:#fff;}
+.barhead.dark span.sub{color:#cfd6c8;}
+.tipbox{background:var(--cream);border:1px solid var(--creamborder);border-left:5px solid var(--green);padding:12px 16px;border-radius:0 6px 6px 0;margin-bottom:14px;font-size:13.5px;}
+.tipbox ul{margin:6px 0;padding-left:20px;}
+img.fig{max-width:100%;border-radius:4px;display:block;margin:10px 0;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+img.fig.center{float:none;display:block;margin:16px auto;}
+img.fig.big{max-width:460px;}
+.clearfix{clear:both;}
+audio{width:100%;max-width:520px;display:block;margin:8px 0 12px;}
+.btnrow{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin:8px 0;}
+.revealbtn{background:var(--green-dark);color:#fff;border:none;padding:7px 16px;border-radius:16px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.revealbtn.model{background:var(--modelblue);}
+.revealbtn.ts{background:#7a5c1e;}
+.revealbtn.locked{background:#8a8a8a;}
+.revealbtn.locked::after{content:" \1F512";}
+
+/* ===== Answer-lock modal ===== */
+#lockModal .modal-box{max-width:420px;}
+#lockModal h3{font-size:20px;display:block;}
+#lockModal p.lock-sub{font-size:13px;color:#666;margin:0 0 12px;}
+#lockRow{display:flex;gap:8px;align-items:center;}
+#lockInput{font-family:'Segoe UI',Arial,sans-serif;font-size:15px;padding:8px 12px;flex:1;border:1px solid #bbb;border-radius:8px;}
+#lockGo{background:var(--green-dark);color:#fff;border:none;padding:9px 18px;border-radius:16px;font-size:13.5px;cursor:pointer;font-weight:700;}
+#lockGo:hover{background:var(--green);color:var(--ink);}
+#lockMsg{color:var(--red);font-size:12.5px;min-height:1.2em;margin:8px 0 0;}
+
+/* answers = red, model/sample answers = blue (revealed one item per click) */
+.ans-ph{display:none;color:var(--red);font-weight:700;}
+.ans-ph.shown{display:inline;}
+.model-ans{display:none;color:var(--modelblue);font-weight:600;}
+.model-ans.shown{display:inline;}
+.blank-ph{display:inline-block;min-width:110px;border-bottom:2px solid #999;transition:min-width .15s, border-color .15s;}
+.blank-ph.shown{min-width:0;border-bottom-color:transparent;}
+
+table.simple{border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+table.simple td,table.simple th{border:1px solid var(--line);padding:5px 10px;}
+table.simple th{background:var(--lav);color:var(--ink);}
+ol.qlist,ul.qlist{padding-left:22px;margin:6px 0;}
+ol.qlist li,ul.qlist li{margin-bottom:6px;}
+.chart{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px;}
+.chart th{background:var(--ink);color:#fff;padding:6px 10px;text-align:left;}
+.chart td{border:1px solid var(--line);padding:6px 10px;vertical-align:top;}
+.vocabgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 20px;margin:10px 0;font-size:14px;}
+.wterm{color:var(--green-dark);font-weight:700;cursor:pointer;border-bottom:1px dotted var(--green-dark);}
+.wterm:hover{background:#eef6e0;}
+.pos{font-style:italic;color:#666;font-weight:400;font-size:12px;}
+.vocab-subhead{font-size:12px;font-weight:800;color:var(--green-dark);text-transform:uppercase;letter-spacing:.4px;margin:14px 0 4px;}
+.vocab-subnote{font-size:12px;color:#777;margin:0 0 6px;}
+
+/* multiple-choice circled answers (page 130, Ex. C) */
+.mcopt{display:inline-block;margin:2px 10px 2px 0;padding:2px 4px;border-radius:14px;border:2px solid transparent;}
+.mcopt.circled{border-color:var(--red);color:var(--red);font-weight:700;}
+
+/* page 129 notes — nested list, tight spacing */
+.notesbox{background:#fdfdf8;border:1px solid var(--creamborder);border-radius:6px;padding:14px 18px;font-size:13.5px;line-height:1.5;color:#1d3557;}
+.notesbox b.notes-title{display:block;color:var(--ink);font-size:14.5px;margin-bottom:8px;}
+.notesbox p{margin:8px 0 4px;}
+.notes-list{margin:2px 0 8px;padding-left:22px;}
+.notes-list li{margin-bottom:4px;}
+.notes-sublist{margin:4px 0 4px;padding-left:20px;list-style:circle;}
+.notes-sublist li{margin-bottom:3px;}
+.ts-chip{display:none;background:var(--lav);color:var(--green-dark);border:1px solid #cfe3b3;border-radius:10px;padding:1px 8px;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;white-space:nowrap;}
+.ts-chip:hover{background:#dcefc4;}
+.exwrap.ts-visible .ts-chip{display:inline-block;}
+
+.smallbox{background:var(--cream);border:1px solid var(--creamborder);padding:10px 12px;border-radius:6px;font-size:12.5px;float:left;width:190px;margin:0 16px 10px 0;}
+.smallbox b.boxhead{display:block;color:var(--green-dark);font-size:12px;margin-bottom:4px;}
+.objbox{background:var(--ink);color:#fff;border-left:8px solid var(--green);padding:14px 18px;border-radius:4px;font-size:13.5px;line-height:1.55;margin:14px 0;}
+.objbox b{color:var(--lime);text-transform:uppercase;letter-spacing:.5px;font-size:12px;display:block;margin-bottom:4px;}
+.objbox .wterm{color:var(--lime);border-bottom-color:var(--lime);}
+.qicon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:var(--ink);font-weight:800;font-size:16px;margin-right:8px;vertical-align:middle;}
+.unitq{font-size:12px;font-weight:800;color:var(--green-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.unitq-title{font-size:21px;font-weight:800;color:var(--ink);margin:0 0 12px;}
+
+/* Warm-up quiz (opinion-only — no right/wrong answer, click just selects) */
+.quiz{display:flex;flex-direction:column;gap:18px;margin-top:12px;}
+.quizq-title{font-weight:800;color:var(--ink);font-size:15px;margin-bottom:6px;}
+.quizopt{display:flex;align-items:baseline;flex-wrap:wrap;gap:9px;padding:7px 10px;border-radius:6px;font-size:13.5px;cursor:pointer;border:1px solid transparent;}
+.quizopt:hover{background:var(--lav);}
+.quizopt.selected{background:var(--lav);border-color:var(--green);}
+.qletter{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--green);color:var(--ink);font-weight:800;font-size:12px;flex:0 0 auto;}
+.quizopt.selected .qletter{background:var(--green-dark);color:#fff;}
+.qtext{flex:0 1 auto;}
+.qresult{display:none;margin-left:auto;padding-left:16px;color:var(--green-dark);font-style:italic;font-size:12.5px;text-align:right;}
+.quizopt.selected .qresult{display:inline-block;animation:outcomepop .2s ease-out;}
+@keyframes outcomepop{from{opacity:0;transform:translateY(-3px);}to{opacity:1;transform:translateY(0);}}
+
+/* Modals */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(15,20,26,.6);z-index:400;align-items:center;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal-box{background:#fff;border-radius:10px;max-width:640px;width:92%;max-height:82vh;overflow-y:auto;padding:22px 26px;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+#wordModal .modal-box{max-width:820px;}
+.modal-box .close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;}
+.modal-box h3{color:var(--green-dark);margin:0 4px 4px;font-size:32px;display:inline-block;}
+.mpos-row{display:flex;align-items:baseline;gap:12px;margin:0 4px 14px;flex-wrap:wrap;}
+.modal-box .mpos{color:#777;font-style:italic;font-size:19px;}
+.modal-box .mipa{color:#888;font-size:18px;font-family:'Segoe UI',Arial,sans-serif;}
+.modal-box .mdef{font-size:21px;line-height:1.5;margin:0 4px 10px;}
+.simplifybtn{background:var(--lav);color:var(--green-dark);border:1px solid #cfe3b3;padding:6px 14px;border-radius:16px;font-size:12.5px;font-weight:700;cursor:pointer;margin:0 4px 16px;display:inline-block;}
+.simplifybtn:hover{background:#dcefc4;}
+.modal-box .mex{font-size:19px;line-height:1.6;margin:0 4px 10px;padding-left:18px;border-left:3px solid var(--lav);color:var(--modelblue);}
+#vocabListModal .modal-box{max-width:620px;}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;margin-bottom:14px;}
+.chip{background:var(--lav);color:var(--green-dark);border:1px solid #cfe3b3;padding:5px 12px;border-radius:14px;font-size:13px;cursor:pointer;font-weight:600;}
+.chip:hover{background:#dcefc4;}
+.vlgrouphead{font-size:12px;font-weight:800;color:var(--ink);text-transform:uppercase;letter-spacing:.4px;margin:12px 4px 2px;}
+mark.user-highlight{background:#fff176;padding:0 1px;}
+
+@media (max-width:720px){
+  #content{padding:22px 18px 40px;}
+  #rightctrl{right:6px;padding:8px 5px;}
+  .vocabgrid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="pagenav"><span class="lbl">PAGE:</span><a href="#warmup" data-p="warmup">Warm-Up</a><a href="#p126" data-p="p126">126</a><a href="#p127" data-p="p127">127</a><a href="#p128" data-p="p128">128</a><a href="#p129" data-p="p129">129</a><a href="#p130" data-p="p130">130</a><a href="#p131" data-p="p131">131</a><a href="#p132" data-p="p132">132</a></div>
+
+<div id="rightctrl">
+  <button class="round" id="zoomIn" title="Zoom in">A+</button>
+  <div id="zoomlabel">100%</div>
+  <button class="round" id="zoomOut" title="Zoom out">A&minus;</button>
+  <div class="toolsep"></div>
+  <button class="tool" id="vocabListBtn" title="Vocabulary list">&#128214;</button>
+  <button class="tool" id="highlightBtn" title="Highlighter">&#9998;</button>
+  <button class="tool" id="eraseBtn" title="Eraser">&#9003;</button>
+</div>
+
+<div id="content">
+<div id="doctitle">Q: Skills for Success 3, Listening &amp; Speaking<br>Unit 6: Neurology (pp. 126&ndash;132)</div>
+
+<div id="warmup" class="page-anchor"></div>
+<div class="exblock" id="slide0">
+<div class="unitq"><span class="qicon">?</span>Warm-Up</div>
+<div class="unitq-title">Would You Trust AI to Do It for You?</div>
+<p style="font-size:13px;color:#666;margin:0 0 10px;">Choose A, B, C, or D. There are no correct answers!</p>
+<div class="quiz">
+<div class="quizq">
+<div class="quizq-title">1. Write your homework essay</div>
+<div class="quizopt" data-q="1" data-outcome="You and AI are now a team. Your teacher may not be happy."><span class="qletter">A</span><span class="qtext">Absolutely. Why suffer?</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="1" data-outcome="You trust AI, but you still want to look smart."><span class="qletter">B</span><span class="qtext">Yes, but I&rsquo;ll change a few things.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="1" data-outcome="Very good! You use AI, but your brain still has a job."><span class="qletter">C</span><span class="qtext">I&rsquo;ll ask AI for ideas, then write it myself.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="1" data-outcome="You are very strong. Or maybe you just like homework."><span class="qletter">D</span><span class="qtext">No. I enjoy suffering.</span><span class="qresult"></span></div>
+</div>
+<div class="quizq">
+<div class="quizq-title">2. Cook dinner for your family</div>
+<div class="quizopt" data-q="2" data-outcome="Famous last words! Good luck with dinner."><span class="qletter">A</span><span class="qtext">Yes. What could possibly go wrong?</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="2" data-outcome="Smart choice. Maybe everyone will survive dinner."><span class="qletter">B</span><span class="qtext">Yes, but I&rsquo;ll check the recipe first.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="2" data-outcome="Good idea. Let AI help with noodles, not a five-course meal."><span class="qletter">C</span><span class="qtext">Only for simple food.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="2" data-outcome="Your family is very happy with your decision."><span class="qletter">D</span><span class="qtext">No. I value my family.</span><span class="qresult"></span></div>
+</div>
+<div class="quizq">
+<div class="quizq-title">3. Look after your pet for a weekend</div>
+<div class="quizopt" data-q="3" data-outcome="Your pet is looking for a new family."><span class="qletter">A</span><span class="qtext">Of course. AI can handle it.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="3" data-outcome="Good! AI gives the advice, and you do the work."><span class="qletter">B</span><span class="qtext">AI can tell me what to do, but I&rsquo;ll do it.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="3" data-outcome="Perfect. AI can remind you. You can feed the pet."><span class="qletter">C</span><span class="qtext">Maybe for feeding reminders.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="3" data-outcome="Good answer. Never make your cat angry."><span class="qletter">D</span><span class="qtext">Absolutely not. My cat would report me.</span><span class="qresult"></span></div>
+</div>
+<div class="quizq">
+<div class="quizq-title">4. Plan your entire holiday</div>
+<div class="quizopt" data-q="4" data-outcome="Great! You are ready for your holiday&hellip; somewhere. Hopefully."><span class="qletter">A</span><span class="qtext">Yes. AI can book everything.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="4" data-outcome="Very smart. AI can make mistakes, too."><span class="qletter">B</span><span class="qtext">Yes, but I&rsquo;ll check the important details.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="4" data-outcome="You trust AI, but you are still the boss."><span class="qletter">C</span><span class="qtext">I&rsquo;ll use AI for suggestions only.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="4" data-outcome="You don&rsquo;t need AI. You need a map."><span class="qletter">D</span><span class="qtext">No. I want to get lost naturally.</span><span class="qresult"></span></div>
+</div>
+<div class="quizq">
+<div class="quizq-title">5. Cut your hair</div>
+<div class="quizopt" data-q="5" data-outcome="AI chooses your hairstyle. Your barber has the final decision."><span class="qletter">A</span><span class="qtext">Yes. AI can generate the perfect hairstyle.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="5" data-outcome="Very sensible. Keep AI away from the scissors."><span class="qletter">B</span><span class="qtext">AI chooses the style; my hairdresser does the cutting.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="5" data-outcome="Good choice. Your hair is safe&hellip; for now."><span class="qletter">C</span><span class="qtext">I&rsquo;ll use AI for inspiration.</span><span class="qresult"></span></div>
+<div class="quizopt" data-q="5" data-outcome="Fair enough. Your hair needs a holiday, too."><span class="qletter">D</span><span class="qtext">No. My hair and I have been through enough.</span><span class="qresult"></span></div>
+</div>
+</div>
+</div>
+
+<div class="page-divider"><span>PAGE 126</span></div>
+<div id="p126" class="page-anchor"></div>
+<div class="exblock" id="slide1">
+<img class="fig" src="media/p126_hero.png" alt="Socibot, a humanoid social robot, at a technology expo" style="max-width:520px;">
+<h2 class="stitle" style="font-size:30px;">Unit 6 &middot; <span class="wterm" onclick="openWordModal('neurology')">Neurology</span></h2>
+<table class="chart clearfix" style="max-width:640px;">
+<tr><th>Listening</th><td>inferring a speaker&rsquo;s attitude</td></tr>
+<tr><th>Critical Thinking</th><td>justifying claims</td></tr>
+<tr><th>Vocabulary</th><td>using the dictionary</td></tr>
+<tr><th>Grammar</th><td>gerunds and infinitives as the objects of verbs</td></tr>
+<tr><th>Pronunciation</th><td>stress on important words</td></tr>
+<tr><th>Speaking</th><td>leading a group discussion</td></tr>
+<tr><th>Note-Taking</th><td>building an outline to take notes on a discussion</td></tr>
+</table>
+</div>
+
+<div class="page-divider"><span>PAGE 127</span></div>
+<div id="p127" class="page-anchor"></div>
+<div class="exblock" id="slide2">
+<div class="unitq"><span class="qicon">?</span>Unit Question</div>
+<div class="unitq-title">Will <span class="wterm" onclick="openWordModal('artificial')">artificial</span> <span class="wterm" onclick="openWordModal('intelligence')">intelligence</span> ever be as smart as humans?</div>
+<h3 class="exline"><span class="exlabel">A. Discuss</span> these questions with your classmates.</h3>
+<div id="ex2" class="exwrap">
+<ol class="qlist">
+<li>What does &ldquo;artificial intelligence&rdquo; (AI) mean?<br><span class="model-ans">Sample answer: It means machines that seem to &ldquo;think&rdquo; because they process information.</span></li>
+<li>Give some examples of things in your daily life that use AI.<br><span class="model-ans">Sample answer: Cell phones, computers, digital watches, cameras, cars, etc.</span></li>
+<li>Look at the photo. What kind of <span class="wterm" onclick="openWordModal('machine')">machine</span> is this? Where are the people?<br><span class="model-ans">Sample answer: The machine looks like a robot with an image for a human &ldquo;face.&rdquo; The humans are probably at a meeting or conference, maybe about technology.</span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p127" onclick="toggleAnswers(this,'ex2','p127')">Show Sample Answers</button></div></div>
+
+<div class="exblock" id="slide3">
+<h3 class="exline"><span class="exlabel">B.</span> Listen to <i>The Q Classroom</i> online. Then answer these questions.</h3>
+<audio controls id="audio-p127" src="media/Q3e_LS3_U06_01_QClassroom.mp3"></audio>
+<div id="ex3" class="exwrap">
+<ol class="qlist">
+<li>What does Yuna <span class="wterm" onclick="openWordModal('assume')">assume</span> when she buys an electronic device? Do you ever do the same?<br><span class="model-ans">Sample answer: Yuna assumes that almost every electronic thing that she buys has some form of AI in it.</span></li>
+<li>How does Felix feel about the use of AI in so many places?<br><span class="model-ans">Sample answer: Felix thinks too many things have AI in them.</span></li>
+<li>How does Sophy feel about electronic devices? Do you feel the same or differently? Explain.<br><span class="model-ans">Sample answer: Sophy would prefer to have simple things.</span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p127" onclick="toggleAnswers(this,'ex3','p127')">Show Sample Answers</button></div>
+<div class="objbox"><b>Unit Objective</b>Listen to a radio interview and an <span class="wterm" onclick="openWordModal('excerpt')">excerpt</span> from a college class discussion. <span class="wterm" onclick="openWordModal('gather')">Gather</span> information and ideas to state and explain your opinions in a group discussion about research into artificial intelligence.</div>
+</div>
+
+<div class="page-divider"><span>PAGE 128</span></div>
+<div id="p128" class="page-anchor"></div>
+<div class="exblock" id="slide4">
+<div class="barhead">Listening</div>
+<h2 class="stitle" style="margin-top:8px;">Listening 1 &middot; What Kind of &ldquo;Smart&rdquo; Is AI?</h2>
+<div class="tipbox"><b>Objective</b><br>You are going to listen to a radio interview with two <span class="wterm" onclick="openWordModal('expert')">experts</span> in artificial intelligence. As you listen to the interview, gather information and ideas about whether AI will ever be as smart as humans.</div>
+<img class="fig center big" src="media/p128_car.png" alt="A self-driving Waymo car on a street">
+</div>
+
+<div class="exblock" id="slide5">
+<h2 class="stitle" style="font-size:19px;">Preview the Listening</h2>
+<h3 class="exline"><span class="exlabel">A. Preview</span> The interviewer&rsquo;s first question is, &ldquo;So, are machines now as smart as we are?&rdquo; What do you think? Discuss your ideas with a partner. Take notes on your discussion.</h3>
+<div id="ex5" class="exwrap">
+<p class="model-ans">Sample answer: I don&rsquo;t think machines are as smart as humans yet. They can process a lot of information quickly, but they can&rsquo;t use judgment or common sense the way people do.</p>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p128" onclick="toggleAnswers(this,'ex5','p128')">Show Sample Answer</button></div></div>
+
+<div class="exblock" id="slide6">
+<h3 class="exline"><span class="exlabel">B. Vocabulary</span> Read aloud these words from Listening 1. Check (&#10003;) the ones you know. Use a dictionary to <span class="wterm" onclick="openWordModal('define')">define</span> any new or <span class="wterm" onclick="openWordModal('unknown')">unknown</span> words. Then discuss with a partner how the words will <span class="wterm" onclick="openWordModal('relate')">relate</span> to the unit.</h3>
+<p style="font-size:12.5px;color:#777;">Click any word below to see its definition and the sentence where it appears in the listening.</p>
+<div class="vocabgrid">
+<div><span class="wterm" onclick="openWordModal('automated')">automated</span> <span class="pos">(adj.)</span></div>
+<div><span class="wterm" onclick="openWordModal('layer')">layer</span> <span class="pos">(n.)</span></div>
+<div><span class="wterm" onclick="openWordModal('reject')">reject</span> <span class="pos">(v.)</span></div>
+<div><span class="wterm" onclick="openWordModal('clever')">clever</span> <span class="pos">(adj.)</span></div>
+<div><span class="wterm" onclick="openWordModal('obvious')">obvious</span> <span class="pos">(adj.)</span></div>
+<div><span class="wterm" onclick="openWordModal('stand-by')">stand by</span> <span class="pos">(v. phr.)</span></div>
+<div><span class="wterm" onclick="openWordModal('fair')">fair</span> <span class="pos">(adj.)</span></div>
+<div><span class="wterm" onclick="openWordModal('predictable')">predictable</span> <span class="pos">(adj.)</span></div>
+<div><span class="wterm" onclick="openWordModal('take-over')">take over</span> <span class="pos">(v. phr.)</span></div>
+<div><span class="wterm" onclick="openWordModal('figure-out')">figure out</span> <span class="pos">(v. phr.)</span></div>
+</div>
+<div class="vocab-subhead">Useful chunks from the listening</div>
+<p class="vocab-subnote">These expressions aren&rsquo;t in the printed word list, but they&rsquo;re useful for understanding the interview.</p>
+<div class="vocabgrid">
+<div><span class="wterm" onclick="openWordModal('go-out-on-a-limb')">go out on a limb</span> <span class="pos">(v. phr.)</span></div>
+<div><span class="wterm" onclick="openWordModal('gazillions')">gazillions</span> <span class="pos">(n.)</span></div>
+<div><span class="wterm" onclick="openWordModal('point-taken')">point taken</span> <span class="pos">(n. phr.)</span></div>
+</div>
+</div>
+
+<div class="page-divider"><span>PAGE 129</span></div>
+<div id="p129" class="page-anchor"></div>
+<div class="exblock" id="slide7">
+<div class="barhead dark">Work with the Listening</div>
+<h3 class="exline" style="margin-top:10px;"><span class="exlabel">A. Listen and Take Notes</span> Listen to the radio interview. As you listen, complete the notes.</h3>
+<audio controls id="audio-p129" src="media/Q3e_LS3_U06_02_Listening1_ActivitiesA_C.mp3"></audio>
+<div id="ex7" class="exwrap">
+<div class="notesbox">
+<b class="notes-title">Concerns about using robots</b>
+<p>AI = <span class="blank-ph">&nbsp;<span class="ans-ph">artificial intelligence</span></span><span class="ts-chip" data-t="14" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 0:14</span></p>
+<ul class="notes-list">
+<li>VanDyke: Is AI smarter? depends on <span class="blank-ph">&nbsp;<span class="ans-ph">what we mean by smart</span></span><span class="ts-chip" data-t="62" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 1:02</span></li>
+<li>Ngoma: Old tasks (e.g., moon landings and remembering <span class="blank-ph">&nbsp;<span class="ans-ph">phone numbers</span></span><span class="ts-chip" data-t="75" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 1:15</span>) isn&rsquo;t being &ldquo;smart&rdquo;</li>
+</ul>
+<p>Some jobs AI might take over soon:</p>
+<ol class="notes-list">
+<li>driving <span class="blank-ph">&nbsp;<span class="ans-ph">trucks</span></span><span class="ts-chip" data-t="118" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 1:58</span> &mdash;10 years</li>
+<li>writing <span class="blank-ph">&nbsp;<span class="ans-ph">novels</span></span><span class="ts-chip" data-t="128" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 2:08</span> &mdash;30 years</li>
+<li><span class="wterm" onclick="openWordModal('perform')">performing</span> <span class="blank-ph">&nbsp;<span class="ans-ph">surgery</span></span><span class="ts-chip" data-t="131" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 2:11</span> &mdash;40 years</li>
+</ol>
+<p>Why?</p>
+<ol class="notes-list">
+<li>most jobs are <span class="blank-ph">&nbsp;<span class="ans-ph">routine</span></span><span class="ts-chip" data-t="167" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 2:47</span></li>
+<li>people <span class="wterm" onclick="openWordModal('eventually')">eventually</span> accept machines&mdash;e.g., laser <span class="blank-ph">&nbsp;<span class="ans-ph">surgery</span></span><span class="ts-chip" data-t="184" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 3:04</span></li>
+<li>machines do jobs better, more cheaply</li>
+</ol>
+<p>AI Trucks:</p>
+<ul class="notes-list">
+<li><span class="wterm" onclick="openWordModal('suitable')">suitable</span> because truck driving mostly <span class="blank-ph">&nbsp;<span class="ans-ph">predictable</span></span><span class="ts-chip" data-t="248" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 4:08</span></li>
+<li>BUT: First and last <span class="blank-ph">&nbsp;<span class="ans-ph">mile(s)</span></span><span class="ts-chip" data-t="250" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 4:10</span> need humans because <span class="blank-ph" style="min-width:260px;">&nbsp;<span class="ans-ph">they contain unpredictable things</span></span><span class="ts-chip" data-t="265" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 4:25</span>
+<ul class="notes-sublist">
+<li>Two layers of information for AI trucks:
+<ul class="notes-sublist">
+<li><span class="blank-ph">&nbsp;<span class="ans-ph">GPS</span></span><span class="ts-chip" data-t="292" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 4:52</span> system</li>
+<li><span class="wterm" onclick="openWordModal('set')">sets</span> of <span class="blank-ph">&nbsp;<span class="ans-ph"><span class="wterm" onclick="openWordModal('sensor')">sensors</span></span></span><span class="ts-chip" data-t="302" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 5:02</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>AI Hacking:</p>
+<ul class="notes-list">
+<li>Some targets:
+<ul class="notes-sublist">
+<li>electric <span class="blank-ph">&nbsp;<span class="ans-ph">power</span></span><span class="ts-chip" data-t="354" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 5:54</span> system</li>
+<li><span class="blank-ph">&nbsp;<span class="ans-ph">banking</span></span><span class="ts-chip" data-t="357" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 5:57</span> system</li>
+</ul>
+</li>
+<li>Ngoma: Dangerous but many experts working on <span class="blank-ph">&nbsp;<span class="ans-ph">security</span></span><span class="ts-chip" data-t="373" data-audio="audio-p129" onclick="jumpTo(this)">&#9654; 6:13</span></li>
+</ul>
+</div>
+</div>
+<div class="btnrow">
+<button class="revealbtn ts" onclick="toggleTimestamps(this,'ex7')">Show Timestamps</button>
+<button class="revealbtn" data-group="p129" onclick="toggleAnswers(this,'ex7','p129')">Show Answers</button>
+</div></div>
+
+<div class="page-divider"><span>PAGE 130</span></div>
+<div id="p130" class="page-anchor"></div>
+<div class="exblock" id="slide8">
+<h3 class="exline"><span class="exlabel">B. Categorize</span> Read the statements. Write <i>T</i> (true) or <i>F</i> (false) according to what the interviewer and his two guests say. Then correct each false statement to make it true.</h3>
+<div id="ex8" class="exwrap">
+<ol class="qlist">
+<li>Machines can make <span class="wterm" onclick="openWordModal('wise')">wise</span> decisions, just as humans can. <span class="blank-ph">&nbsp;<span class="ans-ph">F &mdash; The speakers say machines are not wise and that humans are better at managing &ldquo;messy&rdquo; (complex) situations.</span></span></li>
+<li>Experts predict that AI will take over medical surgery before it takes over writing a novel. <span class="blank-ph">&nbsp;<span class="ans-ph">F &mdash; They predict that AI will create novels in 30 years and perform surgery in 40 years.</span></span></li>
+<li>Most laser eye surgery is now automated. <span class="blank-ph">&nbsp;<span class="ans-ph">T</span></span></li>
+<li>Driving a car around town is less predictable than driving a truck on the highway. <span class="blank-ph">&nbsp;<span class="ans-ph">T</span></span></li>
+<li>An AI-controlled truck is a kind of robot. <span class="blank-ph">&nbsp;<span class="ans-ph">T</span></span></li>
+<li>AI trucks have more trouble with GPS systems than with their sensors. <span class="blank-ph">&nbsp;<span class="ans-ph">F &mdash; The speaker says most problems with AI-driven vehicles involve the sensors.</span></span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn" data-group="p130" onclick="toggleAnswers(this,'ex8','p130')">Show Answers</button></div></div>
+
+<div class="exblock" id="slide9">
+<h3 class="exline"><span class="exlabel">C. Identify</span> Read the sentences. Then listen again. Circle the answer that best completes each statement.</h3>
+<audio controls id="audio-p130" src="media/Q3e_LS3_U06_02_Listening1_ActivitiesA_C.mp3"></audio>
+<div id="ex9" class="exwrap">
+<ol class="qlist">
+<li data-correct="a">Dr. Ngoma says that most people no longer consider ___ a <span class="wterm" onclick="openWordModal('sign')">sign</span> that AI is smart.<br>
+<span class="mcopt" data-letter="a">a. storing a lot of information</span>&nbsp;&nbsp;<span class="mcopt" data-letter="b">b. choosing how to use information</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="b">Dr. VanDyke implies that AI might take over jobs ___ than experts <span class="wterm" onclick="openWordModal('predict')">predict</span>.<br>
+<span class="mcopt" data-letter="a">a. more quickly</span>&nbsp;&nbsp;<span class="mcopt" data-letter="b">b. more slowly</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="b">Dr. VanDyke suggests that 30 years ago people did not ___.<br>
+<span class="mcopt" data-letter="a">a. believe they could get eye surgery</span>&nbsp;&nbsp;<span class="mcopt" data-letter="b">b. consider automated eye surgery safe</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="a">Dr. Ngoma says that for the first and last mile of a truck trip, ___.<br>
+<span class="mcopt" data-letter="a">a. humans should drive the trucks</span>&nbsp;&nbsp;<span class="mcopt" data-letter="b">b. city streets should be redesigned</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="b">The interviewer says many people are worried that criminals will use AI to ___.<br>
+<span class="mcopt" data-letter="a">a. steal trucks and cause accidents</span>&nbsp;&nbsp;<span class="mcopt" data-letter="b">b. damage basic systems that keep society running</span>
+<span class="ans-ph mc-marker"></span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn" data-group="p130" onclick="toggleAnswers(this,'ex9','p130')">Circle Answers</button></div></div>
+
+<div class="page-divider"><span>PAGE 131</span></div>
+<div id="p131" class="page-anchor"></div>
+<div class="exblock" id="slide10">
+<h3 class="exline"><span class="exlabel">D. Vocabulary</span> Use the new vocabulary from Listening 1. Complete each sentence with the correct word or phrase.</h3>
+<p style="font-size:12.5px;color:#777;">automated (adj.) &middot; clever (adj.) &middot; fair (adj.) &middot; figure out (v. phr.) &middot; layer (n.) &middot; obvious (adj.) &middot; predictable (adj.) &middot; reject (v.) &middot; stand by (v. phr.) &middot; take over (v. phr.)</p>
+<div id="ex10" class="exwrap">
+<ol class="qlist">
+<li>Each window is made of three <span class="blank-ph">&nbsp;<span class="ans-ph">layers</span></span>: one of glass, one of clear plastic, and another of glass.</li>
+<li>The judge made a(n) <span class="blank-ph">&nbsp;<span class="ans-ph">fair</span></span> decision about dividing up the money. Each person got an <span class="wterm" onclick="openWordModal('equal')">equal</span> share.</li>
+<li>I washed my car at a(n) <span class="blank-ph">&nbsp;<span class="ans-ph">automated</span></span> car wash because it&rsquo;s faster than washing it by hand.</li>
+<li>After the team <span class="wterm" onclick="openWordModal('fall-behind')">fell behind</span> by five goals, it was <span class="blank-ph">&nbsp;<span class="ans-ph">obvious</span></span> that they were going to lose.</li>
+<li>The owners of this company don&rsquo;t run it well. I wish some larger company would <span class="blank-ph">&nbsp;<span class="ans-ph">take over</span></span> the operation.</li>
+<li>The movie had a very <span class="blank-ph">&nbsp;<span class="ans-ph">predictable</span></span> plot: Two people fall in love, they have a fight, and then in the end, they get back together. I knew that would happen.</li>
+<li>Dolphins are known to be very <span class="blank-ph">&nbsp;<span class="ans-ph">clever</span></span> animals. They&rsquo;ve even been seen using tools!</li>
+<li>Todd has never run this machine before. I think I will <span class="blank-ph">&nbsp;<span class="ans-ph">stand by</span></span> <span class="wterm" onclick="openWordModal('just-in-case')">just in case</span> he needs help.</li>
+<li>Young people may <span class="blank-ph">&nbsp;<span class="ans-ph">reject</span></span> traditions and then, when they get older, return to the old ways.</li>
+<li>You never told me you were planning to quit, but it wasn&rsquo;t difficult to <span class="blank-ph">&nbsp;<span class="ans-ph">figure out</span></span> from the way you were acting.</li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn" data-group="p131" onclick="toggleAnswers(this,'ex10','p131')">Show Answers</button></div></div>
+
+<div class="page-divider"><span>PAGE 132</span></div>
+<div id="p132" class="page-anchor"></div>
+<div class="exblock" id="slide11">
+<div class="unitq"><span class="qicon">?</span>Say What You Think</div>
+<h3 class="exline"><span class="exlabel">Discuss</span> Discuss the questions in a group.</h3>
+<div id="ex11" class="exwrap">
+<ol class="qlist">
+<li>Are some AI systems <span class="wterm" onclick="openWordModal('truly')">truly</span> smart? After hearing the interview about AI, what do you think?<br><span class="model-ans">Sample answer: I still don&rsquo;t think AI systems are really smart. They can do a lot of things, but they seem easily confused.</span></li>
+<li>If AI systems take over a lot of jobs from humans, will that be a good thing?<br><span class="model-ans">Sample answer: No. We have enough trouble finding jobs for people already. If a human can do a job perfectly well, a human should do it.</span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p132" onclick="toggleAnswers(this,'ex11','p132')">Show Sample Answers</button></div></div>
+
+</div>
+
+<!-- Word popup modal -->
+<div class="modal-backdrop" id="wordModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('wordModal')">&times;</button>
+    <h3 id="wm-word"></h3>
+    <div class="mpos-row">
+      <span class="mpos" id="wm-pos"></span>
+      <span class="mipa" id="wm-ipa"></span>
+    </div>
+    <div class="mdef" id="wm-def"></div>
+    <button class="simplifybtn" id="wm-simplify-btn" onclick="toggleSimple()">Show simplified definition</button>
+    <div id="wm-examples"></div>
+  </div>
+</div>
+
+<!-- Vocab list modal -->
+<div class="modal-backdrop" id="vocabListModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('vocabListModal')">&times;</button>
+    <h3 style="font-size:20px;display:block;">Unit 6 Vocabulary</h3>
+    <div id="vocabGroups"></div>
+  </div>
+</div>
+
+<!-- Answer-lock modal -->
+<div class="modal-backdrop" id="lockModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('lockModal')">&times;</button>
+    <h3 id="lockTitle">&#128274; Answers locked</h3>
+    <p class="lock-sub">Enter the class code for this page to see the answers.</p>
+    <div id="lockRow">
+      <input type="password" id="lockInput" placeholder="class code" autocomplete="off">
+      <button type="button" id="lockGo">Unlock</button>
+    </div>
+    <p id="lockMsg"></p>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   WORD DEFINITIONS
+   ===================================================================== */
+const WORD_DEFS = {
+"automated":{group:"Listening 1 Target Vocabulary",ipa:"/ˈɔtəˌmeɪtɪd/",pos:"(adj.)",def:"If a process or piece of equipment is automated, it is done or controlled by machines or computers rather than by people.",simple:"Done by machines, not people.",examples:[
+ "The factory switched to an automated assembly line.",
+ "Automated checkouts let shoppers scan their own items.",
+ "From the listening: &ldquo;Remember that most laser eye surgery now is <b>automated</b>.&rdquo;"]},
+"layer":{group:"Listening 1 Target Vocabulary",ipa:"/ˈleɪər/",pos:"(n.)",def:"A layer is a quantity of a substance or material that lies over a surface or between two other things.",simple:"One flat level of something, with others above or below it.",examples:[
+ "The cake has three layers of chocolate sponge.",
+ "A thin layer of dust covered the shelf.",
+ "From the listening: &ldquo;It uses two main <b>layers</b> of information. The first layer comes from a GPS system&hellip;the second layer comes from a set of sensors.&rdquo;"]},
+"reject":{group:"Listening 1 Target Vocabulary",ipa:"/rɪˈdʒɛkt/",pos:"(v.)",def:"If you reject something such as a proposal or a request, you refuse to accept it or agree to it.",simple:"To say no to something.",examples:[
+ "The committee rejected the plan for a new parking lot.",
+ "She rejected his offer to help.",
+ "From the listening: &ldquo;We can <b>reject</b> any inappropriate uses of such things. Machines aren&rsquo;t wise.&rdquo;"]},
+"clever":{group:"Listening 1 Target Vocabulary",ipa:"/ˈklɛvər/",pos:"(adj.)",def:"A clever person is intelligent and able to think and understand things quickly.",simple:"Smart; good at thinking.",examples:[
+ "She's a clever student who always finishes first.",
+ "It was a clever solution to a difficult problem.",
+ "From the listening: &ldquo;Aren&rsquo;t the AI systems <b>clever</b> enough for the first and last mile?&rdquo;"]},
+"obvious":{group:"Listening 1 Target Vocabulary",ipa:"/ˈɑbviəs/",pos:"(adj.)",def:"Something that is obvious is easy to see or understand.",simple:"Easy to see or understand.",examples:[
+ "It was obvious that he was upset.",
+ "The answer seems obvious once you see it explained.",
+ "From the listening: &ldquo;But it is pretty <b>obvious</b> that AI will take over a lot of jobs.&rdquo;"]},
+"stand-by":{group:"Listening 1 Target Vocabulary",ipa:"/stænd baɪ/",pos:"(v. phr.)",def:"If someone stands by, they wait and are ready to act or help if they are needed.",simple:"To wait, ready to help if needed.",examples:[
+ "Ambulance crews stood by in case of an accident.",
+ "The technician had to stand by during the whole procedure.",
+ "From the listening: &ldquo;Some are full of surprises and a human will probably have to be <b>standing by</b>.&rdquo;"]},
+"fair":{group:"Listening 1 Target Vocabulary",ipa:"/fɛr/",pos:"(adj.)",def:"Something that is fair is reasonable and treats people in a way that is right or equal.",simple:"Right and equal for everyone.",examples:[
+ "It wasn't fair that she had to do all the work alone.",
+ "The referee made a fair decision.",
+ "From the listening: &ldquo;That&rsquo;s not <b>fair</b>, Bob! A tough question right at the start.&rdquo;"]},
+"predictable":{group:"Listening 1 Target Vocabulary",ipa:"/prɪˈdɪktəbəl/",pos:"(adj.)",def:"If something is predictable, you know in advance that it will happen, or you know how or when it will happen.",simple:"You can guess what will happen.",examples:[
+ "The plot of the movie was completely predictable.",
+ "Traffic on this road is fairly predictable at rush hour.",
+ "From the listening: &ldquo;Ninety percent of truck driving is on long, <b>predictable</b> highways.&rdquo;"]},
+"take-over":{group:"Listening 1 Target Vocabulary",ipa:"/teɪk ˈoʊvər/",pos:"(v. phr.)",def:"If a person or thing takes over a job, role, or activity, they start doing it, often replacing someone or something else.",simple:"To start doing a job that someone else did before.",examples:[
+ "Robots have taken over a lot of factory work.",
+ "Her assistant took over while she was on leave.",
+ "From the listening: &ldquo;I think AI is completely smart enough for driving trucks&mdash;or it soon will be.&rdquo; (talking about AI <b>taking over</b> truck driving)"]},
+"figure-out":{group:"Listening 1 Target Vocabulary",ipa:"/ˈfɪɡjər aʊt/",pos:"(v. phr.)",def:"If you figure something out, you think about it carefully until you understand it or find the answer.",simple:"To think about something until you understand it.",examples:[
+ "It took me a while to figure out how the machine worked.",
+ "Can you figure out what went wrong?",
+ "From the listening: &ldquo;Non-scientists used to be amazed that machines could <b>figure out</b> moon landings and store gazillions of phone numbers.&rdquo;"]},
+
+"go-out-on-a-limb":{group:"Useful Chunks from the Listening",ipa:"/ˈgoʊ aʊt ɑn ə lɪm/",pos:"(v. phr.)",def:"To do or say something that could be risky or dangerous, often by taking a position that not everyone agrees with.",simple:"To do something that could be risky.",examples:[
+ "I'll go out on a limb and say this is our best idea yet.",
+ "Nobody wanted to go out on a limb and make the first guess.",
+ "From the listening: &ldquo;I&rsquo;m going to <b>go out on a limb</b> and say&hellip;yes, in some ways, but no in other ways.&rdquo;"]},
+"gazillions":{group:"Useful Chunks from the Listening",ipa:"/ɡəˈzɪljənz/",pos:"(n.)",def:"An unspecified, extremely large number of something (an informal, exaggerated way of saying “a huge amount”).",simple:"An extremely large, uncountable number.",examples:[
+ "He has gazillions of photos on his phone.",
+ "There are gazillions of stars in the sky.",
+ "From the listening: &ldquo;Machines could figure out moon landings and store <b>gazillions</b> of phone numbers.&rdquo;"]},
+"point-taken":{group:"Useful Chunks from the Listening",ipa:"/pɔɪnt ˈteɪkən/",pos:"(n. phr.)",def:"An expression used to say that you understand and accept what someone has just said, even if you don't fully agree.",simple:"OK, I understand what you mean.",examples:[
+ "“We can't please everyone.” “Point taken.”",
+ "Point taken — I'll try to be more careful next time.",
+ "From the listening: &ldquo;<b>Point taken</b>, but let me bring up some survey findings that surprised me.&rdquo;"]},
+
+"neurology":{group:"Additional Vocabulary",ipa:"/nʊˈrɑlədʒi/",pos:"(n.)",def:"Neurology is the scientific study of the nervous system, including the brain, and the diseases that affect it.",simple:"The science of the brain and nerves.",examples:[
+ "She's studying neurology because she wants to become a brain surgeon.",
+ "The hospital has a large neurology department.",
+ "From the text: this unit's title is &ldquo;<b>Neurology</b>.&rdquo;"]},
+"artificial":{group:"Additional Vocabulary",ipa:"/ˌɑrtəˈfɪʃəl/",pos:"(adj.)",def:"Artificial things are made by people, often as a copy of something natural, rather than occurring naturally.",simple:"Man-made, not natural.",examples:[
+ "The lake is artificial — it was built by engineers.",
+ "She has an artificial hip after her surgery.",
+ "From the text: &ldquo;Will <b>artificial</b> intelligence ever be as smart as humans?&rdquo;"]},
+"intelligence":{group:"Additional Vocabulary",ipa:"/ɪnˈtɛlədʒəns/",pos:"(n.)",def:"Intelligence is the ability to learn, understand, and think in a logical way about things.",simple:"The ability to learn and think.",examples:[
+ "Dolphins are known for their intelligence.",
+ "The test measures several kinds of intelligence.",
+ "From the text: &ldquo;Will artificial <b>intelligence</b> ever be as smart as humans?&rdquo;"]},
+"assume":{group:"Additional Vocabulary",ipa:"/əˈsum/",pos:"(v.)",def:"If you assume that something is true, you think that it is true although you have no direct proof of it.",simple:"To guess something is true without checking.",examples:[
+ "I assumed the store would be open, but it was closed.",
+ "Don't assume everyone agrees with you.",
+ "From the text: &ldquo;What does Yuna <b>assume</b> when she buys an electronic device?&rdquo;"]},
+"excerpt":{group:"Additional Vocabulary",ipa:"/ˈɛksɛrpt/",pos:"(n.)",def:"An excerpt is a short part taken from a longer piece of writing, a speech, a piece of music, or a film.",simple:"A small piece taken from something longer.",examples:[
+ "The teacher read an excerpt from the novel.",
+ "You can hear an excerpt of the song online.",
+ "From the text: &ldquo;Listen to a radio interview and an <b>excerpt</b> from a college class discussion.&rdquo;"]},
+"gather":{group:"Additional Vocabulary",ipa:"/ˈgæðər/",pos:"(v.)",def:"If you gather information, facts, or ideas, you collect them, often from different places or people.",simple:"To collect information or ideas.",examples:[
+ "The reporter gathered facts for her story.",
+ "We gathered opinions from several classmates.",
+ "From the text: &ldquo;<b>Gather</b> information and ideas to state and explain your opinions.&rdquo;"]},
+"machine":{group:"Additional Vocabulary",ipa:"/məˈʃin/",pos:"(n.)",def:"A machine is a piece of equipment with moving parts that uses power, such as electricity, to do a particular job.",simple:"A thing with parts that does a job using power.",examples:[
+ "The factory uses machines to package the food.",
+ "Is a washing machine considered a robot?",
+ "From the text: &ldquo;What kind of <b>machine</b> is this? Where are the people?&rdquo;"]},
+"unknown":{group:"Additional Vocabulary",ipa:"/ʌnˈnoʊn/",pos:"(adj.)",def:"Something that is unknown is not known or not familiar to you.",simple:"Not known.",examples:[
+ "The cause of the problem is still unknown.",
+ "He traveled to an unknown city with no plan.",
+ "From the text: &ldquo;Use a dictionary to define any new or <b>unknown</b> words.&rdquo;"]},
+"define":{group:"Additional Vocabulary",ipa:"/dɪˈfaɪn/",pos:"(v.)",def:"If you define a word or phrase, you explain exactly what it means.",simple:"To explain what a word means.",examples:[
+ "Can you define what “success” means to you?",
+ "The dictionary defines the word clearly.",
+ "From the text: &ldquo;Use a dictionary to <b>define</b> any new or unknown words.&rdquo;"]},
+"relate":{group:"Additional Vocabulary",ipa:"/rɪˈleɪt/",pos:"(v.)",def:"If one thing relates to another, there is a connection between them.",simple:"To connect one thing to another.",examples:[
+ "How does this reading relate to last week's topic?",
+ "The two problems relate to each other closely.",
+ "From the text: &ldquo;Discuss with a partner how the words will <b>relate</b> to the unit.&rdquo;"]},
+"set":{group:"Additional Vocabulary",ipa:"/sɛt/",pos:"(n.)",def:"A set is a group of things that belong together or are used together.",simple:"A group of things that go together.",examples:[
+ "She bought a set of kitchen knives.",
+ "The class studied a set of new vocabulary words.",
+ "From the text: &ldquo;Two layers of information for AI trucks&hellip;<b>sets</b> of sensors.&rdquo;"]},
+"suitable":{group:"Additional Vocabulary",ipa:"/ˈsutəbəl/",pos:"(adj.)",def:"Something that is suitable for a purpose or situation is right or appropriate for it.",simple:"Right for a certain use.",examples:[
+ "This movie isn't suitable for young children.",
+ "These shoes aren't suitable for hiking.",
+ "From the text: &ldquo;<b>Suitable</b> because truck driving mostly predictable.&rdquo;"]},
+"eventually":{group:"Additional Vocabulary",ipa:"/ɪˈvɛntʃuəli/",pos:"(adv.)",def:"Eventually means in the end, especially after a long delay, a lot of effort, or a series of other events.",simple:"In the end, after some time.",examples:[
+ "We got lost, but we eventually found the hotel.",
+ "Eventually, she agreed to try the new plan.",
+ "From the text: &ldquo;People <b>eventually</b> accept machines&mdash;e.g., laser surgery.&rdquo;"]},
+"perform":{group:"Additional Vocabulary",ipa:"/pərˈfɔrm/",pos:"(v.)",def:"If someone performs a task or action, they do it, often something that requires skill or effort.",simple:"To do something, like a job or task.",examples:[
+ "Surgeons perform operations every day.",
+ "The robot can perform simple repairs.",
+ "From the text: &ldquo;(3) <b>performing</b> surgery&mdash;40 years.&rdquo;"]},
+"expert":{group:"Additional Vocabulary",ipa:"/ˈɛkspɛrt/",pos:"(n.)",def:"An expert is a person who has special skill or a lot of knowledge in a particular subject.",simple:"Someone who knows a lot about something.",examples:[
+ "She's an expert in computer science.",
+ "We asked an expert for advice about the roof.",
+ "From the text: &ldquo;A radio interview with two <b>experts</b> in artificial intelligence.&rdquo;"]},
+"wise":{group:"Additional Vocabulary",ipa:"/waɪz/",pos:"(adj.)",def:"A wise person or decision shows good judgment, especially based on experience and knowledge.",simple:"Smart in a deep, thoughtful way.",examples:[
+ "It was a wise decision to save some of the money.",
+ "My grandmother always gives me wise advice.",
+ "From the text: &ldquo;Machines can make <b>wise</b> decisions, just as humans can.&rdquo;"]},
+"predict":{group:"Additional Vocabulary",ipa:"/prɪˈdɪkt/",pos:"(v.)",def:"If you predict an event or action, you say that it will happen in the future, often based on evidence.",simple:"To say what will happen before it does.",examples:[
+ "Scientists predict the storm will arrive tonight.",
+ "No one could predict how popular the app would become.",
+ "From the text: &ldquo;AI might take over jobs ___ than experts <b>predict</b>.&rdquo;"]},
+"sensor":{group:"Additional Vocabulary",ipa:"/ˈsɛnsər/",pos:"(n.)",def:"A sensor is a device that detects changes in something, such as light, heat, sound, or motion.",simple:"A machine part that notices things like light or movement.",examples:[
+ "The alarm has a motion sensor.",
+ "Automatic doors use a sensor to know when someone is near.",
+ "From the text: &ldquo;Sets of <b>sensors</b>.&rdquo;"]},
+"sign":{group:"Additional Vocabulary",ipa:"/saɪn/",pos:"(n.)",def:"A sign is something that shows that a particular fact, situation, or quality exists.",simple:"Something that shows what is true.",examples:[
+ "Dark clouds are often a sign of rain.",
+ "A smile can be a sign of happiness.",
+ "From the text: &ldquo;Most people no longer consider ___ a <b>sign</b> that AI is smart.&rdquo;"]},
+"equal":{group:"Additional Vocabulary",ipa:"/ˈikwəl/",pos:"(adj.)",def:"Equal amounts, numbers, or sizes are exactly the same as each other.",simple:"The same as something else.",examples:[
+ "The two teams scored an equal number of points.",
+ "Everyone deserves an equal chance.",
+ "From the text: &ldquo;Each person got an <b>equal</b> share.&rdquo;"]},
+"fall-behind":{group:"Additional Vocabulary",ipa:"/fɔl bɪˈhaɪnd/",pos:"(v. phr.)",def:"If you fall behind, you fail to keep up with someone or something, so you lose ground or your position.",simple:"To not keep up; to lose your position.",examples:[
+ "He fell behind in his classes after being sick.",
+ "Our team fell behind early in the game.",
+ "From the text: &ldquo;After the team <b>fell behind</b> by five goals&hellip;&rdquo;"]},
+"just-in-case":{group:"Additional Vocabulary",ipa:"/dʒʌst ɪn keɪs/",pos:"(phr.)",def:"You do something just in case as a precaution, so that you're prepared if a particular thing happens.",simple:"To be ready if something happens.",examples:[
+ "Take an umbrella, just in case it rains.",
+ "I saved a copy of the file just in case.",
+ "From the text: &ldquo;I think I will stand by <b>just in case</b> he needs help.&rdquo;"]},
+"truly":{group:"Additional Vocabulary",ipa:"/ˈtruli/",pos:"(adv.)",def:"Truly means really, or in an accurate and genuine way.",simple:"Really; very much.",examples:[
+ "I am truly grateful for your help.",
+ "It was a truly amazing performance.",
+ "From the text: &ldquo;Are some AI systems <b>truly</b> smart?&rdquo;"]}
+};
+
+const VOCAB_GROUP_ORDER = ["Listening 1 Target Vocabulary","Useful Chunks from the Listening","Additional Vocabulary"];
+
+let currentWordKey = null;
+let showingSimple = false;
+
+function renderWordModal(){
+  const d = WORD_DEFS[currentWordKey];
+  if(!d) return;
+  document.getElementById('wm-word').textContent = currentWordKey.replace(/-/g,' ');
+  document.getElementById('wm-pos').textContent = d.pos;
+  document.getElementById('wm-ipa').textContent = d.ipa;
+  document.getElementById('wm-def').textContent = showingSimple ? d.simple : d.def;
+  document.getElementById('wm-simplify-btn').textContent = showingSimple ? 'Show standard definition' : 'Show simplified definition';
+  document.getElementById('wm-examples').innerHTML = d.examples.map(e=>'<div class="mex">'+e+'</div>').join('');
+}
+function openWordModal(key){
+  if(!WORD_DEFS[key]) return;
+  currentWordKey = key;
+  showingSimple = false;
+  renderWordModal();
+  document.getElementById('wordModal').classList.add('open');
+}
+function toggleSimple(){
+  showingSimple = !showingSimple;
+  renderWordModal();
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function buildVocabChips(){
+  const box = document.getElementById('vocabGroups');
+  const byGroup = {};
+  Object.keys(WORD_DEFS).forEach(k=>{
+    const g = WORD_DEFS[k].group || 'Additional Vocabulary';
+    (byGroup[g] = byGroup[g] || []).push(k);
+  });
+  let html = '';
+  VOCAB_GROUP_ORDER.forEach(g=>{
+    if(!byGroup[g]) return;
+    html += '<div class="vlgrouphead">'+g+'</div><div class="chiprow">';
+    html += byGroup[g].map(k=>'<div class="chip" onclick="closeModal(\'vocabListModal\');openWordModal(\''+k+'\')">'+k.replace(/-/g,' ')+'</div>').join('');
+    html += '</div>';
+  });
+  box.innerHTML = html;
+}
+document.getElementById('vocabListBtn').addEventListener('click', ()=>{ buildVocabChips(); document.getElementById('vocabListModal').classList.add('open'); });
+document.querySelectorAll('.modal-backdrop').forEach(m=>{
+  m.addEventListener('click', (e)=>{ if(e.target===m) m.classList.remove('open'); });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ document.querySelectorAll('.modal-backdrop.open').forEach(m=>m.classList.remove('open')); }
+});
+
+/* =====================================================================
+   Reveal-answers, one item per click. Button flips to "Hide" once the
+   last item in the exercise has been revealed.
+   ===================================================================== */
+/* =====================================================================
+   Answer lock — one passcode per page, plus a master code for the
+   teacher. Nothing is remembered between visits (resets on reload).
+   To change codes, just edit the values below.
+   ===================================================================== */
+const PAGES = {
+  p127: { label:'Page 127', code:'robot'   },
+  p128: { label:'Page 128', code:'sensor'  },
+  p129: { label:'Page 129', code:'circuit' },
+  p130: { label:'Page 130', code:'signal'  },
+  p131: { label:'Page 131', code:'binary'  },
+  p132: { label:'Page 132', code:'neuron'  }
+};
+const MASTER_CODE = 'robot234';
+const unlockedPages = new Set();
+
+function isUnlocked(page){ return !page || unlockedPages.has(page); }
+
+function tryUnlock(page, code){
+  if(code === MASTER_CODE){
+    Object.keys(PAGES).forEach(p=>{ unlockedPages.add(p); refreshLockUI(p); });
+    return true;
+  }
+  if(PAGES[page] && code === PAGES[page].code){
+    unlockedPages.add(page);
+    refreshLockUI(page);
+    return true;
+  }
+  return false;
+}
+
+function refreshLockUI(page){
+  document.querySelectorAll('.revealbtn[data-group="'+page+'"]').forEach(b=>{
+    b.classList.remove('locked');
+  });
+}
+
+let pendingUnlock = null; // { page, onSuccess }
+function openLockModal(page, onSuccess){
+  pendingUnlock = { page: page, onSuccess: onSuccess };
+  document.getElementById('lockTitle').innerHTML = '&#128274; ' + (PAGES[page] ? PAGES[page].label : 'Answers') + ' is locked';
+  document.getElementById('lockMsg').textContent = '';
+  const input = document.getElementById('lockInput');
+  input.value = '';
+  document.getElementById('lockModal').classList.add('open');
+  setTimeout(()=>input.focus(), 50);
+}
+function submitLockCode(){
+  if(!pendingUnlock) return;
+  const input = document.getElementById('lockInput');
+  const val = (input.value || '').trim();
+  if(tryUnlock(pendingUnlock.page, val)){
+    const cb = pendingUnlock.onSuccess;
+    pendingUnlock = null;
+    closeModal('lockModal');
+    if(cb) cb();
+  } else {
+    document.getElementById('lockMsg').textContent = 'Incorrect code. Try again.';
+    input.value = '';
+    input.focus();
+  }
+}
+document.getElementById('lockGo').addEventListener('click', submitLockCode);
+document.getElementById('lockInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submitLockCode(); });
+
+/* =====================================================================
+   Reveal-answers, one item per click. Locked pages open the passcode
+   modal first; the reveal resumes automatically once unlocked.
+   ===================================================================== */
+function toggleAnswers(btn, wrapId, page){
+  if(page && !isUnlocked(page)){
+    openLockModal(page, ()=> toggleAnswers(btn, wrapId, page));
+    return;
+  }
+  const wrap = document.getElementById(wrapId);
+  const items = Array.from(wrap.querySelectorAll('.ans-ph, .model-ans'));
+  const total = items.length;
+  const isModel = btn.classList.contains('model');
+  const baseLabel = btn.dataset.label;
+  const hideLabel = isModel ? (total>1?'Hide Sample Answers':'Hide Sample Answer') : (total>1?'Hide Answers':'Hide Answer');
+  let count = parseInt(wrap.dataset.revealed || '0', 10);
+
+  if(count < total){
+    const item = items[count];
+    item.classList.add('shown');
+    const bp = item.closest('.blank-ph');
+    if(bp) bp.classList.add('shown');
+    if(item.classList.contains('mc-marker')){
+      const li = item.closest('li');
+      const letter = li && li.dataset.correct;
+      if(li && letter){
+        const opt = li.querySelector('.mcopt[data-letter="'+letter+'"]');
+        if(opt) opt.classList.add('circled');
+      }
+    }
+    count++;
+    wrap.dataset.revealed = count;
+    btn.textContent = (count < total) ? baseLabel+' ('+count+'/'+total+')' : hideLabel;
+  } else {
+    items.forEach(it=>{
+      it.classList.remove('shown');
+      const bp = it.closest('.blank-ph');
+      if(bp) bp.classList.remove('shown');
+    });
+    wrap.querySelectorAll('.mcopt.circled').forEach(o=>o.classList.remove('circled'));
+    wrap.dataset.revealed = 0;
+    btn.textContent = baseLabel;
+  }
+}
+document.querySelectorAll('.revealbtn:not(.ts)').forEach(b=>{ b.dataset.label = b.textContent; });
+
+/* Lock every answer button whose page hasn't been unlocked yet (i.e. all of them, on load) */
+document.querySelectorAll('.revealbtn[data-group]').forEach(b=>{
+  if(!isUnlocked(b.getAttribute('data-group'))) b.classList.add('locked');
+});
+
+/* =====================================================================
+   Timestamps (page 129) — show/hide clickable time chips; clicking one
+   jumps the linked audio player to that point and plays it.
+   ===================================================================== */
+function toggleTimestamps(btn, wrapId){
+  const wrap = document.getElementById(wrapId);
+  const on = wrap.classList.toggle('ts-visible');
+  btn.textContent = on ? 'Hide Timestamps' : 'Show Timestamps';
+}
+function jumpTo(el){
+  const t = parseFloat(el.dataset.t);
+  const audioId = el.dataset.audio || 'audio-p129';
+  const audio = document.getElementById(audioId);
+  if(audio && !isNaN(t)){
+    audio.currentTime = t;
+    audio.play();
+  }
+}
+
+/* =====================================================================
+   Warm-up quiz — click an option to select it (opinion only, no scoring)
+   ===================================================================== */
+document.querySelectorAll('.quizopt').forEach(o=>{
+  o.addEventListener('click', ()=>{
+    const q = o.dataset.q;
+    document.querySelectorAll('.quizopt[data-q="'+q+'"]').forEach(x=>{
+      x.classList.remove('selected');
+      const r = x.querySelector('.qresult');
+      if(r) r.textContent = '';
+    });
+    o.classList.add('selected');
+    const r = o.querySelector('.qresult');
+    if(r) r.textContent = '→ Your result: ' + o.dataset.outcome;
+  });
+});
+
+/* =====================================================================
+   Highlighter / eraser tool
+   ===================================================================== */
+let highlightMode=false, eraseMode=false;
+const hlBtn=document.getElementById('highlightBtn'), erBtn=document.getElementById('eraseBtn');
+hlBtn.addEventListener('click', ()=>{
+  highlightMode=!highlightMode; eraseMode=false;
+  hlBtn.classList.toggle('on',highlightMode); erBtn.classList.remove('on');
+});
+erBtn.addEventListener('click', ()=>{
+  eraseMode=!eraseMode; highlightMode=false;
+  erBtn.classList.toggle('on',eraseMode); hlBtn.classList.remove('on');
+});
+document.addEventListener('mouseup', (e)=>{
+  if(!highlightMode) return;
+  if(e.target.closest('#pagenav')||e.target.closest('#rightctrl')||e.target.closest('.modal-backdrop')) return;
+  const sel = window.getSelection();
+  if(!sel || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  if(range.collapsed) return;
+  const mark = document.createElement('mark');
+  mark.className='user-highlight';
+  try{
+    range.surroundContents(mark);
+  }catch(err){
+    const frag = range.extractContents();
+    mark.appendChild(frag);
+    range.insertNode(mark);
+  }
+  sel.removeAllRanges();
+});
+document.addEventListener('click', (e)=>{
+  if(!eraseMode) return;
+  const mk = e.target.closest('mark.user-highlight');
+  if(mk){
+    const parent = mk.parentNode;
+    while(mk.firstChild) parent.insertBefore(mk.firstChild, mk);
+    parent.removeChild(mk);
+  }
+});
+
+/* =====================================================================
+   Zoom control — scales the whole continuous document at once
+   ===================================================================== */
+const BASE_ZOOM = 1.2;
+let relScale = 1.0;
+const contentEl = document.getElementById('content');
+function applyZoom(){
+  const doc = document.documentElement;
+  const maxScrollBefore = Math.max(1, doc.scrollHeight - window.innerHeight);
+  const scrollFrac = doc.scrollTop / maxScrollBefore;
+  const prevBehavior = doc.style.scrollBehavior;
+  doc.style.scrollBehavior = 'auto';
+
+  contentEl.style.transform = 'scale(' + (relScale*BASE_ZOOM) + ')';
+  contentEl.style.width = (100/(relScale*BASE_ZOOM)) + '%';
+  document.getElementById('zoomlabel').textContent = Math.round(relScale*100) + '%';
+
+  requestAnimationFrame(()=>{
+    const maxScrollAfter = Math.max(1, doc.scrollHeight - window.innerHeight);
+    doc.scrollTop = scrollFrac * maxScrollAfter;
+    doc.style.scrollBehavior = prevBehavior;
+  });
+}
+document.getElementById('zoomIn').addEventListener('click', ()=>{ relScale = Math.min(relScale+0.1, 1.8); applyZoom(); });
+document.getElementById('zoomOut').addEventListener('click', ()=>{ relScale = Math.max(relScale-0.1, 0.6); applyZoom(); });
+applyZoom();
+
+/* =====================================================================
+   Active page-number highlighting while scrolling
+   ===================================================================== */
+const pageAnchors = ['warmup','p126','p127','p128','p129','p130','p131','p132'].map(id=>document.getElementById(id)).filter(Boolean);
+const pagenavLinks = {};
+document.querySelectorAll('#pagenav a').forEach(a=> pagenavLinks[a.getAttribute('data-p')] = a);
+function updateActivePage(){
+  let current = pageAnchors[0];
+  const refY = 90;
+  for(const a of pageAnchors){
+    const rect = a.getBoundingClientRect();
+    if(rect.top - refY <= 0) current = a; else break;
+  }
+  Object.values(pagenavLinks).forEach(a=>a.classList.remove('active'));
+  if(current && pagenavLinks[current.id]) pagenavLinks[current.id].classList.add('active');
+}
+window.addEventListener('scroll', updateActivePage, {passive:true});
+window.addEventListener('resize', updateActivePage);
+setTimeout(updateActivePage, 300);
+</script>
+</body>
+</html>

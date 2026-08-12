@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Q: Skills for Success 3 — Unit 5, pp. 114–116</title>
+<style>
+  :root{
+    --brand-green:#78BE21;
+    --brand-green-dark:#5C8A1E;
+    --accent-lime:#A7CB47;
+    --ink:#0B0F14;
+    --paper:#FFFFFF;
+    --text:#181818;
+    --line:#D9D9D9;
+    --panel:#F4F6EF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#e7e9e4;font-family:'Segoe UI',Helvetica,Arial,sans-serif;color:var(--text);}
+
+  /* ---------- TOP NAV ---------- */
+  #topnav{
+    position:fixed; top:0; left:0; right:0; height:56px; z-index:100;
+    background:var(--ink); display:flex; align-items:center;
+    padding:0 16px; gap:6px; overflow-x:auto; white-space:nowrap;
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+  }
+  #topnav .brand{
+    color:var(--accent-lime); font-weight:800; letter-spacing:.5px;
+    font-size:13px; margin-right:14px; flex:0 0 auto;
+  }
+  #topnav .brand small{display:block; color:#cfcfcf; font-weight:400; font-size:10px;}
+  .navbtn{
+    flex:0 0 auto; background:transparent; border:1px solid #333; color:#eee;
+    padding:7px 13px; border-radius:18px; font-size:12.5px; cursor:pointer;
+    font-weight:600; transition:.15s;
+  }
+  .navbtn:hover{border-color:var(--brand-green);}
+  .navbtn.active{background:var(--brand-green); color:var(--ink); border-color:var(--brand-green);}
+
+  /* ---------- DECK ---------- */
+  #deck{
+    margin-top:56px; min-height:calc(100vh - 56px);
+    display:flex; align-items:center; justify-content:center;
+    padding:14px 70px;
+  }
+  .slide{
+    display:none;
+    width:100%; max-width:1380px; aspect-ratio:16/9;
+    background:var(--paper); position:relative;
+    box-shadow:0 8px 30px rgba(0,0,0,.25);
+    padding:22px 40px 18px; overflow-y:auto; overflow-x:hidden;
+    flex-direction:column;
+  }
+  .slide.active{display:flex;}
+
+  .eyebrow{
+    font-size:12px; font-weight:700; letter-spacing:1px; color:#888;
+    text-transform:uppercase; margin-bottom:2px;
+  }
+  .section-title{
+    display:flex; align-items:center; gap:12px; margin-bottom:8px;
+  }
+  .section-title .icon{
+    width:34px; height:34px; border-radius:50%; background:var(--brand-green);
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .section-title .icon svg{width:15px; height:15px; fill:#fff;}
+  .section-title h1{
+    font-size:24px; font-weight:800; text-transform:uppercase; margin:0;
+    letter-spacing:.5px; color:var(--ink);
+  }
+  .activity-tag{
+    display:flex; align-items:center; color:var(--brand-green-dark); font-weight:800;
+    font-size:18px; letter-spacing:.5px; margin:4px 0 8px;
+    text-transform:uppercase;
+  }
+  .activity-tag .letter{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; background:var(--accent-lime);
+    color:var(--ink); margin-right:8px; font-size:15px; flex:0 0 auto;
+  }
+  .prompt{
+    font-size:18px; line-height:1.35; color:var(--ink); margin:0 0 10px; font-weight:500;
+  }
+  .body-text{font-size:15.5px; line-height:1.45; margin:0 0 8px; color:#262626;}
+
+  .content-row{display:flex; gap:22px; flex:1; align-items:flex-start; min-height:0;}
+  .content-side{flex:1; min-width:0;}
+  .content-image{flex:1; min-width:0; display:flex; align-items:center; justify-content:center;}
+  .content-image img{max-width:100%; max-height:330px; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.25);}
+
+  .vocab-box{
+    background:var(--panel); border-left:5px solid var(--brand-green);
+    border-radius:6px; padding:12px 16px;
+  }
+  .vocab-box h3{
+    margin:0 0 8px; font-size:13px; letter-spacing:.5px; color:var(--brand-green-dark);
+    text-transform:uppercase; font-weight:800;
+  }
+  .vocab-box dl{margin:0; columns:1;}
+  .vocab-box dt{font-weight:700; font-size:14px; color:var(--ink); margin-top:6px;}
+  .vocab-box dt:first-child{margin-top:0;}
+  .vocab-box dt .pos{font-weight:400; font-style:italic; color:#666; font-size:12px;}
+  .vocab-box dd{margin:1px 0 0; font-size:13px; color:#3a3a3a; line-height:1.3;}
+
+  /* table */
+  table.chart{width:100%; border-collapse:collapse; margin-top:6px; font-size:14.5px;}
+  table.chart th{
+    background:var(--brand-green-dark); color:#fff; text-align:left;
+    padding:7px 12px; font-size:14.5px; text-transform:uppercase; letter-spacing:.5px;
+  }
+  table.chart td{
+    border:1px solid var(--line); padding:8px 12px; vertical-align:top; width:50%;
+  }
+  table.chart tr.row-label td{
+    background:#fafafa; font-weight:700; color:#444; border-top:2px solid #bbb; font-size:13.5px;
+  }
+  .lines{min-height:30px; color:#999; font-style:italic; font-size:14px;}
+  .answer-fill{display:none; color:var(--ink); font-style:normal; font-weight:500; font-size:14px;}
+  .answer-fill.shown{display:block;}
+  tr.done-row td{color:#888; font-style:italic; font-size:12.5px; padding:5px 12px;}
+
+  .examples-line{
+    font-size:13.5px; color:#555; margin:4px 0 8px; font-style:italic;
+  }
+
+  .reveal-btn{
+    margin-top:10px; align-self:flex-start; background:var(--ink); color:#fff;
+    border:none; padding:9px 18px; border-radius:20px; font-size:13.5px; font-weight:700;
+    cursor:pointer; display:flex; align-items:center; gap:7px; transition:.15s; flex:0 0 auto;
+  }
+  .reveal-btn:hover{background:var(--brand-green-dark);}
+  .reveal-btn .dot{width:7px; height:7px; border-radius:50%; background:var(--brand-green);}
+
+  /* video slide */
+  .video-slide{justify-content:center; align-items:center; text-align:center; background:var(--ink);}
+  .video-slide .eyebrow{color:var(--accent-lime); text-align:center;}
+  .video-slide h1{color:#fff; font-size:30px; text-transform:uppercase; margin:4px 0 12px; font-weight:800;}
+  .video-slide video{width:100%; max-width:780px; max-height:60vh; border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,.5); background:#000;}
+  .video-slide .cap{color:#cfcfcf; margin-top:10px; font-size:13.5px; font-style:italic;}
+
+  /* vocab skill slide */
+  .skill-banner{
+    background:var(--ink); color:#fff; padding:10px 20px; border-radius:6px;
+    margin-bottom:10px;
+  }
+  .skill-banner .label{color:var(--accent-lime); font-weight:800; letter-spacing:1px; font-size:12px; text-transform:uppercase;}
+  .skill-banner h1{margin:2px 0 0; font-size:22px; font-weight:800;}
+  .dict-card{
+    background:var(--panel); border:1px solid var(--line); border-left:5px solid var(--brand-green);
+    border-radius:6px; padding:10px 16px; margin:8px 0 10px; font-size:13.5px; line-height:1.45;
+  }
+  .dict-card b{color:var(--ink);}
+  .skill-foot{font-size:11px; color:#888; font-style:italic; margin-top:auto;}
+
+  /* word family chart (p.116) */
+  table.wf{width:100%; border-collapse:collapse; font-size:14px; margin-top:6px;}
+  table.wf th{background:var(--brand-green-dark); color:#fff; padding:6px 10px; text-transform:uppercase; font-size:13px; letter-spacing:.4px;}
+  table.wf td{border:1px solid var(--line); padding:6px 10px; text-align:left;}
+  table.wf td.given{font-weight:700;}
+  table.wf td.na{background:#cfe3a8; text-align:center; color:#5f7a3a; font-style:italic; font-size:12px;}
+  table.wf td .ans{display:none; color:var(--brand-green-dark); font-weight:700;}
+  table.wf td .ans.shown{display:inline;}
+  table.wf td .blank{color:#bbb;}
+  table.wf td .blank.hide{display:none;}
+
+  .sentence-cols{display:flex; gap:22px; font-size:13.5px; line-height:1.4;}
+  .sentence-col{flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;}
+  .sentence-col .num{font-weight:700; color:var(--brand-green-dark); margin-right:4px;}
+  .sentence-col .ans{display:none; color:var(--brand-green-dark); font-weight:700; background:#eef6e0; padding:0 4px; border-radius:3px;}
+  .sentence-col .ans.shown{display:inline;}
+  .sentence-col .blank{border-bottom:1px solid #999; display:inline-block; min-width:90px;}
+  .sentence-col .blank.hide{display:none;}
+
+  .scroll-area{flex:1; padding-right:4px;}
+
+  /* ---------- VERTICAL SIDE CONTROLS ---------- */
+  #controls{
+    position:fixed; right:14px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px; z-index:90; align-items:center;
+  }
+  #controls button{
+    background:var(--ink); color:#fff; border:none; width:46px; height:46px; border-radius:50%;
+    font-size:18px; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.3);
+  }
+  #controls button:hover{background:var(--brand-green-dark);}
+  #counter{
+    background:#fff; color:var(--ink); padding:6px 10px; border-radius:14px; font-weight:700;
+    box-shadow:0 4px 12px rgba(0,0,0,.15); font-size:12.5px; writing-mode:horizontal-tb;
+  }
+
+  /* ---------- LEFT FONT-SIZE CONTROLS ---------- */
+  #fontControls{
+    position:fixed; left:14px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px; z-index:90; align-items:center;
+  }
+  #fontControls button{
+    background:var(--ink); color:#fff; border:none; width:46px; height:46px; border-radius:50%;
+    font-size:17px; font-weight:800; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.3);
+  }
+  #fontControls button:hover{background:var(--brand-green-dark);}
+  #fontLabel{
+    background:#fff; color:var(--ink); padding:6px 8px; border-radius:14px; font-weight:700;
+    box-shadow:0 4px 12px rgba(0,0,0,.15); font-size:11.5px;
+  }
+
+  @media (max-width:900px){
+    .slide{padding:16px; aspect-ratio:auto; min-height:560px;}
+    .content-row{flex-direction:column;}
+    .section-title h1{font-size:19px;}
+    .prompt{font-size:16px;}
+    #deck{padding:10px 56px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="topnav">
+  <div class="brand">Q: SKILLS FOR SUCCESS 3<small>Unit 5 · Behavioral Science · pp. 114–116</small></div>
+  <button class="navbtn" data-target="preview">A. Preview</button>
+  <button class="navbtn" data-target="video">▶ Unit Video</button>
+  <button class="navbtn" data-target="categorize">B. Categorize</button>
+  <button class="navbtn" data-target="extend">C. Extend</button>
+  <button class="navbtn" data-target="swyt">Say What You Think</button>
+  <button class="navbtn" data-target="vocabskill">Vocabulary Skill</button>
+  <button class="navbtn" data-target="wfcategorize">A. Categorize (Words)</button>
+  <button class="navbtn" data-target="wfapply">B. Apply (Words)</button>
+</div>
+
+<div id="deck">
+
+  <!-- SLIDE 1: A. PREVIEW -->
+  <section class="slide" id="slide-preview">
+    <div class="eyebrow">Work with the Video · Unit 5, p. 114</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <h1>Work with the Video</h1>
+    </div>
+
+    <div class="activity-tag"><span class="letter">A</span>Preview</div>
+    <p class="prompt">Do you like to explore new places? Why or why not?</p>
+
+    <div class="content-row">
+      <div class="content-side">
+        <div class="vocab-box">
+          <h3>Video Vocabulary</h3>
+          <dl>
+            <dt>expedition <span class="pos">(n.)</span></dt>
+            <dd>a long trip for a special purpose</dd>
+            <dt>rival <span class="pos">(n.)</span></dt>
+            <dd>a person, group, or thing that is competing with another</dd>
+            <dt>eastward <span class="pos">(adv.)</span></dt>
+            <dd>toward the east</dd>
+            <dt>strait <span class="pos">(n.)</span></dt>
+            <dd>a narrow area of water that joins two larger seas or oceans</dd>
+            <dt>capture <span class="pos">(v.)</span></dt>
+            <dd>to take someone prisoner</dd>
+            <dt>voyage <span class="pos">(n.)</span></dt>
+            <dd>a long trip by ship or in space</dd>
+            <dt>circumnavigation <span class="pos">(n.)</span></dt>
+            <dd>the act of sailing around something, especially all the way around the world</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="content-image">
+        <img src="media/ship-p114.png" alt="Illustration of Magellan's ship in stormy seas, p.114">
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: VIDEO -->
+  <section class="slide video-slide" id="slide-video">
+    <div class="eyebrow">Unit 5 Video</div>
+    <h1>Magellan's Voyage</h1>
+    <video controls preload="metadata">
+      <source src="media/L3-U5-1.mp4" type="video/mp4">
+      Your browser does not support embedded video. The file is located at media/L3-U5-1.mp4.
+    </video>
+    <div class="cap">Watch two or three times before completing Activity B: Categorize.</div>
+  </section>
+
+  <!-- SLIDE 3: B. CATEGORIZE -->
+  <section class="slide" id="slide-categorize">
+    <div class="eyebrow">Work with the Video · Unit 5, p. 114</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <h1>Work with the Video</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">B</span>Categorize</div>
+    <p class="prompt">Watch the video two or three times. Take notes in the first part of the chart.</p>
+
+    <table class="chart">
+      <tr><th>Risks</th><th>Outcomes</th></tr>
+      <tr class="row-label"><td colspan="2">Notes from the video:</td></tr>
+      <tr>
+        <td>
+          <div class="lines" id="cat-risks-blank">&nbsp;</div>
+          <div class="answer-fill" id="cat-risks-fill">Set out on an expedition, headed west, unexplored, sailed across the Pacific</div>
+        </td>
+        <td>
+          <div class="lines" id="cat-out-blank">&nbsp;</div>
+          <div class="answer-fill" id="cat-out-fill">Men were sick and hungry, reached the Philippines and was killed, a single ship returned home, proved the world was round, brought back valuable spices</div>
+        </td>
+      </tr>
+      <tr class="row-label"><td colspan="2">My ideas: <span style="font-weight:400; font-style:italic;">(see Activity C — Extend)</span></td></tr>
+    </table>
+
+    <button class="reveal-btn" onclick="toggleAnswer(this,['cat-risks-fill','cat-out-fill'])"><span class="dot"></span>Show Answers</button>
+  </section>
+
+  <!-- SLIDE 4: C. EXTEND -->
+  <section class="slide" id="slide-extend">
+    <div class="eyebrow">Work with the Video · Unit 5, p. 114</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <h1>Work with the Video</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">C</span>Extend</div>
+    <p class="prompt">What are the risks or outcomes of other voyages or expeditions that you know about? Write your ideas in the chart above.</p>
+
+    <table class="chart">
+      <tr><th>Risks</th><th>Outcomes</th></tr>
+      <tr class="done-row"><td colspan="2">Notes from the video: completed in Activity B</td></tr>
+      <tr class="row-label"><td colspan="2">My ideas:</td></tr>
+      <tr>
+        <td>
+          <div class="lines" id="ext-risks-blank">&nbsp;</div>
+          <div class="answer-fill" id="ext-risks-fill">Exploring space — could have an explosion or fail to return</div>
+        </td>
+        <td>
+          <div class="lines" id="ext-out-blank">&nbsp;</div>
+          <div class="answer-fill" id="ext-out-fill">Learn more about space; find places to live in the future</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="answer-fill" id="ext-examples" style="font-style:italic; color:#555; font-size:13px; background:#fafafa;">Examples: Christopher Columbus's voyage to the Americas · The first Moon landing</td>
+      </tr>
+    </table>
+
+    <button class="reveal-btn" onclick="toggleAnswer(this,['ext-risks-fill','ext-out-fill','ext-examples'])"><span class="dot"></span>Show Answers</button>
+  </section>
+
+  <!-- SLIDE 5: SAY WHAT YOU THINK (p.115) -->
+  <section class="slide" id="slide-swyt">
+    <div class="eyebrow">Say What You Think · Unit 5, p. 115</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Say What You Think</h1>
+    </div>
+    <div class="activity-tag">Synthesize</div>
+    <p class="body-text">Think about Listening 1, Listening 2, and the unit video as you discuss the questions.</p>
+
+    <div class="scroll-area">
+      <ol style="font-size:15.5px; line-height:1.5; padding-left:20px; margin:0;">
+        <li>What kind of risks do people take that are primarily for personal benefit? What risks do people take for the benefit of others?
+          <div class="answer-fill" id="swyt-1">Risks we take for personal benefit might include taking a new job and going to school far away from home. Risks we take for others might include trying to help someone in danger or moving so our children will have better lives.</div>
+        </li>
+        <li>Are you a person who often takes risks? Why or why not? Do you think that will change?
+          <div class="answer-fill" id="swyt-2">I take some risks. For example, I play some sports that are risky, and I like to try new things. I don't do things like skydiving. Based on these studies, it seems likely that I'll like taking risks less as I get older.</div>
+        </li>
+        <li>How have the risks taken in the unit changed the world? What does this say about taking risks?
+          <div class="answer-fill" id="swyt-3">Magellan and the scientists are examples of people who take risks that help change the world. Magellan found a way to travel around the world and learned about new places. The two scientists help protect people by learning about dangerous weather and volcanoes. This says that sometimes taking risks is worth it, or even necessary.</div>
+        </li>
+      </ol>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleAnswer(this,['swyt-1','swyt-2','swyt-3'], true)"><span class="dot"></span>Show Answers</button>
+  </section>
+
+  <!-- SLIDE 6: VOCABULARY SKILL -->
+  <section class="slide" id="slide-vocabskill">
+    <div class="skill-banner">
+      <div class="label">Vocabulary Skill</div>
+      <h1>Word Families</h1>
+    </div>
+
+    <div class="scroll-area">
+      <p class="body-text">One way to increase your vocabulary is to understand word families. Word families consist of words that come from the same root and are related in form. They usually include several different parts of speech (a noun, an adjective, and a verb form). The ending of the word often indicates the part of speech.</p>
+
+      <div class="dict-card">
+        <b>in·vent</b> /ɪnˈvɛnt/ <i>verb</i> [T] <b>1</b> to think of or make something for the first time: <i>Who invented the wheel? • When was the camera invented?</i> <b>2</b> to say or describe something that is not true: <i>I realized that he had invented the whole story.</i> ▶ <b>in·vent·or</b> /ɪnˈvɛntər/ <i>noun</i> [C]<br>
+        <b>in·ven·tion</b> /ɪnˈvɛnʃən/ <i>noun</i> <b>1</b> [C] a thing that has been made or designed by someone for the first time: <i>The microwave oven is a very useful invention.</i> <b>2</b> [U] the action or process of making or designing something for the first time: <i>Books had to be written by hand before the invention of printing.</i> <b>3</b> [C,U] a story or excuse that is not true: <i>This story is apparently a complete invention.</i><br>
+        <b>in·ven·tive</b> /ɪnˈvɛntɪv/ <i>adj.</i> having new and interesting ideas ▶ <b>in·ven·tive·ly</b> <i>adverb</i> [U]
+      </div>
+
+      <p class="body-text">When you look up new words in the dictionary, look at the other words in the same word family. By doing this, you can add several new words to your vocabulary.</p>
+      <p class="body-text">Another benefit of understanding word families is that when you see new words that look similar to words you already know, you can use your knowledge to figure out their meaning.</p>
+    </div>
+
+    <div class="skill-foot">All dictionary entries adapted from the Oxford American Dictionary for learners of English © Oxford University Press 2011.</div>
+  </section>
+
+  <!-- SLIDE 7: A. CATEGORIZE (word family chart, p.116) -->
+  <section class="slide" id="slide-wfcategorize">
+    <div class="eyebrow">Vocabulary Skill · Unit 5, p. 116</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Word Families</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">A</span>Categorize</div>
+    <p class="prompt" style="font-size:15px;">Work with a partner. Complete the word family chart with any forms of the words you know. Use a dictionary to check your answers.</p>
+
+    <table class="wf">
+      <tr><th>Verb</th><th>Noun</th><th>Adjective</th><th>Adverb</th></tr>
+      <tr><td class="given">invent</td><td class="given">inventor</td><td class="given">inventive</td><td class="given">inventively</td></tr>
+      <tr>
+        <td><span class="blank" id="wf2v-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf2v-a">develop</span></td>
+        <td><span class="blank" id="wf2n-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf2n-a">development</span></td>
+        <td class="given">developmental</td>
+        <td><span class="blank" id="wf2d-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf2d-a">developmentally</span></td>
+      </tr>
+      <tr>
+        <td class="given">discover</td>
+        <td><span class="blank" id="wf3n-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf3n-a">discovery</span></td>
+        <td class="na">no word</td><td class="na">no word</td>
+      </tr>
+      <tr>
+        <td class="given">explore</td>
+        <td><span class="blank" id="wf4n-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf4n-a">exploration, explorer</span></td>
+        <td><span class="blank" id="wf4d-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf4d-a">exploratory</span></td>
+        <td class="na">no word</td>
+      </tr>
+      <tr>
+        <td><span class="blank" id="wf5v-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf5v-a">finance</span></td>
+        <td><span class="blank" id="wf5n-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf5n-a">financer</span></td>
+        <td class="given">financial</td>
+        <td><span class="blank" id="wf5d-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf5d-a">financially</span></td>
+      </tr>
+      <tr>
+        <td class="given">locate</td>
+        <td><span class="blank" id="wf6n-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf6n-a">location</span></td>
+        <td class="na">no word</td><td class="na">no word</td>
+      </tr>
+      <tr>
+        <td class="given">prove</td>
+        <td><span class="blank" id="wf7n-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf7n-a">proof</span></td>
+        <td class="given">proven</td>
+        <td class="na">no word</td>
+      </tr>
+      <tr>
+        <td class="given">solve</td>
+        <td><span class="blank" id="wf8n-b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="ans" id="wf8n-a">solution</span></td>
+        <td class="na">no word</td><td class="na">no word</td>
+      </tr>
+    </table>
+
+    <button class="reveal-btn" onclick="toggleWF(this)"><span class="dot"></span>Show Answers</button>
+  </section>
+
+  <!-- SLIDE 8: B. APPLY (p.116) -->
+  <section class="slide" id="slide-wfapply">
+    <div class="eyebrow">Vocabulary Skill · Unit 5, p. 116</div>
+    <div class="section-title">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.38C8.56 21.5 10.29 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+      <h1>Word Families</h1>
+    </div>
+    <div class="activity-tag"><span class="letter">B</span>Apply</div>
+    <p class="prompt" style="font-size:15px;">Complete each sentence with an appropriate word from your completed chart in Activity A.</p>
+
+    <div class="scroll-area">
+      <div class="sentence-cols">
+        <div class="sentence-col">
+          <div><span class="num">1.</span>A <span class="blank" id="s1-b">&nbsp;</span><span class="ans" id="s1-a">developmental</span> psychologist is interested in how children grow and change.</div>
+          <div><span class="num">2.</span>I can't <span class="blank" id="s2-b">&nbsp;</span><span class="ans" id="s2-a">solve</span> this math problem.</div>
+          <div><span class="num">3.</span>The scientist made an important new <span class="blank" id="s3-b">&nbsp;</span><span class="ans" id="s3-a">discovery</span>.</div>
+          <div><span class="num">4.</span>Independent TV producers <span class="blank" id="s4-b">&nbsp;</span><span class="ans" id="s4-a">finance</span> their programs in different ways, from credit cards to private investors to personal savings.</div>
+          <div><span class="num">5.</span>The <span class="blank" id="s5-b">&nbsp;</span><span class="ans" id="s5-a">solution</span> to the problem is at the back of the book.</div>
+        </div>
+        <div class="sentence-col">
+          <div><span class="num">6.</span>Having too much credit card debt can lead to <span class="blank" id="s6-b">&nbsp;</span><span class="ans" id="s6-a">financial</span> disaster.</div>
+          <div><span class="num">7.</span>Scientists have never found real <span class="blank" id="s7-b">&nbsp;</span><span class="ans" id="s7-a">proof</span> that aliens exist.</div>
+          <div><span class="num">8.</span>We decided not to buy the house because of its <span class="blank" id="s8-b">&nbsp;</span><span class="ans" id="s8-a">location</span>. It was too close to the freeway.</div>
+          <div><span class="num">9.</span>I can't <span class="blank" id="s9-b">&nbsp;</span><span class="ans" id="s9-a">prove</span> he took my money, but I think he did.</div>
+          <div><span class="num">10.</span>Outer space and the deep ocean are the last great regions for human <span class="blank" id="s10-b">&nbsp;</span><span class="ans" id="s10-a">exploration</span>. They are difficult for people to live in, so we don't know much about them.</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleSentences(this)"><span class="dot"></span>Show Answers</button>
+  </section>
+
+</div>
+
+<div id="fontControls">
+  <button id="fontPlus" title="Increase text size">A+</button>
+  <div id="fontLabel">100%</div>
+  <button id="fontMinus" title="Decrease text size">A−</button>
+</div>
+
+<div id="controls">
+  <button id="prevBtn" title="Previous">▲</button>
+  <div id="counter">1 / 8</div>
+  <button id="nextBtn" title="Next">▼</button>
+</div>
+
+<script>
+  const order = ['preview','video','categorize','extend','swyt','vocabskill','wfcategorize','wfapply'];
+  let idx = 0;
+
+  function showSlide(i){
+    idx = (i+order.length)%order.length;
+    order.forEach((id,n)=>{
+      document.getElementById('slide-'+id).classList.toggle('active', n===idx);
+    });
+    document.querySelectorAll('.navbtn').forEach((b,n)=>{
+      b.classList.toggle('active', n===idx);
+    });
+    document.getElementById('counter').textContent = (idx+1)+' / '+order.length;
+    if(typeof refreshFontLabel === 'function') refreshFontLabel();
+  }
+
+  document.querySelectorAll('.navbtn').forEach((b,n)=>{
+    b.addEventListener('click', ()=> showSlide(n));
+  });
+  document.getElementById('prevBtn').addEventListener('click', ()=> showSlide(idx-1));
+  document.getElementById('nextBtn').addEventListener('click', ()=> showSlide(idx+1));
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight' || e.key==='ArrowDown') showSlide(idx+1);
+    if(e.key==='ArrowLeft' || e.key==='ArrowUp') showSlide(idx-1);
+  });
+
+  function toggleAnswer(btn, ids){
+    const first = document.getElementById(ids[0]);
+    if(!first) return;
+    const anyShown = first.classList.contains('shown');
+    ids.forEach(id=>{
+      const fill = document.getElementById(id);
+      if(!fill) return;
+      fill.classList.toggle('shown', !anyShown);
+      if(id.indexOf('-fill') !== -1){
+        const blank = document.getElementById(id.replace('-fill','-blank'));
+        if(blank){ blank.style.display = anyShown ? 'block' : 'none'; }
+      }
+    });
+    btn.innerHTML = anyShown ? '<span class="dot"></span>Show Answers' : '<span class="dot"></span>Hide Answers';
+  }
+
+  function toggleWF(btn){
+    const anyShown = document.querySelector('#slide-wfcategorize .ans.shown') !== null;
+    document.querySelectorAll('#slide-wfcategorize .ans').forEach(a=> a.classList.toggle('shown', !anyShown));
+    document.querySelectorAll('#slide-wfcategorize .blank').forEach(b=> b.classList.toggle('hide', !anyShown));
+    btn.innerHTML = !anyShown ? '<span class="dot"></span>Hide Answers' : '<span class="dot"></span>Show Answers';
+  }
+
+  function toggleSentences(btn){
+    const anyShown = document.querySelector('#slide-wfapply .ans.shown') !== null;
+    document.querySelectorAll('#slide-wfapply .ans').forEach(a=> a.classList.toggle('shown', !anyShown));
+    document.querySelectorAll('#slide-wfapply .blank').forEach(b=> b.classList.toggle('hide', !anyShown));
+    btn.innerHTML = !anyShown ? '<span class="dot"></span>Hide Answers' : '<span class="dot"></span>Show Answers';
+  }
+
+  // ---- per-slide font size (zoom) controls ----
+  // BASE_ZOOM is the default presentation font size: 20% larger than the printed/100% size.
+  // The A+/A- label always shows 100% at this baseline; the underlying CSS zoom is BASE_ZOOM * relative scale.
+  const BASE_ZOOM = 1.2;
+  const fontScale = {};
+  function currentSlideEl(){ return document.getElementById('slide-'+order[idx]); }
+  function applyZoom(id){
+    const s = fontScale[id] || 1;
+    const el = document.getElementById('slide-'+id);
+    if(el) el.style.zoom = s * BASE_ZOOM;
+  }
+  function refreshFontLabel(){
+    const s = fontScale[order[idx]] || 1;
+    document.getElementById('fontLabel').textContent = Math.round(s*100)+'%';
+  }
+  function adjustFont(delta){
+    const id = order[idx];
+    let s = (fontScale[id] || 1) + delta;
+    s = Math.min(1.5, Math.max(0.7, Math.round(s*100)/100));
+    fontScale[id] = s;
+    applyZoom(id);
+    refreshFontLabel();
+  }
+  document.getElementById('fontPlus').addEventListener('click', ()=> adjustFont(0.1));
+  document.getElementById('fontMinus').addEventListener('click', ()=> adjustFont(-0.1));
+
+  order.forEach(id => applyZoom(id));
+  showSlide(0);
+  refreshFontLabel();
+</script>
+
+</body>
+</html>
