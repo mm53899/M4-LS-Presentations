@@ -1294,7 +1294,7 @@ const WORD_DEFS = {
       ]
     },
     "ipa": "/ɪn ðæt keɪs/",
-    "cambridge": "https://dictionary.cambridge.org/dictionary/english/case"
+    "cambridge": "https://dictionary.cambridge.org/dictionary/english/in-that-case"
   },
   "scene-of-the-crime": {
     "pos": "noun",
@@ -1314,7 +1314,7 @@ const WORD_DEFS = {
       ]
     },
     "ipa": "/siːn əv ðə kraɪm/",
-    "cambridge": "https://dictionary.cambridge.org/dictionary/english/scene-of-the-crime"
+    "cambridge": "https://www.google.com/search?q=scene+of+the+crime.+define+it+in+simple+language+suitable+for+A2+level.+make+it+brief+and+to+the+point+with+a+couple+of+examples&newwindow=1"
   },
   "turn-up": {
     "pos": "phrasal verb",
@@ -1577,7 +1577,7 @@ const WORD_DEFS = {
       ]
     },
     "ipa": "/ˈfɒl.əʊ ɪnˈstrʌk.ʃənz/",
-    "cambridge": "https://dictionary.cambridge.org/dictionary/english/instruction"
+    "cambridge": "https://dictionary.cambridge.org/dictionary/english/follow-instructions"
   },
   "work-out": {
     "pos": "phrasal verb",
@@ -1728,7 +1728,11 @@ function renderWordPopup() {
   h += '<div class="wp-def">' + src.def + '</div>';
   if (!wpSimpleMode && d.pattern) h += '<div class="wp-pattern">' + d.pattern + '</div>';
   h += '<ul class="wp-examples">' + src.examples.map(function(ex){ return '<li>' + ex + '</li>'; }).join('') + '</ul>';
-  if (d.cambridge) h += '<a class="wp-cambridge" href="' + d.cambridge + '" target="_blank" rel="noopener">Cambridge Dictionary &#8599;</a>';
+  if (d.cambridge) {
+    var isCambridge = d.cambridge.indexOf('dictionary.cambridge.org') !== -1;
+    var linkLabel = isCambridge ? 'Cambridge Dictionary' : 'Look up definition';
+    h += '<a class="wp-cambridge" href="' + d.cambridge + '" target="_blank" rel="noopener">' + linkLabel + ' &#8599;</a>';
+  }
   card.innerHTML = h;
   card.querySelector('.wp-close').addEventListener('click', closeWordPopup);
   card.querySelector('.wp-toggle').addEventListener('click', function() {
