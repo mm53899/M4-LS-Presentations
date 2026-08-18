@@ -7,13 +7,16 @@ Slide 5:  maple
 Slide 6:  amber
 Slide 7:  delta
 Slide 8:  ivory
-Slide 10: lemon
-Slide 11: ocean
-Slide 12: pearl
-Slide 13: ruby
-Slide 14: silver
-Slide 16: tulip
-Slide 18: velvet
-Slide 19: willow
+Slide 9:  garnet
+Slide 10: copper
+Slide 12: lemon
+Slide 13: ocean
+Slide 14: pearl
+Slide 15: ruby
+Slide 16: silver
+Slide 18: tulip
+Slide 20: velvet
+Slide 21: willow
+Slide 24: orchid
 
 Master code (unlocks all slides): robot234
