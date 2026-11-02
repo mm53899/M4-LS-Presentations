@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gateway to the World B1 &mdash; Unit 7</title>
+<style>
+:root{
+  --pink:#E0506A;
+  --pink-dark:#B83450;
+  --pink-tint:#FDECEF;
+  --pink-border:#f3c3cc;
+  --ink:#1F2530;
+  --cream:#FAF7F8;
+  --lime:#8DC63F;
+  --lime-dark:#5E8C1F;
+  --lilac:#A28BC9;
+  --lilac-dark:#6F55A5;
+  --lilac-tint:#EFEAF8;
+  --orchid:#B45FB6;
+  --orchid-tint:#F8EEF8;
+  --blue:#1F6FA8;
+  --blue-tint:#E7F1F8;
+  --red:#c0392b;
+  --modelblue:#1d6f91;
+  --line:#c9ccd6;
+  --accent:var(--pink);
+  --accent-dark:var(--pink-dark);
+  --accent-tint:var(--pink-tint);
+  --accent-border:var(--pink-border);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:auto;}
+body{
+  margin:0;font-family:'Segoe UI',Arial,sans-serif;color:#222;background:#dfe3ea;
+  padding:84px 24px 90px;
+}
+
+/* ===== Two fixed top bars: brand strip + page nav ===== */
+#brandbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:30px;
+  background:var(--ink);color:#fff;display:flex;align-items:center;padding:0 16px;
+  font-size:12.5px;font-weight:700;letter-spacing:.3px;
+}
+#brandbar .unit7{background:var(--pink);color:#fff;border-radius:4px;padding:1px 8px;margin-right:10px;font-weight:800;}
+#brandbar .sub{color:#aeb6c4;font-weight:400;margin-left:10px;}
+#pagenav{
+  position:fixed;top:30px;left:0;right:0;z-index:199;height:34px;
+  background:#2c3340;padding:0 16px;display:flex;flex-wrap:wrap;
+  gap:6px;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
+#pagenav span.lbl{font-size:11px;font-weight:700;color:#f6a6b5;margin-right:4px;}
+#pagenav a{
+  color:#fff;text-decoration:none;font-size:12.5px;font-weight:700;
+  border:1px solid rgba(255,255,255,.5);border-radius:4px;padding:2px 9px;
+  background:rgba(255,255,255,.12);
+}
+#pagenav a:hover{background:rgba(255,255,255,.28);}
+#pagenav a{white-space:nowrap;}
+#pagenav a .nm{font-weight:600;}
+@media (max-width:1050px){#pagenav a .nm{display:none;}}
+#pagenav a.active{background:var(--pink);color:#fff;border-color:var(--pink);}
+
+/* ===== Right-edge control panel ===== */
+#rightctrl{
+  position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:198;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:12px 8px;box-shadow:0 3px 12px rgba(0,0,0,.22);
+}
+#rightctrl button.round{width:42px;height:42px;border-radius:50%;border:2px solid var(--pink);background:var(--ink);color:#fff;font-size:15px;cursor:pointer;}
+#rightctrl button.round:hover{background:var(--pink-dark);}
+#zoomlabel{color:#444;font-size:11px;margin:0 0 2px;}
+.toolsep{width:30px;height:1px;background:var(--line);margin:2px 0;}
+#rightctrl button.tool{width:42px;height:42px;border-radius:50%;border:2px solid #b8c0cc;background:#eef1f5;color:var(--ink);font-size:17px;cursor:pointer;}
+#rightctrl button.tool.on{background:var(--pink);border-color:var(--pink-dark);color:#fff;}
+#rightctrl button.tool#eraseBtn.on{background:#888;border-color:#888;color:#fff;}
+
+/* ===== Continuous content column ===== */
+#content{
+  max-width:980px;margin:0 auto;background:#fff;border-radius:8px;
+  box-shadow:0 2px 14px rgba(0,0,0,.2);padding:30px 40px 50px;
+  transform-origin:top center;font-size:15px;line-height:1.55;
+}
+#doctitle{
+  color:var(--ink);text-align:center;font-weight:800;font-size:22px;
+  line-height:1.4;margin:0 0 28px;padding-bottom:18px;border-bottom:3px solid var(--pink);
+}
+.page-anchor{position:relative;top:-96px;visibility:hidden;height:0;}
+.exblock{clear:both;margin:0 0 22px;overflow:auto;}
+.page-divider{border:none;border-top:2px dashed var(--line);margin:34px 0 26px;position:relative;clear:both;}
+.page-divider span{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fff;padding:0 16px;font-family:Arial,sans-serif;font-size:11.5px;color:var(--accent-dark);font-weight:800;letter-spacing:.5px;}
+
+/* section accent colours (taken from the book's section headings) */
+.sec-vocab{--accent:#E0506A;--accent-dark:#B83450;--accent-tint:#FDECEF;--accent-border:#f3c3cc;}
+.sec-learn{--accent:#8DC63F;--accent-dark:#5E8C1F;--accent-tint:#F1F8E4;--accent-border:#d3e6ad;}
+.sec-listen{--accent:#B45FB6;--accent-dark:#8C3E8F;--accent-tint:#F8EEF8;--accent-border:#e4c6e5;}
+.sec-speak{--accent:#1F6FA8;--accent-dark:#175581;--accent-tint:#E7F1F8;--accent-border:#bcd7ea;}
+
+h2.stitle{color:var(--accent-dark);font-size:22px;margin:0 0 4px;font-weight:800;clear:both;}
+h3.exline{font-size:15px;margin:14px 0 8px;}
+.exlabel{color:var(--accent-dark);font-weight:800;text-transform:uppercase;}
+.spk{display:inline-block;background:var(--ink);color:#fff;font-size:10px;font-weight:800;letter-spacing:.5px;border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:middle;}
+.barhead{background:var(--accent);color:#fff;font-weight:800;padding:7px 14px;border-radius:5px 5px 0 0;font-size:13px;letter-spacing:.3px;text-transform:uppercase;}
+.barhead span.sub{font-weight:400;text-transform:none;margin-left:8px;opacity:.92;}
+.barhead.dark{background:var(--ink);color:#fff;}
+.tipbox{background:var(--accent-tint);border:1px solid var(--accent-border);border-left:5px solid var(--accent);padding:12px 16px;border-radius:0 6px 6px 0;margin-bottom:14px;font-size:13.5px;}
+.tipbox ul{margin:6px 0;padding-left:20px;}
+.tipbox .boxhead{display:block;color:var(--accent-dark);font-weight:800;margin-bottom:3px;}
+img.fig{max-width:100%;border-radius:4px;display:block;margin:10px 0;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+img.fig.center{float:none;display:block;margin:16px auto;}
+.clearfix{clear:both;}
+audio{width:100%;max-width:520px;display:block;margin:8px 0 12px;}
+video{width:100%;max-width:760px;display:block;margin:8px 0 8px;border-radius:6px;background:#000;}
+.btnrow{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin:8px 0;}
+.revealbtn{background:var(--accent-dark);color:#fff;border:none;padding:7px 16px;border-radius:16px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.revealbtn.model{background:var(--modelblue);}
+.revealbtn.ts{background:#7a5c1e;}
+.revealbtn.locked{background:#8a8a8a;}
+.revealbtn.locked::after{content:" \1F512";}
+.revealbtn.script{background:#3a6ea5;}
+.audiorow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0 4px;}
+.audiorow audio{margin:0;flex:1;min-width:220px;}
+.script-box{display:none;background:var(--cream);border:1px solid #e6dde0;border-left:5px solid #3a6ea5;border-radius:0 6px 6px 0;padding:12px 16px;margin:0 0 14px;font-size:13px;line-height:1.65;max-height:360px;overflow-y:auto;}
+.script-box.shown{display:block;}
+.script-box p{margin:0 0 8px;}
+.script-box .sp{font-weight:800;color:var(--accent-dark);}
+
+/* ===== Answer-lock modal ===== */
+#lockModal .modal-box{max-width:420px;}
+#lockModal h3{font-size:20px;display:block;}
+#lockModal p.lock-sub{font-size:13px;color:#666;margin:0 0 12px;}
+#lockRow{display:flex;gap:8px;align-items:center;}
+#lockInput{font-family:'Segoe UI',Arial,sans-serif;font-size:15px;padding:8px 12px;flex:1;border:1px solid #bbb;border-radius:8px;}
+#lockGo{background:var(--pink-dark);color:#fff;border:none;padding:9px 18px;border-radius:16px;font-size:13.5px;cursor:pointer;font-weight:700;}
+#lockGo:hover{background:var(--pink);}
+#lockMsg{color:var(--red);font-size:12.5px;min-height:1.2em;margin:8px 0 0;}
+
+/* answers = red, model/sample answers = blue (revealed one item per click) */
+.ans-ph{display:none;color:var(--red);font-weight:700;}
+.ans-ph.shown{display:inline;}
+.model-ans{display:none;color:var(--modelblue);font-weight:600;}
+.model-ans.shown{display:inline;}
+.ans-ph .wterm{color:var(--red);border-bottom-color:var(--red);}
+.model-ans .wterm{color:var(--modelblue);border-bottom-color:var(--modelblue);}
+.blank-ph{display:inline-block;min-width:110px;border-bottom:2px solid #999;transition:min-width .15s, border-color .15s;}
+.blank-ph.shown{min-width:0;border-bottom-color:transparent;}
+.blank-ph.sm{min-width:70px;}
+.blank-ph.sm.shown{min-width:0;}
+.blank-ph.tight{margin:0 -2px 0 2px;}
+.blank-ph.tight.shown{margin-right:0;}
+.wi,.nb{white-space:nowrap;}
+.ansline{min-height:1.55em;}
+.ansline.model-block{display:block;}
+
+table.simple{border-collapse:collapse;margin:10px 0;font-size:13.5px;}
+table.simple td,table.simple th{border:1px solid var(--line);padding:5px 10px;}
+table.simple th{background:var(--accent-tint);color:var(--ink);}
+ol.qlist,ul.qlist{padding-left:22px;margin:6px 0;}
+ol.qlist li,ul.qlist li{margin-bottom:6px;}
+ol.numlist{list-style:none;padding-left:0;margin:6px 0;}
+ol.numlist li{display:flex;gap:10px;margin-bottom:6px;}
+ol.numlist li .n{flex:0 0 22px;font-weight:700;color:var(--accent-dark);}
+ol.numlist li .t{flex:1;}
+.wterm{color:var(--accent-dark);font-weight:700;cursor:pointer;border-bottom:1px dotted var(--accent-dark);}
+.wterm:hover{background:var(--accent-tint);}
+.pos{font-style:italic;color:#666;font-weight:400;font-size:12px;}
+
+/* word boxes (Jobs, Personal qualities, word banks) */
+.wordbox{border:2px solid var(--accent);border-radius:12px;padding:10px 16px 12px;margin:10px 0 12px;position:relative;font-size:14px;background:#fff;}
+.wordbox .wbtitle{position:absolute;top:-13px;left:14px;background:#fff;padding:0 10px;color:var(--accent-dark);font-weight:800;font-size:13.5px;}
+.wordbox .words{line-height:1.8;}
+.wordbox .words .dot{color:var(--accent);margin:0 6px;}
+.wordbank{background:var(--accent-tint);border-radius:6px;padding:7px 14px;font-size:14px;margin:8px 0;}
+.wordbank .dot{color:var(--accent);margin:0 6px;}
+.exbox{border:2px solid var(--accent);border-radius:14px;padding:16px 20px 10px;margin:18px 0 10px;position:relative;}
+.exbox .exbox-title{position:absolute;top:-14px;left:16px;background:var(--accent);color:#fff;font-weight:800;font-size:14px;border-radius:14px;padding:2px 16px;}
+.speechbubble{background:#fff;border:2px solid #555;border-radius:12px;padding:8px 16px;margin:8px 0 8px 30px;font-style:italic;display:inline-block;max-width:80%;}
+
+/* multiple-choice circled answers */
+.mcopt{display:inline-block;margin:2px 10px 2px 0;padding:2px 4px;border-radius:14px;border:2px solid transparent;}
+.mcopt.circled{border-color:var(--red);color:var(--red);font-weight:700;}
+
+/* notes box */
+.notesbox{background:#fdfdf8;border:1px solid var(--accent-border);border-radius:6px;padding:14px 18px;font-size:13.5px;line-height:1.5;color:#1d3557;}
+.notesbox p{margin:8px 0 4px;}
+.ts-chip{display:none;background:var(--accent-tint);color:var(--accent-dark);border:1px solid var(--accent-border);border-radius:10px;padding:1px 8px;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;white-space:nowrap;}
+.ts-chip:hover{filter:brightness(.95);}
+.exwrap.ts-visible .ts-chip{display:inline-block;}
+.chiprow-ts{display:none;margin:6px 0;}
+.exwrap.ts-visible .chiprow-ts{display:block;}
+
+.objbox{background:var(--ink);color:#fff;border-left:8px solid var(--accent);padding:14px 18px;border-radius:4px;font-size:13.5px;line-height:1.55;margin:14px 0;}
+.objbox b{color:#fff;text-transform:uppercase;letter-spacing:.5px;font-size:12px;display:block;margin-bottom:4px;}
+.unitq{font-size:12px;font-weight:800;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.unitq-title{font-size:21px;font-weight:800;color:var(--ink);margin:0 0 12px;}
+
+.figrow{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0;align-items:flex-start;}
+.figrow figure{margin:0;text-align:center;}
+.figrow figcaption{font-size:12.5px;font-weight:700;margin-top:4px;color:#333;}
+.floatr{float:right;margin:0 0 10px 18px;}
+.floatl{float:left;margin:0 18px 10px 0;}
+
+/* the page-88 header */
+.learnhead{background:var(--ink);color:#fff;border-radius:8px;overflow:hidden;margin:0 0 14px;display:flex;flex-wrap:wrap;}
+.learnhead .txt{flex:1 1 320px;padding:18px 22px;}
+.learnhead .pic{flex:0 1 330px;min-height:150px;background:#222 center/cover no-repeat;}
+.learnhead .gl{font-size:26px;font-weight:900;letter-spacing:.5px;line-height:1.05;text-transform:uppercase;}
+.learnhead .gl .l{color:var(--lime);} .learnhead .gl .t{color:var(--lilac);}
+.learnhead .topic{font-size:22px;font-weight:800;margin:8px 0 10px;text-transform:uppercase;}
+.learnhead .row{background:rgba(255,255,255,.1);padding:5px 12px;margin:0 -22px;font-size:13.5px;}
+.learnhead .sel{display:inline-block;background:#F7D61E;color:#222;font-weight:900;font-size:11px;border-radius:4px;padding:0 5px;margin-right:6px;}
+.thinkbox{background:var(--lilac-tint);border-radius:14px;overflow:hidden;margin:16px 0;}
+.thinkbox .tb-head{background:var(--ink);color:#fff;padding:8px 18px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;}
+.thinkbox .tb-head .t{color:var(--lilac);}
+.thinkbox .tb-sub{background:#c5b8e0;padding:5px 18px;font-size:14px;font-weight:600;}
+.thinkbox .tb-body{padding:14px 18px;}
+.learnbox{background:#EAF5D2;border-radius:14px;overflow:hidden;margin:16px 0;}
+.learnbox .lb-head{background:var(--ink);color:#fff;padding:8px 18px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;}
+.learnbox .lb-head .l{color:var(--lime);}
+.learnbox .lb-sub{background:#c7e48e;padding:5px 18px;font-size:14px;font-weight:700;}
+.learnbox .lb-body{padding:12px 18px;}
+.criticalbox{border:2px solid var(--accent);border-radius:14px;padding:16px 20px 12px;margin:20px 0 10px;position:relative;}
+.criticalbox .cb-title{position:absolute;top:-14px;left:16px;background:var(--accent);color:#fff;font-weight:800;font-size:14px;border-radius:14px;padding:2px 16px;}
+.criticalbox .cb-q{color:var(--accent-dark);font-weight:700;margin:6px 0;}
+.speakbank{background:var(--blue-tint);border-radius:12px;overflow:hidden;margin:12px 0;}
+.speakbank .sb-head{background:var(--blue);color:#fff;padding:8px 16px;}
+.speakbank .sb-head b{display:block;font-size:16px;}
+.speakbank .sb-head span{font-size:13px;}
+.speakbank ul{margin:0;padding:10px 16px 10px 36px;font-size:14px;}
+.speakbank li{margin-bottom:3px;}
+.speakbank li.notused .ans-ph{margin-left:8px;}
+
+/* Modals */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(15,20,26,.6);z-index:400;align-items:center;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal-box{background:#fff;border-radius:10px;max-width:640px;width:92%;max-height:82vh;overflow-y:auto;padding:22px 26px;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+#wordModal .modal-box{max-width:820px;}
+.modal-box .close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;}
+.modal-box h3{color:var(--pink-dark);margin:0 4px 4px;font-size:32px;display:inline-block;}
+.mpos-row{display:flex;align-items:baseline;gap:12px;margin:0 4px 14px;flex-wrap:wrap;}
+.modal-box .mpos{color:#777;font-style:italic;font-size:19px;}
+.modal-box .mipa{color:#888;font-size:18px;font-family:'Segoe UI',Arial,sans-serif;}
+.modal-box .mdef{font-size:21px;line-height:1.5;margin:0 4px 10px;}
+.simplifybtn{position:absolute;top:12px;right:46px;background:var(--pink-tint);color:var(--pink-dark);border:1px solid var(--pink-border);padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.simplifybtn:hover{background:#fadde2;}
+.lookuplink{color:var(--pink-dark);font-size:13.5px;font-weight:700;text-decoration:none;border-bottom:1px dotted var(--pink-dark);}
+.lookuplink:hover{color:var(--modelblue);border-bottom-color:var(--modelblue);}
+.modal-box .mex{font-size:19px;line-height:1.6;margin:0 4px 10px;padding-left:18px;border-left:3px solid var(--pink-tint);color:var(--modelblue);}
+#vocabListModal .modal-box{max-width:620px;}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;margin-bottom:14px;}
+.chip{background:var(--pink-tint);color:var(--pink-dark);border:1px solid var(--pink-border);padding:5px 12px;border-radius:14px;font-size:13px;cursor:pointer;font-weight:600;}
+.chip:hover{background:#fadde2;}
+.vlgrouphead{font-size:12px;font-weight:800;color:var(--ink);text-transform:uppercase;letter-spacing:.4px;margin:12px 4px 2px;}
+mark.user-highlight{background:#fff176;padding:0 1px;}
+
+@media (max-width:720px){
+  #content{padding:22px 18px 40px;}
+  #rightctrl{right:6px;padding:8px 5px;}
+}
+</style>
+</head>
+<body>
+
+<div id="brandbar"><span class="unit7">UNIT 7</span>Gateway to the World B1 &middot; Get to the top!</div>
+<div id="pagenav"><span class="lbl">SECTION:</span><a href="#p84" data-p="p84"><b>1</b><span class="nm"> Vocabulary in context</span></a><a href="#p87" data-p="p87"><b>2</b><span class="nm"> Developing vocabulary</span></a><a href="#p88" data-p="p88"><b>3</b><span class="nm"> Great Learners Great Thinkers</span></a><a href="#p90" data-p="p90"><b>4</b><span class="nm"> Listening</span></a><a href="#p92" data-p="p92"><b>5</b><span class="nm"> Developing speaking</span></a></div>
+
+<div id="rightctrl">
+  <button class="round" id="zoomIn" title="Zoom in">A+</button>
+  <div id="zoomlabel">100%</div>
+  <button class="round" id="zoomOut" title="Zoom out">A&minus;</button>
+  <div class="toolsep"></div>
+  <button class="tool" id="vocabListBtn" title="Vocabulary list">&#128214;</button>
+  <button class="tool" id="highlightBtn" title="Highlighter">&#9998;</button>
+  <button class="tool" id="eraseBtn" title="Eraser">&#9003;</button>
+</div>
+
+<div id="content">
+<div id="doctitle">Unit 7: Get to the top!</div>
+
+
+<div class="page-divider"><span>SECTION 1 &middot; VOCABULARY IN CONTEXT</span></div>
+<div id="p84" class="page-anchor"></div>
+<div class="exblock sec-vocab" id="s84a">
+<img class="fig" src="media/p84_banner.jpg" alt="Unit 7 opener: a young surveyor with a yellow helmet beside the title GET TO THE TOP!" style="margin-top:0;">
+<h2 class="stitle" style="margin-top:12px;">Vocabulary in context</h2>
+<div class="unitq">Jobs and words connected with work &middot; Personal qualities</div>
+</div>
+
+<div class="exblock sec-vocab" id="s84b">
+<h3 class="exline"><span class="exlabel">1</span> Read the sentences and check the words in bold in your dictionary if necessary.</h3>
+<ol class="numlist">
+<li><span class="n">1</span><span class="t">They work <b>outdoors</b>.</span></li>
+<li><span class="n">2</span><span class="t">They work with <b>the public</b>.</span></li>
+<li><span class="n">3</span><span class="t">They do <b>paperwork</b>, e.g. producing reports, articles and documents or writing letters.</span></li>
+<li><span class="n">4</span><span class="t">They <b>look after</b> and work with children.</span></li>
+<li><span class="n">5</span><span class="t">They do <b>manual work</b>.</span></li>
+<li><span class="n">6</span><span class="t"><b>Teamwork</b> is important in their job.</span></li>
+<li><span class="n">7</span><span class="t">They work in an office, with <b>figures</b> or with computers.</span></li>
+<li><span class="n">8</span><span class="t">They <b>earn</b> a high <b>salary</b>.</span></li>
+<li><span class="n">9</span><span class="t">They often work <b>overtime</b>.</span></li>
+<li><span class="n">10</span><span class="t">They work in <b>retail</b> or <b>finance</b>.</span></li>
+</ol>
+</div>
+
+<div class="exblock sec-vocab" id="s84c">
+<h3 class="exline"><span class="exlabel">2</span> <span class="spk">SPEAKING</span>Find two jobs for each sentence in 1.</h3>
+<div class="audiorow">
+<audio controls id="audio-84-2" src="media/Gateway_B1_U7_track49_Jobs.mp3"></audio>
+</div>
+<div class="wordbox"><span class="wbtitle">Jobs</span>
+<div class="words"><span class="wi">architect</span><span class="dot">&bull;</span><wbr><span class="wi">au pair</span><span class="dot">&bull;</span><wbr><span class="wi">chef</span><span class="dot">&bull;</span><wbr><span class="wi">company director</span><span class="dot">&bull;</span><wbr><span class="wi">construction worker</span><span class="dot">&bull;</span><wbr><span class="wi">economist</span><span class="dot">&bull;</span><wbr><span class="wi">fashion designer</span><span class="dot">&bull;</span><wbr><span class="wi">firefighter</span><span class="dot">&bull;</span><wbr><span class="wi">journalist</span><span class="dot">&bull;</span><wbr><span class="wi">lawyer</span><span class="dot">&bull;</span><wbr><span class="wi">mechanic</span><span class="dot">&bull;</span><wbr><span class="wi">nurse</span><span class="dot">&bull;</span><wbr><span class="wi">photographer</span><span class="dot">&bull;</span><wbr><span class="wi">plumber</span><span class="dot">&bull;</span><wbr><span class="wi">police officer</span><span class="dot">&bull;</span><wbr><span class="wi">receptionist</span><span class="dot">&bull;</span><wbr><span class="wi">shop assistant</span><span class="dot">&bull;</span><wbr><span class="wi">vet</span></div></div>
+<p style="font-style:italic;color:#1d6f91;margin:6px 0 8px;">1 construction worker, firefighter</p>
+<div id="ex84_2" class="exwrap">
+<div class="ansline"><b>2</b> <span class="model-ans">photographer, vet</span></div>
+<div class="ansline"><b>3</b> <span class="model-ans">journalist, lawyer</span></div>
+<div class="ansline"><b>4</b> <span class="model-ans">au pair, nurse</span></div>
+<div class="ansline"><b>5</b> <span class="model-ans">mechanic, plumber</span></div>
+<div class="ansline"><b>6</b> <span class="model-ans">chef, firefighter</span></div>
+<div class="ansline"><b>7</b> <span class="model-ans">economist, receptionist</span></div>
+<div class="ansline"><b>8</b> <span class="model-ans">architect, lawyer</span></div>
+<div class="ansline"><b>9</b> <span class="model-ans">company director, police officer</span></div>
+<div class="ansline"><b>10</b> <span class="model-ans">economist, shop assistant</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p84" onclick="toggleAnswers(this,'ex84_2','p84')">Show Model Answers</button></div>
+</div>
+
+<div class="exblock sec-vocab" id="s84d">
+<h3 class="exline"><span class="exlabel">3</span> <span class="spk">SPEAKING</span>Can you think of one more job (not from the list in 2) for each sentence in 1?</h3>
+<div id="ex84_3" class="exwrap">
+<div class="ansline"><b>1</b> <span class="model-ans">farmer</span></div>
+<div class="ansline"><b>2</b> <span class="model-ans">teacher</span></div>
+<div class="ansline"><b>3</b> <span class="model-ans">secretary</span></div>
+<div class="ansline"><b>4</b> <span class="model-ans">childminder</span></div>
+<div class="ansline"><b>5</b> <span class="model-ans">builder</span></div>
+<div class="ansline"><b>6</b> <span class="model-ans">footballer</span></div>
+<div class="ansline"><b>7</b> <span class="model-ans">accountant</span></div>
+<div class="ansline"><b>8</b> <span class="model-ans">surgeon</span></div>
+<div class="ansline"><b>9</b> <span class="model-ans">doctor</span></div>
+<div class="ansline"><b>10</b> <span class="model-ans">banker</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p84" onclick="toggleAnswers(this,'ex84_3','p84')">Show Model Answers</button></div>
+</div>
+
+<div class="exblock sec-vocab" id="s84e">
+<h3 class="exline"><span class="exlabel">4a</span> Complete the text with some of these words.</h3>
+<div class="audiorow">
+<audio controls id="audio-84-4a" src="media/Gateway_B1_U7_track50_PersonalQualities.mp3"></audio>
+</div>
+<div class="wordbox"><span class="wbtitle">Personal qualities</span>
+<div class="words"><span class="wi">ambitious</span><span class="dot">&bull;</span><wbr><span class="wi">calm</span><span class="dot">&bull;</span><wbr><span class="wi">caring</span><span class="dot">&bull;</span><wbr><span class="wi">clever/bright</span><span class="dot">&bull;</span><wbr><span class="wi">confident</span><span class="dot">&bull;</span><wbr><span class="wi">creative</span><span class="dot">&bull;</span><wbr><span class="wi">determined</span><span class="dot">&bull;</span><wbr><span class="wi">fit</span><span class="dot">&bull;</span><wbr><span class="wi">flexible</span><span class="dot">&bull;</span><wbr><span class="wi">hard-working</span><span class="dot">&bull;</span><wbr><span class="wi">patient</span><span class="dot">&bull;</span><wbr><span class="wi">reliable</span><span class="dot">&bull;</span><wbr><span class="wi">responsible</span><span class="dot">&bull;</span><wbr><span class="wi">sensitive</span><span class="dot">&bull;</span><wbr><span class="wi">sociable/friendly</span><span class="dot">&bull;</span><wbr><span class="wi">strong</span><span class="dot">&bull;</span><wbr><span class="wi">well-organised</span></div></div>
+<img class="fig" src="media/p84_students.jpg" alt="A group of teenagers working together around a table" style="max-width:560px;">
+<div class="tipbox" style="border-left-color:#4FB6C9;background:#E6F6F9;border-color:#bfe3ea;">
+<b style="display:block;color:#1c7c8e;font-size:16px;letter-spacing:.3px;margin-bottom:6px;text-transform:uppercase;">Essential qualities in the world of work</b>
+<div id="ex84_4a" class="exwrap" style="font-size:15px;line-height:1.9;">
+There are jobs where you need to have a specific skill or personal quality. But there are many personal qualities that are useful in almost any job. For example, it&rsquo;s always important to be <b>(a)</b><span class="blank-ph">&nbsp;<span class="ans-ph">well-organised</span></span>, i.e. to plan things carefully and know exactly what you&rsquo;re doing. It&rsquo;s also important to be <b>(b)</b><span class="blank-ph">&nbsp;<span class="ans-ph">flexible</span></span> so that you adapt to changing situations. Being <b>(c)</b><span class="blank-ph">&nbsp;<span class="ans-ph">creative</span></span> isn&rsquo;t just a quality that artists and writers need &ndash; it&rsquo;s essential in any job where you need imagination to think of new ideas or solutions to problems. Working in teams is always important, so it&rsquo;s good if you are <b>(d)</b><span class="blank-ph">&nbsp;<span class="ans-ph">sociable</span></span> and <b>(e)</b><span class="blank-ph">&nbsp;<span class="ans-ph">friendly</span></span> and like working with other people. It&rsquo;s vital that you are <b>(f)</b><span class="blank-ph">&nbsp;<span class="ans-ph">reliable</span></span> and <b>(g)</b><span class="blank-ph">&nbsp;<span class="ans-ph">responsible</span></span>, too, so that people know they can depend on you. It also helps if you&rsquo;re <b>(h)</b><span class="blank-ph">&nbsp;<span class="ans-ph">calm</span></span> and <b>(i)</b><span class="blank-ph">&nbsp;<span class="ans-ph">patient</span></span> so that you don&rsquo;t panic or get angry when things start to go wrong. And, finally, it&rsquo;s OK to be <b>(j)</b><span class="blank-ph">&nbsp;<span class="ans-ph">ambitious</span></span> and to want to be a big success in your job!
+</div>
+</div>
+<div class="btnrow"><button class="revealbtn" data-group="p84" onclick="toggleAnswers(this,'ex84_4a','p84')">Show Answer</button></div>
+</div>
+
+<div class="exblock sec-vocab" id="s84f">
+<h3 class="exline"><span class="exlabel">4b</span> Listen and check your answers.</h3>
+<audio controls id="audio-84-4b" src="media/Gateway_B1_U7_track51_EssentialQualities.mp3"></audio>
+</div>
+
+<div class="exblock sec-vocab" id="s84h">
+<div class="exbox"><span class="exbox-title">Use it &hellip; don&rsquo;t lose it!</span>
+<h3 class="exline" style="margin-top:4px;"><span class="exlabel">5</span> <span class="spk">SPEAKING</span>Ask and answer the questions.</h3>
+<div id="ex84_6" class="exwrap">
+<ol class="numlist">
+<li><span class="n">1</span><span class="t">Which of the things in 1 would you like in your future job? Which would you not like?<br><span class="model-ans">I&rsquo;d like to work in a team and earn a high salary. I wouldn&rsquo;t like to work overtime or do paperwork all day.</span></span></li>
+<li><span class="n">2</span><span class="t">Which two jobs in 2 would you be interested in doing in the future? Which two are you definitely not interested in doing?<br><span class="model-ans">I&rsquo;d be interested in being a vet and a photographer. I&rsquo;m definitely not interested in being a lawyer or an economist.</span></span></li>
+<li><span class="n">3</span><span class="t">Is there another job, not in 2, that you think you would like to do? If so, which?<br><span class="model-ans">Yes, I think I&rsquo;d like to be a pilot because I love travelling.</span></span></li>
+<li><span class="n">4</span><span class="t">Which qualities in 4a can you use to describe yourself? Justify your answer.<br><span class="model-ans">I think I&rsquo;m creative and sociable. For example, I love making videos with my friends, and I always talk to new classmates.</span></span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p84" onclick="toggleAnswers(this,'ex84_6','p84')">Show Model Answers</button></div>
+</div>
+</div>
+
+
+<div class="page-divider"><span>SECTION 2 &middot; DEVELOPING VOCABULARY</span></div>
+<div id="p87" class="page-anchor"></div>
+<div class="exblock sec-vocab" id="s87a">
+<div class="barhead">Developing vocabulary</div>
+<h2 class="stitle" style="margin-top:8px;font-size:19px;">Compound adjectives</h2>
+<h3 class="exline"><span class="exlabel">1</span> <i>Hard-working</i> is a compound adjective made by joining two words. The two words are usually connected with a hyphen (-).</h3>
+<h3 class="exline" style="margin-top:6px;"><span class="spk">SPEAKING</span>Join words in A with words in B to make compound adjectives. You can use some of the words in A more than once.</h3>
+<div style="display:flex;gap:0;border:2px solid var(--accent-border);max-width:560px;margin:12px 0;">
+<div style="flex:1;border-right:2px solid var(--accent-border);"><div style="background:var(--accent-border);font-weight:800;padding:4px 12px;">A</div><div style="padding:8px 12px;line-height:1.6;">badly<br>blue/brown/green<br>easy<br>full/part<br>good<br>long/short<br>right/left<br>well</div></div>
+<div style="flex:1;"><div style="background:var(--accent-border);font-weight:800;padding:4px 12px;">B</div><div style="padding:8px 12px;line-height:1.6;">-time<br>-going<br>-paid<br>-eyed<br>-handed<br>-looking<br>-behaved<br>-known<br>-haired</div></div>
+</div>
+<div id="ex87_1" class="exwrap">
+<div class="ansline"><b>badly</b> &rarr; <span class="ans-ph">badly-paid, badly-behaved</span></div>
+<div class="ansline"><b>blue/brown/green</b> &rarr; <span class="ans-ph">blue-eyed, brown-eyed, green-eyed</span></div>
+<div class="ansline"><b>easy</b> &rarr; <span class="ans-ph">easy-going</span></div>
+<div class="ansline"><b>full/part</b> &rarr; <span class="ans-ph">full-time, part-time</span></div>
+<div class="ansline"><b>good</b> &rarr; <span class="ans-ph">good-looking</span></div>
+<div class="ansline"><b>long/short</b> &rarr; <span class="ans-ph">long-haired, short-haired</span></div>
+<div class="ansline"><b>right/left</b> &rarr; <span class="ans-ph">right-handed, left-handed</span></div>
+<div class="ansline"><b>well</b> &rarr; <span class="ans-ph">well-paid, well-behaved, well-known</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn" data-group="p87" onclick="toggleAnswers(this,'ex87_1','p87')">Show Answer</button></div>
+</div>
+
+<div class="exblock sec-vocab" id="s87b">
+<h3 class="exline"><span class="exlabel">2a</span> Listen and check your answers in 1. Do you have all the words?</h3>
+<audio controls id="audio-87-2a" src="media/Gateway_B1_U7_track54_CompoundAdjectives.mp3"></audio>
+</div>
+
+<div class="exblock sec-vocab" id="s87d">
+<h3 class="exline"><span class="exlabel">3</span> Read the text. Complete the compound adjectives in the text using these words.</h3>
+<div class="wordbank"><span class="wi">18-year</span><span class="dot">&bull;</span><wbr><span class="wi">badly</span><span class="dot">&bull;</span><wbr><span class="wi">forward</span><span class="dot">&bull;</span><wbr><span class="wi">full</span><span class="dot">&bull;</span><wbr><span class="wi">hard</span><span class="dot">&bull;</span><wbr><span class="wi">well</span><span class="dot">&bull;</span><wbr><span class="wi">well</span></div>
+<div style="background:#a99bd0;padding:10px;border-radius:4px;margin-top:10px;">
+<div style="font-size:22px;font-weight:900;color:#241a4a;letter-spacing:.5px;text-transform:uppercase;margin:0 4px 8px;">A determined teenager</div>
+<div style="background:#fff;padding:14px 18px;font-size:15px;line-height:1.95;overflow:auto;">
+<img class="floatr" src="media/p87_teen.jpg" alt="A smiling teenager in a dark jumper" style="width:130px;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.3);margin-top:-8px;">
+<div id="ex87_3" class="exwrap">
+A <span class="nb"><b>(a)</b><span class="blank-ph tight sm">&#8203;<span class="ans-ph">hard</span></span>-working</span> teenager from a modest part of London got a place at university and then a great <span class="nb"><b>(b)</b><span class="blank-ph tight sm">&#8203;<span class="ans-ph"><span class="wterm" data-word="full-time">full</span></span></span>-time</span> job in finance in the centre of London&rsquo;s business district, all thanks to his determination. <span class="nb"><b>(c)</b><span class="blank-ph tight sm">&#8203;<span class="ans-ph"><span class="wterm" data-word="18-year-old">18-year</span></span></span>-old</span> Reggie Nelson decided to visit a very rich, <span class="nb"><b>(d)</b><span class="blank-ph tight sm">&#8203;<span class="ans-ph"><span class="wterm" data-word="well-off">well</span></span></span>-off</span> street in London. He knocked on people&rsquo;s doors and asked what skills and qualities you needed to be able to live in that rich area. One resident invited him in and then helped him find work experience in a <span class="nb"><b>(e)</b><span class="blank-ph tight sm">&#8203;<span class="ans-ph"><span class="wterm" data-word="well-known">well</span></span></span>-known</span> US financial company. There they told him he should go to university, which he did. Instead of getting a <span class="nb"><b>(f)</b><span class="blank-ph tight sm">&#8203;<span class="ans-ph"><span class="wterm" data-word="badly-paid">badly</span></span></span>-paid</span> job in the area where he lived, or indeed no job at all, the <span class="nb"><b>(g)</b><span class="blank-ph tight sm">&#8203;<span class="ans-ph"><span class="wterm" data-word="forward-thinking">forward</span></span></span>-thinking</span> Reggie now has his dream job!
+</div>
+</div>
+</div>
+<div class="btnrow"><button class="revealbtn" data-group="p87" onclick="toggleAnswers(this,'ex87_3','p87')">Show Answer</button></div>
+</div>
+
+<div class="exblock sec-vocab" id="s87e">
+<div class="exbox"><span class="exbox-title">Use it &hellip; don&rsquo;t lose it!</span>
+<h3 class="exline" style="margin-top:4px;"><span class="exlabel">4</span> <span class="spk">SPEAKING</span>Which of the compound adjectives in 1 and 3 can you use to describe &hellip;</h3>
+<div id="ex87_4" class="exwrap">
+<ol class="numlist" style="margin-left:6px;">
+<li><span class="n">a)</span><span class="t">Lisa from BLACKPINK?<br><span class="model-ans">Lisa is well-known, well-paid and hard-working.</span></span></li>
+<li><span class="n">b)</span><span class="t">another famous person?<br><span class="model-ans">Tony Jaa is well-known and hard-working. Tony Jaa is also very fit.</span></span></li>
+<li><span class="n">c)</span><span class="t">yourself?<br><span class="model-ans">I&rsquo;m easy-going and hard-working. I&rsquo;m also brown-eyed and short-haired.</span></span></li>
+<li><span class="n">d)</span><span class="t">your friend?<br><span class="model-ans">My friend is easy-going and well-behaved. My friend is also long-haired and left-handed.</span></span></li>
+<li><span class="n">e)</span><span class="t">your choice<br><span class="model-ans">My choice is my English teacher. My English teacher is easy-going and hard-working.</span></span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p87" onclick="toggleAnswers(this,'ex87_4','p87')">Show Model Answers</button></div>
+</div>
+</div>
+
+
+<div class="page-divider"><span>SECTION 3 &middot; GREAT LEARNERS GREAT THINKERS</span></div>
+<div id="p88" class="page-anchor"></div>
+<div class="exblock sec-learn" id="s88a">
+<div class="learnhead">
+<div class="txt">
+<div class="gl"><span class="l">Great Learners</span><br><span class="t">Great Thinkers</span></div>
+<div class="topic">Attitudes to work</div>
+<div class="row"><b>Lesson aim:</b> To think about the different things that we all want from a job</div>
+<div class="row"><b>Video:</b> Working in the great outdoors</div>
+<div class="row"><span class="sel">SEL</span><b>Social and emotional learning:</b> Listening to others</div>
+</div>
+<div class="pic" style="background-image:url('media/p89_landscape.jpg');"></div>
+</div>
+</div>
+
+<div class="exblock sec-learn" id="s88b">
+<h3 class="exline"><span class="exlabel">1</span> <span class="spk">SPEAKING</span>Look at the options. With your partner, say which you prefer and why.</h3>
+<div id="ex88_1" class="exwrap">
+<ol class="numlist">
+<li><span class="n">1</span><span class="t">Working indoors/Working outdoors<br><span class="model-ans">I prefer working outdoors because I like fresh air and I don&rsquo;t like sitting in an office.</span></span></li>
+<li><span class="n">2</span><span class="t">Working from 9 to 5/Having flexible working hours<br><span class="model-ans">I prefer having flexible working hours because I can plan my day.</span></span></li>
+<li><span class="n">3</span><span class="t">Working individually/Working in a team<br><span class="model-ans">I prefer working in a team because it&rsquo;s more fun and we can share ideas.</span></span></li>
+<li><span class="n">4</span><span class="t">Working with technology/Working with no technology<br><span class="model-ans">I prefer working with technology because it makes many jobs easier.</span></span></li>
+<li><span class="n">5</span><span class="t">A well-paid job/A satisfying job, the salary is not important<br><span class="model-ans">I prefer a satisfying job. I&rsquo;d rather enjoy my work than earn a lot of money.</span></span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p88" onclick="toggleAnswers(this,'ex88_1','p88')">Show Model Answers</button></div>
+</div>
+
+<div class="exblock sec-learn" id="s88c">
+<div class="barhead dark">Video &middot; Working in the great outdoors</div>
+<video controls preload="metadata" id="video-88a" src="media/Gateway_B1_U7_Video_WorkingInTheGreatOutdoors.mp4"></video>
+<div class="btnrow" style="justify-content:flex-start;"><button class="revealbtn script" data-group="p88" onclick="toggleScript(this,'script-p88a','p88')">Show Script</button></div>
+<div class="script-box" id="script-p88a">
+<p><span class="sp">Narrator:</span> Meet Jess Wheeler. She’s 25. She’s an illustrator, and she lives right here, next to a river, in Suffolk. She sleeps in one tent and lives and works in the other. It’s very different from her old life in London! With little space indoors, she has to live with only the things she really needs. Eighteen-year-old Zeki Basan also lives with very little. The Highlands of Scotland are his playground and his office. He teaches survival courses where he shows we don’t need as much as we think. He can live for days, weeks, even months with just the things he carries in his backpack. This too is a very different life from the nine to five of working in the city. Take food, for example. He doesn’t have to spend any money because he eats what he catches and finds. And he cooks it by making fire in the old traditional way. Back by the river, a new day is beginning for Jess. After preparing and eating a simple breakfast, it’s time for work. Without the distractions of the Internet or other people, she has more time to be creative. She draws illustrations for magazines, menus and invitations, plus animal portraits. Like Jess, Zeki is happy to be without the Internet or screens. He believes people are addicted to them. But is that what life is really about? You mustn’t forget what is really beautiful, what you really should enjoy.</p>
+<p>In fact, Zeki is happier without modern gadgets and without modern materials. He uses the bark from trees and the skins of animals to produce soft, natural leather. And with this leather, he makes different types of objects and products and then he sells them. So, live and work in the city or in the great outdoors like Zeki and Jess?</p>
+</div>
+</div>
+
+<div class="exblock sec-learn" id="s88d">
+<h3 class="exline"><span class="exlabel">2</span> <span class="spk">VIDEO</span>Watch a video about a young man and woman. Which of the options in 1 have they both chosen?</h3>
+<div id="ex88_2" class="exwrap">
+<ol class="numlist">
+<li><span class="n">1</span><span class="t"><span class="blank-ph" style="min-width:300px;">&nbsp;<span class="ans-ph">Working outdoors</span></span><span class="ts-chip" data-t="42.5" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 0:42</span></span></li>
+<li><span class="n">2</span><span class="t"><span class="blank-ph" style="min-width:300px;">&nbsp;<span class="ans-ph">Having flexible working hours</span></span><span class="ts-chip" data-t="64.1" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 1:04</span></span></li>
+<li><span class="n">3</span><span class="t"><span class="blank-ph" style="min-width:300px;">&nbsp;<span class="ans-ph">Working individually</span></span><span class="ts-chip" data-t="91" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 1:31</span></span></li>
+<li><span class="n">4</span><span class="t"><span class="blank-ph" style="min-width:300px;">&nbsp;<span class="ans-ph">Working with no technology</span></span><span class="ts-chip" data-t="108.5" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 1:48</span></span></li>
+<li><span class="n">5</span><span class="t"><span class="blank-ph" style="min-width:300px;">&nbsp;<span class="ans-ph">A satisfying job, the salary is not important</span></span><span class="ts-chip" data-t="114.6" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 1:54</span></span></li>
+</ol>
+</div>
+<div class="btnrow">
+<button class="revealbtn ts" onclick="toggleTimestamps(this,'ex88_2')">Show Timestamps</button>
+<button class="revealbtn" data-group="p88" onclick="toggleAnswers(this,'ex88_2','p88')">Show Answer</button>
+</div>
+</div>
+
+<div class="exblock sec-learn" id="s88f">
+<h3 class="exline"><span class="exlabel">3</span> <span class="spk">VIDEO</span>Watch the video again. Are the statements about Jess Wheeler (J), Zeki Basan (Z) or both (B)?</h3>
+<div id="ex88_3" class="exwrap">
+<ol class="numlist">
+<li><span class="n">1</span><span class="t">They&rsquo;re 25 years old. <span class="blank-ph sm">&nbsp;<span class="ans-ph">J</span></span><span class="ts-chip" data-t="10.5" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 0:10</span></span></li>
+<li><span class="n">2</span><span class="t">They used to live in London. <span class="blank-ph sm">&nbsp;<span class="ans-ph">J</span></span><span class="ts-chip" data-t="23.4" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 0:23</span></span></li>
+<li><span class="n">3</span><span class="t">They only need a few objects to live. <span class="blank-ph sm">&nbsp;<span class="ans-ph">B</span></span><span class="ts-chip" data-t="29.1" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 0:29</span></span></li>
+<li><span class="n">4</span><span class="t">They sometimes work with others. <span class="blank-ph sm">&nbsp;<span class="ans-ph">Z</span></span><span class="ts-chip" data-t="47.7" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 0:47</span></span></li>
+<li><span class="n">5</span><span class="t">Their eating habits are quite primitive and simple. <span class="blank-ph sm">&nbsp;<span class="ans-ph">Z</span></span><span class="ts-chip" data-t="67.6" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 1:07</span></span></li>
+<li><span class="n">6</span><span class="t">They don&rsquo;t mind living without modern gadgets. <span class="blank-ph sm">&nbsp;<span class="ans-ph">B</span></span><span class="ts-chip" data-t="108.5" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 1:48</span></span></li>
+<li><span class="n">7</span><span class="t">They make money by creating things. <span class="blank-ph sm">&nbsp;<span class="ans-ph">B</span></span><span class="ts-chip" data-t="141.9" data-audio="video-88a" onclick="jumpTo(this)">&#9654; 2:21</span></span></li>
+</ol>
+</div>
+<div class="btnrow">
+<button class="revealbtn ts" onclick="toggleTimestamps(this,'ex88_3')">Show Timestamps</button>
+<button class="revealbtn" data-group="p88" onclick="toggleAnswers(this,'ex88_3','p88')">Show Answer</button>
+</div>
+</div>
+
+<div class="exblock sec-learn" id="s88g">
+<div class="thinkbox">
+<div class="tb-head">Great <span class="t">Thinkers</span></div>
+<div class="tb-sub">Step inside</div>
+<div class="tb-body">
+<h3 class="exline" style="margin-top:0;"><span class="exlabel" style="color:#4a3a78;">4</span> Work with a partner. What do you think about Jess and Zeki&rsquo;s lifestyles? What do you like and what you don&rsquo;t like about them? Present it to the class.</h3>
+<div id="ex88_4" class="exwrap">
+<div class="ansline"><span class="model-ans">I like Jess&rsquo;s lifestyle because she lives next to a river and draws all day. I like Zeki&rsquo;s lifestyle because he is free and fit and teaches survival courses outdoors. I don&rsquo;t like that they have very little space and no Internet. I wouldn&rsquo;t like to live in a tent when the weather is cold.</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p88" onclick="toggleAnswers(this,'ex88_4','p88')">Show Model Answer</button></div>
+</div>
+</div>
+</div>
+
+
+<div class="exblock sec-learn" id="s89a">
+<img class="floatl" src="media/p89_worker.jpg" alt="A young woman concentrating while working at a metal lathe in a workshop" style="width:230px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.3);">
+<h3 class="exline" style="margin-top:0;"><span class="exlabel">5</span> Look at the statements below about what can be important in a job. Give each factor a mark from 0 (completely disagree) to 5 (completely agree).</h3>
+<div id="ex89_5" class="exwrap">
+<div style="background:#4a4e75;border-radius:6px;padding:12px 16px;margin-left:250px;">
+<div style="background:#fff;border-radius:10px;padding:8px 14px;margin:6px 0;font-size:14px;"><b>a</b> &lsquo;I want a job where I can help and look after others. That&rsquo;s more important than money.&rsquo; <span class="model-ans"><b>&rarr; 4</b></span></div>
+<div style="background:#fff;border-radius:10px;padding:8px 14px;margin:6px 0;font-size:14px;"><b>b</b> &lsquo;I don&rsquo;t mind doing a boring job or working long hours, but it has to be well-paid.&rsquo; <span class="model-ans"><b>&rarr; 2</b></span></div>
+<div style="background:#fff;border-radius:10px;padding:8px 14px;margin:6px 0;font-size:14px;"><b>c</b> &lsquo;I prefer a job that doesn&rsquo;t pay well but that I enjoy, not a job with a great salary that I hate.&rsquo; <span class="model-ans"><b>&rarr; 5</b></span></div>
+<div style="background:#fff;border-radius:10px;padding:8px 14px;margin:6px 0;font-size:14px;"><b>d</b> &lsquo;Working on your own is boring. I want to work in a team and have contact with people.&rsquo; <span class="model-ans"><b>&rarr; 5</b></span></div>
+<div style="background:#fff;border-radius:10px;padding:8px 14px;margin:6px 0;font-size:14px;"><b>e</b> &lsquo;I&rsquo;d prefer to work fewer hours and get paid less, but have time for my hobbies.&rsquo; <span class="model-ans"><b>&rarr; 3</b></span></div>
+<div style="background:#fff;border-radius:10px;padding:8px 14px;margin:6px 0;font-size:14px;"><b>f</b> &lsquo;I love travelling. I want a job where I can see the world.&rsquo; <span class="model-ans"><b>&rarr; 4</b></span></div>
+</div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p88" onclick="toggleAnswers(this,'ex89_5','p88')">Show Model Answers</button></div>
+</div>
+
+<div class="exblock sec-learn" id="s89b">
+<h3 class="exline"><span class="exlabel">6</span> <span class="spk">SPEAKING</span>Compare your answers in 5. Are they similar?</h3>
+<div id="ex89_6" class="exwrap">
+<div class="ansline"><span class="model-ans">My partner and I both gave statement d a 5, so we both prefer working in a team. But I gave statement b a 2 and my partner gave it a 4, so our answers are not completely similar.</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p88" onclick="toggleAnswers(this,'ex89_6','p88')">Show Model Answer</button></div>
+</div>
+
+<div class="exblock sec-learn" id="s89c">
+<h3 class="exline"><span class="exlabel">7</span> Suggest jobs for your partner according to the marks they gave to the statements in 5.</h3>
+<div id="ex89_7" class="exwrap">
+<div class="ansline"><span class="model-ans">You gave statement f a 4, so I think you would like to be a pilot or a tour guide. You gave statement a a 4 as well, so you could also be a nurse or a vet.</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p88" onclick="toggleAnswers(this,'ex89_7','p88')">Show Model Answer</button></div>
+</div>
+
+
+
+<div class="page-divider"><span>SECTION 4 &middot; LISTENING</span></div>
+<div id="p90" class="page-anchor"></div>
+<div class="exblock sec-listen" id="s90a">
+<div class="barhead">Listening</div>
+<h3 class="exline" style="margin-top:10px;"><span class="exlabel">1</span> <span class="spk">SPEAKING</span>Look at the photos. What do you think Louise and Christopher have to do in their jobs? Make a list of good and bad things about each job.</h3>
+<div class="figrow">
+<figure><img class="fig" src="media/p90_icecream.jpg" alt="A woman with short hair eating an ice cream cone in the street" style="max-width:280px;margin:0;"><figcaption>Louise (ice cream taster)</figcaption></figure>
+<figure><img class="fig" src="media/p90_raven.jpg" alt="A man in a red and navy Yeoman Warder uniform with a large black raven on his shoulder" style="max-width:280px;margin:0;"><figcaption>Christopher (ravenmaster)</figcaption></figure>
+</div>
+</div>
+
+<div class="exblock sec-listen" id="s90b">
+<h3 class="exline"><span class="exlabel">2</span> Listen to two teenagers discussing the two jobs. Do they talk about any of your ideas in 1? If so, which?</h3>
+<div id="ex90_2" class="exwrap">
+<div class="audiorow">
+<audio controls id="audio-90-2" src="media/Gateway_B1_U7_track55_Listening.mp3"></audio>
+<button class="revealbtn script" data-group="p90" onclick="toggleScript(this,'script-p90-2','p90')">Show Script</button>
+</div>
+<div class="script-box" id="script-p90-2">
+<p><span class="sp">Layla:</span> Wow! Harry, have you seen this? I didn’t know this job really existed!</p>
+<p><span class="sp">Harry:</span> Which job?</p>
+<p><span class="sp">Layla:</span> Being a professional ice cream taster! Can you imagine?</p>
+<p><span class="sp">Harry:</span> Yes, Layla, I can! I can imagine that if I ate ice cream every day, I’d put on weight really fast! Actually, I wonder how much ice cream you have to eat.</p>
+<p><span class="sp">Layla:</span> Err … Wait, it says it here … Louise Bamber, she’s in charge of tasting ice cream for a big UK supermarket … She says that sometimes she tastes up to 250 ice creams a day!</p>
+<p><span class="sp">Harry:</span> Really? I like having an ice cream or two in the summer but if I did that job I’d get tired of it. Unless you really loved ice cream, you wouldn’t want to eat it all through the winter.</p>
+<p><span class="sp">Layla:</span> But wait! You don’t actually eat all that ice cream, you just taste it. It’s not the same. Nobody could eat all that sugar! And you do other things too. For example, Louise travels a lot. She’s always looking for new flavours and ideas and that’s the part that sounds the most interesting to me. If I had that job, I’d really enjoy inventing new flavours. Tomato ketchup or blue cheese!</p>
+<p><span class="sp">Harry:</span> Yuck … Seriously, though, I reckon if you did that job, you’d need to visit the dentist regularly!</p>
+<p><span class="sp">Layla:</span> True! But what about you, what would your dream job be?</p>
+<p><span class="sp">Harry:</span> I’ve just finished a great book called Ravenmaster. The man who looks after the ravens at the Tower of London wrote it. His name is Christopher Skaife. That’s probably my dream job!</p>
+<p><span class="sp">Layla:</span> Wait, isn’t there a legend about the ravens? If the six ravens at the Tower of London fly away, the Kingdom and the Tower of London will fall?</p>
+<p><span class="sp">Harry:</span> Yeah, that’s why it’s so special. You’re responsible for the future of the country!</p>
+<p><span class="sp">Layla:</span> Hmm. So, what qualifications do you need for a job like that?</p>
+<p><span class="sp">Harry:</span> You must have at least 22 years of military experience. I suppose you have to like birds too … What I’d love about the job is that you live inside the Tower of London!</p>
+<p><span class="sp">Layla:</span> Pff! I would be really frightened if I lived inside the Tower of London! Didn’t prisoners die there?</p>
+<p><span class="sp">Harry:</span> A long time ago.</p>
+<p><span class="sp">Layla:</span> Actually, I find ravens quite scary too.</p>
+<p><span class="sp">Harry:</span> Christopher says the birds are usually friendly with visitors but it isn’t a good idea to get too close to them. He has lots of marks on his arms where the ravens have attacked him. He also says visitors should be careful because the ravens sometimes steal things, especially crisps and biscuits!</p>
+<p><span class="sp">Layla:</span> Is he responsible for feeding the ravens?</p>
+<p><span class="sp">Harry:</span> Yes, he has to give them chicken … and mice … and rats!</p>
+<p><span class="sp">Layla:</span> Oh!</p>
+<p><span class="sp">Harry:</span> Yes, but at least he doesn’t have to catch them!</p>
+<p><span class="sp">Layla:</span> If I were you, I’d choose a different dream job … For example, one where there’s ice cream, not mice or rats!</p>
+</div>
+<div class="notesbox">
+<p><span class="model-ans">Yes. Harry says he would put on weight and get tired of eating ice cream.</span><span class="ts-chip" data-t="22" data-audio="audio-90-2" onclick="jumpTo(this)">&#9654; 0:22</span></p>
+<p><span class="model-ans">Layla says Louise travels a lot and would enjoy inventing new flavours.</span><span class="ts-chip" data-t="68.9" data-audio="audio-90-2" onclick="jumpTo(this)">&#9654; 1:08</span></p>
+<p><span class="model-ans">Harry would love to live inside the Tower of London, but Layla thinks she would be frightened there.</span><span class="ts-chip" data-t="140.1" data-audio="audio-90-2" onclick="jumpTo(this)">&#9654; 2:20</span></p>
+<p><span class="model-ans">The ravens attack the ravenmaster and steal food from visitors, and he has to feed them chicken, mice and rats.</span><span class="ts-chip" data-t="165.9" data-audio="audio-90-2" onclick="jumpTo(this)">&#9654; 2:45</span></p>
+</div>
+</div>
+<div class="btnrow">
+<button class="revealbtn ts" onclick="toggleTimestamps(this,'ex90_2')">Show Timestamps</button>
+<button class="revealbtn model" data-group="p90" onclick="toggleAnswers(this,'ex90_2','p90')">Show Model Answers</button>
+</div>
+</div>
+
+<div class="exblock sec-listen" id="s90c">
+<h3 class="exline"><span class="exlabel">3</span> Listen again and choose the best answers.</h3>
+<div id="ex90_3" class="exwrap">
+<div class="audiorow">
+<audio controls id="audio-90-3" src="media/Gateway_B1_U7_track55_Listening.mp3"></audio>
+<button class="revealbtn script" data-group="p90" onclick="toggleScript(this,'script-p90-3','p90')">Show Script</button>
+</div>
+<div class="script-box" id="script-p90-3">
+<p><span class="sp">Layla:</span> Wow! Harry, have you seen this? I didn’t know this job really existed!</p>
+<p><span class="sp">Harry:</span> Which job?</p>
+<p><span class="sp">Layla:</span> Being a professional ice cream taster! Can you imagine?</p>
+<p><span class="sp">Harry:</span> Yes, Layla, I can! I can imagine that if I ate ice cream every day, I’d put on weight really fast! Actually, I wonder how much ice cream you have to eat.</p>
+<p><span class="sp">Layla:</span> Err … Wait, it says it here … Louise Bamber, she’s in charge of tasting ice cream for a big UK supermarket … She says that sometimes she tastes up to 250 ice creams a day!</p>
+<p><span class="sp">Harry:</span> Really? I like having an ice cream or two in the summer but if I did that job I’d get tired of it. Unless you really loved ice cream, you wouldn’t want to eat it all through the winter.</p>
+<p><span class="sp">Layla:</span> But wait! You don’t actually eat all that ice cream, you just taste it. It’s not the same. Nobody could eat all that sugar! And you do other things too. For example, Louise travels a lot. She’s always looking for new flavours and ideas and that’s the part that sounds the most interesting to me. If I had that job, I’d really enjoy inventing new flavours. Tomato ketchup or blue cheese!</p>
+<p><span class="sp">Harry:</span> Yuck … Seriously, though, I reckon if you did that job, you’d need to visit the dentist regularly!</p>
+<p><span class="sp">Layla:</span> True! But what about you, what would your dream job be?</p>
+<p><span class="sp">Harry:</span> I’ve just finished a great book called Ravenmaster. The man who looks after the ravens at the Tower of London wrote it. His name is Christopher Skaife. That’s probably my dream job!</p>
+<p><span class="sp">Layla:</span> Wait, isn’t there a legend about the ravens? If the six ravens at the Tower of London fly away, the Kingdom and the Tower of London will fall?</p>
+<p><span class="sp">Harry:</span> Yeah, that’s why it’s so special. You’re responsible for the future of the country!</p>
+<p><span class="sp">Layla:</span> Hmm. So, what qualifications do you need for a job like that?</p>
+<p><span class="sp">Harry:</span> You must have at least 22 years of military experience. I suppose you have to like birds too … What I’d love about the job is that you live inside the Tower of London!</p>
+<p><span class="sp">Layla:</span> Pff! I would be really frightened if I lived inside the Tower of London! Didn’t prisoners die there?</p>
+<p><span class="sp">Harry:</span> A long time ago.</p>
+<p><span class="sp">Layla:</span> Actually, I find ravens quite scary too.</p>
+<p><span class="sp">Harry:</span> Christopher says the birds are usually friendly with visitors but it isn’t a good idea to get too close to them. He has lots of marks on his arms where the ravens have attacked him. He also says visitors should be careful because the ravens sometimes steal things, especially crisps and biscuits!</p>
+<p><span class="sp">Layla:</span> Is he responsible for feeding the ravens?</p>
+<p><span class="sp">Harry:</span> Yes, he has to give them chicken … and mice … and rats!</p>
+<p><span class="sp">Layla:</span> Oh!</p>
+<p><span class="sp">Harry:</span> Yes, but at least he doesn’t have to catch them!</p>
+<p><span class="sp">Layla:</span> If I were you, I’d choose a different dream job … For example, one where there’s ice cream, not mice or rats!</p>
+</div>
+<ol class="qlist">
+<li data-correct="c">Harry isn&rsquo;t very enthusiastic about being an ice cream taster because &hellip;<span class="ts-chip" data-t="46.9" data-audio="audio-90-3" onclick="jumpTo(this)">&#9654; 0:46</span><br>
+<span class="mcopt" data-letter="a">a&nbsp; he doesn&rsquo;t enjoy eating ice cream.</span><br>
+<span class="mcopt" data-letter="b">b&nbsp; he thinks ice cream is bad for you.</span><br>
+<span class="mcopt" data-letter="c">c&nbsp; he doesn&rsquo;t want to eat ice cream all year.</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="b">Layla likes Louise&rsquo;s job because &hellip;<span class="ts-chip" data-t="68.9" data-audio="audio-90-3" onclick="jumpTo(this)">&#9654; 1:08</span><br>
+<span class="mcopt" data-letter="a">a&nbsp; she enjoys travelling to new places.</span><br>
+<span class="mcopt" data-letter="b">b&nbsp; she likes the creative side of the job.</span><br>
+<span class="mcopt" data-letter="c">c&nbsp; she enjoys eating all types of ice cream.</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="a">Harry thinks being a ravenmaster is an important job because &hellip;<span class="ts-chip" data-t="121.7" data-audio="audio-90-3" onclick="jumpTo(this)">&#9654; 2:01</span><br>
+<span class="mcopt" data-letter="a">a&nbsp; of a traditional story about the ravens.</span><br>
+<span class="mcopt" data-letter="b">b&nbsp; the ravenmaster is in charge of the Tower of London.</span><br>
+<span class="mcopt" data-letter="c">c&nbsp; ravenmasters also write books and stories.</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="a">The ravenmaster &hellip;<span class="ts-chip" data-t="133.4" data-audio="audio-90-3" onclick="jumpTo(this)">&#9654; 2:13</span><br>
+<span class="mcopt" data-letter="a">a&nbsp; has to have worked in the army.</span><br>
+<span class="mcopt" data-letter="b">b&nbsp; must have worked with birds for more than 20 years.</span><br>
+<span class="mcopt" data-letter="c">c&nbsp; needs to travel to the Tower of London every day.</span>
+<span class="ans-ph mc-marker"></span></li>
+<li data-correct="c">Christopher Skaife thinks that visitors should &hellip;<span class="ts-chip" data-t="159" data-audio="audio-90-3" onclick="jumpTo(this)">&#9654; 2:39</span><br>
+<span class="mcopt" data-letter="a">a&nbsp; only give the birds food that they usually eat.</span><br>
+<span class="mcopt" data-letter="b">b&nbsp; be very careful because the birds attack.</span><br>
+<span class="mcopt" data-letter="c">c&nbsp; stay at a short distance from the birds, just in case.</span>
+<span class="ans-ph mc-marker"></span></li>
+</ol>
+</div>
+<div class="btnrow">
+<button class="revealbtn ts" onclick="toggleTimestamps(this,'ex90_3')">Show Timestamps</button>
+<button class="revealbtn" data-group="p90" onclick="toggleAnswers(this,'ex90_3','p90')">Show Answer</button>
+</div>
+</div>
+
+<div class="exblock sec-listen" id="s90d">
+<div class="criticalbox"><span class="cb-title">Critical thinkers</span>
+<h3 class="exline" style="margin-top:2px;"><span class="exlabel">4</span> In your opinion, how useful or important are these two jobs? What factors make a job useful or important?</h3>
+<div class="cb-q">What makes you say that?</div>
+<p style="margin:4px 0;">Use ideas from the listening and other information to justify your opinion. Then share your ideas.</p>
+<div id="ex90_4" class="exwrap">
+<div class="ansline"><span class="model-ans">I think both jobs are useful, but the ravenmaster&rsquo;s job is more important because, according to the legend, the Kingdom will fall if the ravens fly away. An ice cream taster makes sure that the ice cream is tasty, which matters to the supermarket but not to the whole country. A job is useful or important if it helps many people, if it needs special skills and if it protects something valuable.</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p90" onclick="toggleAnswers(this,'ex90_4','p90')">Show Model Answer</button></div>
+</div>
+</div>
+
+
+<div class="page-divider"><span>SECTION 5 &middot; DEVELOPING SPEAKING</span></div>
+<div id="p92" class="page-anchor"></div>
+<div class="exblock sec-speak" id="s92a">
+<div class="barhead">Developing speaking</div>
+<h2 class="stitle" style="margin-top:8px;font-size:19px;">Giving detailed personal information</h2>
+<div class="figrow">
+<figure><img class="fig" src="media/p92_photo_a.jpg" alt="Photo a: two girls bumping fists in a gym with a basketball team behind them" style="max-width:340px;margin:0;"></figure>
+<figure><img class="fig" src="media/p92_photo_b.jpg" alt="Photo b: a boy showing an older man how to use a smartphone" style="max-width:340px;margin:0;"></figure>
+</div>
+</div>
+
+<div class="exblock sec-speak" id="s92b">
+<h3 class="exline"><span class="exlabel">1</span> <span class="spk">SPEAKING</span>Look at this list of qualities and skills. What qualities or skills do you think you need for the activities in the photos? Give reasons and examples to justify your answer.</h3>
+<ol class="numlist">
+<li><span class="n">1</span><span class="t">Being friendly and caring</span></li>
+<li><span class="n">2</span><span class="t">Having good communication skills</span></li>
+<li><span class="n">3</span><span class="t">Being good at motivating others</span></li>
+<li><span class="n">4</span><span class="t">Being good at organising others</span></li>
+<li><span class="n">5</span><span class="t">ICT skills</span></li>
+<li><span class="n">6</span><span class="t">Leadership</span></li>
+<li><span class="n">7</span><span class="t">Numeracy skills (maths and money)</span></li>
+<li><span class="n">8</span><span class="t">Patience</span></li>
+<li><span class="n">9</span><span class="t">Problem solving</span></li>
+<li><span class="n">10</span><span class="t">Ability to work in a team</span></li>
+</ol>
+<div id="ex92_1" class="exwrap">
+<div class="ansline"><span class="model-ans"><b>Photo a:</b> I think you need to be good at motivating others and you need leadership and the ability to work in a team. For example, a basketball coach has to encourage the players when they lose a match.</span></div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p92" onclick="toggleAnswers(this,'ex92_1','p92')">Show Model Answer</button></div>
+</div>
+
+<div class="exblock sec-speak" id="s92c">
+<h3 class="exline"><span class="exlabel">2</span> Listen to a part of an interview with Amelia, the girl in photo a and answer the questions.</h3>
+<div id="ex92_2" class="exwrap">
+<div class="audiorow">
+<audio controls id="audio-92-2" src="media/Gateway_B1_U7_track56_DevelopingSpeaking.mp3"></audio>
+<button class="revealbtn script" data-group="p92" onclick="toggleScript(this,'script-p92-2','p92')">Show Script</button>
+</div>
+<div class="script-box" id="script-p92-2">
+<p><span class="sp">Interviewer:</span> What do you like doing in your free time?</p>
+<p><span class="sp">Amelia:</span> Err … I love playing basketball and I’ve always played in the school team. We’re in the Dynamik National Schools League. This year the school asked me to help train our youngest girls’ team. The girls are 10 and 11.</p>
+<p><span class="sp">Interviewer:</span> What skills have you learned from that? And what qualities do you think you have that help you?</p>
+<p><span class="sp">Amelia:</span> Well, I think I’ve learned to motivate others. For example, we only had seven girls in the team when I started training them. Now we have a full team of 12. That’s because they enjoy playing and training more this year so they asked their friends to join the team. Another thing to say is that I think it’s important that I’m friendly and caring. For instance, the team can see that I have a good relationship with them and that means they try harder for me. Also, to train a team, you have to be good at organising people, and I think I’m good at that. Let me give you an example … Last year the team didn’t know exactly when they were going to train. I’ve made a timetable, you see, so they know exactly what day and time we have training sessions and matches. That really helps!</p>
+</div>
+<ol class="numlist">
+<li><span class="n">1</span><span class="t">What three questions do they ask her?<span class="ts-chip" data-t="7.1" data-audio="audio-92-2" onclick="jumpTo(this)">&#9654; 0:07</span><br><span class="ans-ph">What do you like doing in your free time? What skills have you learned from that? And what qualities do you think you have that help you?</span></span></li>
+<li><span class="n">2</span><span class="t">What is Amelia doing this year?<span class="ts-chip" data-t="18.7" data-audio="audio-92-2" onclick="jumpTo(this)">&#9654; 0:18</span><br><span class="ans-ph">She is playing in the school basketball team and training the school&rsquo;s youngest girls&rsquo; team.</span></span></li>
+<li><span class="n">3</span><span class="t">Does she give just one answer to the second question?<span class="ts-chip" data-t="33" data-audio="audio-92-2" onclick="jumpTo(this)">&#9654; 0:33</span><br><span class="ans-ph">Yes &ndash; she&rsquo;s learned to motivate others.</span></span></li>
+<li><span class="n">4</span><span class="t">Does she just give one answer to the third question?<span class="ts-chip" data-t="52" data-audio="audio-92-2" onclick="jumpTo(this)">&#9654; 0:52</span><br><span class="ans-ph">No, she gives two: she&rsquo;s friendly and caring and she&rsquo;s good at organising people.</span></span></li>
+<li><span class="n">5</span><span class="t">Does she mention any of your ideas in 1? Which?<span class="ts-chip" data-t="69.2" data-audio="audio-92-2" onclick="jumpTo(this)">&#9654; 1:09</span></span></li>
+</ol>
+</div>
+<div class="btnrow">
+<button class="revealbtn ts" onclick="toggleTimestamps(this,'ex92_2')">Show Timestamps</button>
+<button class="revealbtn" data-group="p92" onclick="toggleAnswers(this,'ex92_2','p92')">Show Answer</button>
+</div>
+</div>
+
+<div class="exblock sec-speak" id="s92d">
+<h3 class="exline"><span class="exlabel">3</span> Listen again. What examples does Amelia give to justify the qualities and skills she mentions in her answer? Take notes with important words that help you to remember your answer.</h3>
+<div id="ex92_3" class="exwrap">
+<div class="audiorow">
+<audio controls id="audio-92-3" src="media/Gateway_B1_U7_track56_DevelopingSpeaking.mp3"></audio>
+<button class="revealbtn script" data-group="p92" onclick="toggleScript(this,'script-p92-3','p92')">Show Script</button>
+</div>
+<div class="script-box" id="script-p92-3">
+<p><span class="sp">Interviewer:</span> What do you like doing in your free time?</p>
+<p><span class="sp">Amelia:</span> Err … I love playing basketball and I’ve always played in the school team. We’re in the Dynamik National Schools League. This year the school asked me to help train our youngest girls’ team. The girls are 10 and 11.</p>
+<p><span class="sp">Interviewer:</span> What skills have you learned from that? And what qualities do you think you have that help you?</p>
+<p><span class="sp">Amelia:</span> Well, I think I’ve learned to motivate others. For example, we only had seven girls in the team when I started training them. Now we have a full team of 12. That’s because they enjoy playing and training more this year so they asked their friends to join the team. Another thing to say is that I think it’s important that I’m friendly and caring. For instance, the team can see that I have a good relationship with them and that means they try harder for me. Also, to train a team, you have to be good at organising people, and I think I’m good at that. Let me give you an example … Last year the team didn’t know exactly when they were going to train. I’ve made a timetable, you see, so they know exactly what day and time we have training sessions and matches. That really helps!</p>
+</div>
+<div class="notesbox">
+<p><b>Motivating others</b><span class="ts-chip" data-t="36.4" data-audio="audio-92-3" onclick="jumpTo(this)">&#9654; 0:36</span><br><span class="ans-ph">just seven girls in the team at beginning, now 12</span></p>
+<p><b>Friendly and caring</b><span class="ts-chip" data-t="57.7" data-audio="audio-92-3" onclick="jumpTo(this)">&#9654; 0:57</span><br><span class="ans-ph">good relationship means team try harder for her</span></p>
+<p><b>Good at organising</b><span class="ts-chip" data-t="74.3" data-audio="audio-92-3" onclick="jumpTo(this)">&#9654; 1:14</span><br><span class="ans-ph">team didn&rsquo;t know when to train, so she made a timetable</span></p>
+</div>
+</div>
+<div class="btnrow">
+<button class="revealbtn ts" onclick="toggleTimestamps(this,'ex92_3')">Show Timestamps</button>
+<button class="revealbtn" data-group="p92" onclick="toggleAnswers(this,'ex92_3','p92')">Show Answer</button>
+</div>
+</div>
+
+<div class="exblock sec-speak" id="s92e">
+<h3 class="exline"><span class="exlabel">4</span> Look at the Speaking bank. Which expression did Amelia not use? Listen again if necessary.</h3>
+<div id="ex92_4" class="exwrap">
+<div class="audiorow">
+<audio controls id="audio-92-4" src="media/Gateway_B1_U7_track56_DevelopingSpeaking.mp3"></audio>
+<button class="revealbtn script" data-group="p92" onclick="toggleScript(this,'script-p92-4','p92')">Show Script</button>
+</div>
+<div class="script-box" id="script-p92-4">
+<p><span class="sp">Interviewer:</span> What do you like doing in your free time?</p>
+<p><span class="sp">Amelia:</span> Err … I love playing basketball and I’ve always played in the school team. We’re in the Dynamik National Schools League. This year the school asked me to help train our youngest girls’ team. The girls are 10 and 11.</p>
+<p><span class="sp">Interviewer:</span> What skills have you learned from that? And what qualities do you think you have that help you?</p>
+<p><span class="sp">Amelia:</span> Well, I think I’ve learned to motivate others. For example, we only had seven girls in the team when I started training them. Now we have a full team of 12. That’s because they enjoy playing and training more this year so they asked their friends to join the team. Another thing to say is that I think it’s important that I’m friendly and caring. For instance, the team can see that I have a good relationship with them and that means they try harder for me. Also, to train a team, you have to be good at organising people, and I think I’m good at that. Let me give you an example … Last year the team didn’t know exactly when they were going to train. I’ve made a timetable, you see, so they know exactly what day and time we have training sessions and matches. That really helps!</p>
+</div>
+<div class="speakbank">
+<div class="sb-head"><b>Speaking bank</b><span>Useful expressions for giving and adding examples</span></div>
+<ul>
+<li>For example</li>
+<li>For instance</li>
+<li>Let me give you an example</li>
+<li class="notused">A good example is &hellip;<span class="ans-ph">&larr; Amelia did not use this expression.</span></li>
+<li>Also &hellip;</li>
+<li>Another thing to say is &hellip;</li>
+</ul>
+</div>
+</div>
+<div class="btnrow"><button class="revealbtn" data-group="p92" onclick="toggleAnswers(this,'ex92_4','p92')">Show Answer</button></div>
+</div>
+
+<div class="exblock sec-speak" id="s92f">
+<h3 class="exline"><span class="exlabel">5</span> Use the same three questions that the Amelia answered and your ideas in 1 to create an interview with the boy in the picture b. Also, use some expressions from the Speaking Bank.</h3>
+<div id="ex92_5" class="exwrap">
+<ol class="numlist" style="margin-left:6px;">
+<li><span class="n">1</span><span class="t">What do you like doing in your free time?<br><span class="model-ans">I like helping people with technology. I often show my grandfather how to use his phone.</span></span></li>
+<li><span class="n">2</span><span class="t">What skills have you learned from that?<br><span class="model-ans">I think I&rsquo;ve learned to be patient. For example, last week I explained how to send photos three times and I didn&rsquo;t get angry.</span></span></li>
+<li><span class="n">3</span><span class="t">And what qualities do you think you have that help you?<br><span class="model-ans">I think I&rsquo;m friendly and good at explaining things. Another thing to say is that I have good ICT skills. For instance, I fixed the Wi-Fi at home.</span></span></li>
+</ol>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p92" onclick="toggleAnswers(this,'ex92_5','p92')">Show Model Answers</button></div>
+</div>
+
+<div class="exblock sec-speak" id="s92g">
+<h3 class="exline"><span class="exlabel">6</span> Think about one of your favourite free-time activities (hobbies, interests, sports, etc.). Which of the skills and qualities from the list in 1 has it helped you to develop (you can also use skills and qualities that are not in Exercise 1)? Make a note of three skills or qualities and examples to justify your answer.</h3>
+<div id="ex92_6" class="exwrap">
+<div class="notesbox">
+<p><span class="model-ans"><b>Activity: playing football.</b></span></p>
+<p><span class="model-ans"><b>Ability to work in a team</b> &ndash; I pass the ball and listen to my teammates in every match.</span></p>
+<p><span class="model-ans"><b>Leadership</b> &ndash; I&rsquo;m the captain, so I organise the training and talk to the coach.</span></p>
+<p><span class="model-ans"><b>Patience</b> &ndash; I help the younger players and I wait until they understand the exercise.</span></p>
+</div>
+</div>
+<div class="btnrow"><button class="revealbtn model" data-group="p92" onclick="toggleAnswers(this,'ex92_6','p92')">Show Model Answers</button></div>
+</div>
+
+
+</div><!-- /#content -->
+
+<!-- Word popup modal -->
+<div class="modal-backdrop" id="wordModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('wordModal')">&times;</button>
+    <button class="simplifybtn" id="wm-simplify-btn" onclick="toggleSimple()">Show simplified definition</button>
+    <h3 id="wm-word"></h3>
+    <div class="mpos-row">
+      <span class="mpos" id="wm-pos"></span>
+      <span class="mipa" id="wm-ipa"></span>
+    </div>
+    <div class="mdef" id="wm-def"></div>
+    <div id="wm-examples"></div>
+    <div style="margin:14px 4px 0;">
+      <a id="wm-lookup" class="lookuplink" href="#" target="_blank" rel="noopener">Look up definition &#8599;</a>
+    </div>
+  </div>
+</div>
+
+<!-- Vocab list modal -->
+<div class="modal-backdrop" id="vocabListModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('vocabListModal')">&times;</button>
+    <h3 style="font-size:20px;display:block;">Unit 7 Vocabulary</h3>
+    <div id="vocabGroups"></div>
+  </div>
+</div>
+
+<!-- Answer-lock modal -->
+<div class="modal-backdrop" id="lockModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('lockModal')">&times;</button>
+    <h3 id="lockTitle">&#128274; Answers locked</h3>
+    <p class="lock-sub">Enter the class code for this section to see the answers.</p>
+    <div id="lockRow">
+      <input type="password" id="lockInput" placeholder="class code" autocomplete="off">
+      <button type="button" id="lockGo">Unlock</button>
+    </div>
+    <p id="lockMsg"></p>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   WORD DEFINITIONS
+   ===================================================================== */
+const WORD_DEFS = {
+/* ---------- Jobs (section 1) ---------- */
+"architect":{w:"architect",g:"Jobs (section 1)",ipa:"/ˈɑːrkɪtekt/",pos:"(n.)",def:"An architect is a person whose job is to design buildings and to plan how they will be built.",simple:"A person who plans and draws new buildings.",ex:["The architect drew plans for a new library.","My aunt is an architect, so she looks at buildings differently."]},
+"au-pair":{w:"au pair",g:"Jobs (section 1)",ipa:"/ˌoʊ ˈper/",pos:"(n.)",def:"An au pair is a young person, usually from another country, who lives with a family and helps look after their children in exchange for a room, food and a little money.",simple:"A young person who lives with a family and looks after the children.",ex:["They have an au pair from Spain who speaks to the children in Spanish.","Being an au pair is a good way to learn a language."]},
+"chef":{w:"chef",g:"Jobs (section 1)",ipa:"/ʃef/",pos:"(n.)",def:"A chef is a professional cook, especially the main cook in a restaurant or hotel.",simple:"A person who cooks food as a job in a restaurant.",ex:["The chef prepares all the dishes in the kitchen.","She trained for three years to become a chef."]},
+"company-director":{w:"company director",g:"Jobs (section 1)",ipa:"/ˈkʌmpəni dəˈrektər/",pos:"(n.)",def:"A company director is a person at a senior level who helps to manage a company and make important decisions about it.",simple:"A person who helps to run a company.",ex:["The company director welcomed all the new employees.","A company director often has to make difficult decisions."]},
+"construction-worker":{w:"construction worker",g:"Jobs (section 1)",ipa:"/kənˈstrʌkʃn ˌwɜːrkər/",pos:"(n.)",def:"A construction worker is a person whose job is to build or repair buildings, roads and bridges.",simple:"A person who builds houses, roads and bridges.",ex:["Construction workers wear hard hats on building sites.","My uncle is a construction worker and he works outdoors all year."]},
+"economist":{w:"economist",g:"Jobs (section 1)",ipa:"/ɪˈkɑːnəmɪst/",pos:"(n.)",def:"An economist is a person who studies or has expert knowledge of how money, trade and industry work in a country or in the world.",simple:"A person who studies money, jobs and business in a country.",ex:["The economist explained why prices were going up.","An economist works with a lot of figures."]},
+"fashion-designer":{w:"fashion designer",g:"Jobs (section 1)",ipa:"/ˈfæʃn dɪˌzaɪnər/",pos:"(n.)",def:"A fashion designer is a person whose job is to create new styles of clothes.",simple:"A person who creates new clothes.",ex:["The fashion designer showed her new collection in Paris.","You need to be creative to be a fashion designer."]},
+"firefighter":{w:"firefighter",g:"Jobs (section 1)",ipa:"/ˈfaɪərfaɪtər/",pos:"(n.)",def:"A firefighter is a person whose job is to stop fires and to rescue people from dangerous situations.",simple:"A person who puts out fires and saves people.",ex:["The firefighters arrived within five minutes.","Firefighters have to be fit, strong and calm."]},
+"journalist":{w:"journalist",g:"Jobs (section 1)",ipa:"/ˈdʒɜːrnəlɪst/",pos:"(n.)",def:"A journalist is a person whose job is to collect and write news stories for newspapers, magazines, websites, television or radio.",simple:"A person who writes or reports the news.",ex:["The journalist interviewed the mayor.","Journalists produce articles and reports every day."]},
+"lawyer":{w:"lawyer",g:"Jobs (section 1)",ipa:"/ˈlɔːjər/",pos:"(n.)",def:"A lawyer is a person who is trained and qualified to give advice about the law and to speak for people in court.",simple:"A person who gives advice about the law and speaks for people in court.",ex:["She hired a lawyer to help with the contract.","A lawyer does a lot of paperwork."]},
+"mechanic":{w:"mechanic",g:"Jobs (section 1)",ipa:"/məˈkænɪk/",pos:"(n.)",def:"A mechanic is a person whose job is to repair and look after machines, especially car engines.",simple:"A person who repairs cars and machines.",ex:["The mechanic found the problem with my car.","He works as a mechanic in a garage."]},
+"nurse":{w:"nurse",g:"Jobs (section 1)",ipa:"/nɜːrs/",pos:"(n.)",def:"A nurse is a person whose job is to look after people who are ill or injured, usually in a hospital or clinic.",simple:"A person who looks after sick people in a hospital.",ex:["The nurse checked the patient's temperature.","Nurses often work long hours and at night."]},
+"photographer":{w:"photographer",g:"Jobs (section 1)",ipa:"/fəˈtɑːɡrəfər/",pos:"(n.)",def:"A photographer is a person whose job is to take photographs.",simple:"A person who takes photos as a job.",ex:["The wedding photographer took hundreds of pictures.","A nature photographer often works outdoors."]},
+"plumber":{w:"plumber",g:"Jobs (section 1)",ipa:"/ˈplʌmər/",pos:"(n.)",def:"A plumber is a person whose job is to fit and repair water pipes, toilets, sinks and heating systems.",simple:"A person who fixes water pipes and taps.",ex:["We called a plumber because the kitchen sink was leaking.","The plumber fixed the pipe in ten minutes."]},
+"police-officer":{w:"police officer",g:"Jobs (section 1)",ipa:"/pəˈliːs ˌɔːfɪsər/",pos:"(n.)",def:"A police officer is a member of the police force, whose job is to protect people, prevent crime and make sure that people obey the law.",simple:"A person who works for the police and keeps people safe.",ex:["A police officer stopped the traffic.","Police officers must stay calm in difficult situations."]},
+"receptionist":{w:"receptionist",g:"Jobs (section 1)",ipa:"/rɪˈsepʃənɪst/",pos:"(n.)",def:"A receptionist is a person whose job is to welcome visitors, answer the phone and deal with enquiries in an office, hotel or clinic.",simple:"A person who welcomes visitors and answers the phone in an office or hotel.",ex:["The receptionist asked me to wait in the lobby.","A receptionist works with the public every day."]},
+"shop-assistant":{w:"shop assistant",g:"Jobs (section 1)",ipa:"/ʃɑːp əˈsɪstənt/",pos:"(n.)",def:"A shop assistant is a person whose job is to serve customers and sell things in a shop.",simple:"A person who works in a shop and helps customers.",ex:["The shop assistant helped me find the right size.","Many students work as shop assistants at weekends."]},
+"vet":{w:"vet",g:"Jobs (section 1)",ipa:"/vet/",pos:"(n.)",def:"A vet is a doctor for animals. The word is short for 'veterinarian' (US) or 'veterinary surgeon' (UK).",simple:"A doctor who looks after animals.",ex:["We took our cat to the vet because she wasn't eating.","A vet has to love animals."]},
+
+/* ---------- Personal qualities (section 1) ---------- */
+"ambitious":{w:"ambitious",g:"Personal Qualities (section 1)",ipa:"/æmˈbɪʃəs/",pos:"(adj.)",def:"If you are ambitious, you have a strong wish to be successful, powerful or famous, and you are willing to work hard to achieve it.",simple:"Wanting very much to be successful.",ex:["She is very ambitious and wants to be a company director by the age of 30.","Ambitious people often set big goals for themselves."]},
+"calm":{w:"calm",g:"Personal Qualities (section 1)",ipa:"/kɑːm/",pos:"(adj.)",def:"If you are calm, you are relaxed and quiet, and you do not feel angry, nervous or worried.",simple:"Quiet and relaxed, not worried or angry.",ex:["Firefighters have to stay calm in an emergency.","He took a deep breath and tried to stay calm."]},
+"caring":{w:"caring",g:"Personal Qualities (section 1)",ipa:"/ˈkerɪŋ/",pos:"(adj.)",def:"A caring person is kind and shows that they care about other people and want to help them.",simple:"Kind and wanting to help other people.",ex:["Nurses need to be caring and patient.","She is a caring older sister who always helps with homework."]},
+"clever-bright":{w:"clever/bright",g:"Personal Qualities (section 1)",ipa:"/ˈklevər/ · /braɪt/",pos:"(adj.)",def:"If you are clever or bright, you can learn and understand things quickly and easily, and you can find good solutions to problems.",simple:"Able to learn and think quickly.",re:"clever/bright",ex:["She's a bright student who always finds a quick way to solve problems.","It was a clever idea to bring an umbrella."]},
+"confident":{w:"confident",g:"Personal Qualities (section 1)",ipa:"/ˈkɑːnfɪdənt/",pos:"(adj.)",def:"If you are confident, you believe in yourself and your abilities and you do not feel nervous or afraid.",simple:"Sure about yourself and not nervous.",ex:["He felt confident before the job interview.","A confident speaker looks at the audience and smiles."]},
+"creative":{w:"creative",g:"Personal Qualities (section 1)",ipa:"/kriˈeɪtɪv/",pos:"(adj.)",def:"If you are creative, you are good at thinking of new ideas or making new things.",simple:"Good at having new ideas.",ex:["Artists and designers need to be creative.","She found a creative way to solve the problem."]},
+"determined":{w:"determined",g:"Personal Qualities (section 1)",ipa:"/dɪˈtɜːrmɪnd/",pos:"(adj.)",def:"If you are determined, you have made a firm decision to do something and you will not let anything stop you.",simple:"Not giving up, even when things are difficult.",ex:["She was determined to win the race.","A determined student never gives up when exams are hard."]},
+"fit":{w:"fit",g:"Personal Qualities (section 1)",ipa:"/fɪt/",pos:"(adj.)",def:"If you are fit, your body is healthy and strong, especially because you exercise regularly.",simple:"Healthy and strong because you exercise.",ex:["Firefighters have to be very fit.","He plays football three times a week to keep fit."]},
+"flexible":{w:"flexible",g:"Personal Qualities (section 1)",ipa:"/ˈfleksəbl/",pos:"(adj.)",def:"If you are flexible, you are able to change your plans or the way you do things easily when a situation changes.",simple:"Able to change your plans easily.",ex:["I'm flexible, so I can start work at 8 or at 10.","A flexible worker can adapt to changing situations."]},
+"hard-working":{w:"hard-working",g:"Personal Qualities (section 1)",ipa:"/ˌhɑːrd ˈwɜːrkɪŋ/",pos:"(adj.)",def:"A hard-working person puts a lot of effort and energy into their work and does it carefully and properly.",simple:"Working a lot and trying hard.",ex:["She's the most hard-working student in the class.","Hard-working employees often get promoted."]},
+"patient":{w:"patient",g:"Personal Qualities (section 1)",ipa:"/ˈpeɪʃnt/",pos:"(adj.)",def:"If you are patient, you can wait for a long time or deal with problems or difficult people without becoming angry or upset.",simple:"Able to wait calmly and not get angry.",ex:["Teachers have to be patient with young children.","Be patient – the bus will be here soon."]},
+"reliable":{w:"reliable",g:"Personal Qualities (section 1)",ipa:"/rɪˈlaɪəbl/",pos:"(adj.)",def:"A reliable person or thing can be trusted to do what you expect them to do.",simple:"Someone you can trust to do what they say.",ex:["Tom is a reliable friend – he always arrives on time.","We need a reliable person to look after the shop."]},
+"responsible":{w:"responsible",g:"Personal Qualities (section 1)",ipa:"/rɪˈspɑːnsəbl/",pos:"(adj.)",def:"If you are responsible, you behave sensibly and can be trusted to do your duty or to look after something or someone.",simple:"Sensible and able to be trusted with important things.",ex:["She is responsible enough to look after her little brother.","A responsible person always finishes their work on time."]},
+"sensitive":{w:"sensitive",g:"Personal Qualities (section 1)",ipa:"/ˈsensətɪv/",pos:"(adj.)",def:"If you are sensitive, you think about other people's feelings and understand them well. A sensitive person can also be easily upset.",simple:"Understanding other people's feelings.",ex:["A sensitive teacher notices when a student feels sad.","He's very sensitive and gets upset if people are unkind."]},
+"sociable-friendly":{w:"sociable/friendly",g:"Personal Qualities (section 1)",ipa:"/ˈsoʊʃəbl/ · /ˈfrendli/",pos:"(adj.)",def:"If you are sociable or friendly, you like being with other people and talking to them, and you are kind and pleasant to them.",simple:"Liking to be with people and being kind to them.",re:"sociable/friendly",ex:["A receptionist should be friendly to everyone who comes in.","She's very sociable and has friends in every class."]},
+"strong":{w:"strong",g:"Personal Qualities (section 1)",ipa:"/strɔːŋ/",pos:"(adj.)",def:"If you are strong, you have a powerful body (strong physically) or you can deal with problems without being badly affected by them (strong mentally).",simple:"Having a powerful body or a powerful mind.",ex:["Construction workers have to be strong to lift heavy things.","She's mentally strong, so she doesn't give up after a bad day."]},
+"well-organised":{w:"well-organised",g:"Personal Qualities (section 1)",ipa:"/ˌwel ˈɔːrɡənaɪzd/",pos:"(adj.)",def:"A well-organised person plans things carefully and knows exactly what they are doing.",simple:"Planning things carefully so that nothing goes wrong.",ex:["A well-organised student never forgets their homework.","He's so well-organised that he wrote a list for every day."]},
+
+/* ---------- Words connected with work (section 1) ---------- */
+"outdoors":{w:"outdoors",g:"Words Connected with Work (section 1)",ipa:"/ˌaʊtˈdɔːrz/",pos:"(adv.)",def:"If you do something outdoors, you do it outside a building, in the open air.",simple:"Outside, not inside a building.",re:"outdoors",ex:["Gardeners work outdoors in all kinds of weather.","We eat outdoors in the summer."]},
+"the-public":{w:"the public",g:"Words Connected with Work (section 1)",ipa:"/ðə ˈpʌblɪk/",pos:"(n.)",def:"The public means ordinary people in general, rather than people who belong to a special group or organisation.",simple:"People in general.",re:"the public",ex:["The museum is open to the public every day.","Shop assistants work with the public all day."]},
+"paperwork":{w:"paperwork",g:"Words Connected with Work (section 1)",ipa:"/ˈpeɪpərwɜːrk/",pos:"(n.)",def:"Paperwork is the part of a job that involves written documents, such as filling in forms, writing reports and answering letters.",simple:"Writing and filling in forms, reports and letters.",ex:["I have a lot of paperwork to finish before Friday.","Doctors don't like the paperwork, but they have to do it."]},
+"look-after":{w:"look after",g:"Words Connected with Work (section 1)",ipa:"/lʊk ˈæftər/",pos:"(v. phr.)",def:"If you look after someone or something, you make sure that they are safe and healthy and have everything they need.",simple:"To take care of someone or something.",re:"look(?:s|ed|ing)? after",ex:["Can you look after my dog while I'm on holiday?","Au pairs look after children when the parents are at work."]},
+"manual-work":{w:"manual work",g:"Words Connected with Work (section 1)",ipa:"/ˈmænjuəl wɜːrk/",pos:"(n.)",def:"Manual work is physical work that you do with your hands or your body, rather than work that you do with your mind.",simple:"Work that uses your hands and body.",ex:["Building a wall is hard manual work.","He left his job in the office and now does manual work on a farm."]},
+"teamwork":{w:"teamwork",g:"Words Connected with Work (section 1)",ipa:"/ˈtiːmwɜːrk/",pos:"(n.)",def:"Teamwork is the work that people do together as a team, when everyone helps to achieve something.",simple:"Working together with other people.",ex:["Good teamwork helped us finish the project early.","Teamwork is important for firefighters."]},
+"figures":{w:"figures",g:"Words Connected with Work (section 1)",ipa:"/ˈfɪɡjərz/",pos:"(n.)",def:"Figures are numbers, especially numbers that show amounts of money or other facts that you need to count or calculate.",simple:"Numbers that you count or work with.",re:"figures?",ex:["The accountant checked all the figures twice.","I'm not good with figures – I use a calculator."]},
+"earn":{w:"earn",g:"Words Connected with Work (section 1)",ipa:"/ɜːrn/",pos:"(v.)",def:"If you earn money, you receive it as payment for the work that you do.",simple:"To get money for the work you do.",re:"earn(?:s|ed|ing)?",ex:["She earns a good salary as a lawyer.","How much do nurses earn in your country?"]},
+"salary":{w:"salary",g:"Words Connected with Work (section 1)",ipa:"/ˈsæləri/",pos:"(n.)",def:"A salary is a fixed amount of money that you receive every month or year from your job.",simple:"The money you get every month from your job.",ex:["He gets a salary of 2,000 euros a month.","A high salary isn't the most important thing for everyone."]},
+"overtime":{w:"overtime",g:"Words Connected with Work (section 1)",ipa:"/ˈoʊvərtaɪm/",pos:"(n.)",def:"Overtime is extra time that you work at your job after your normal working hours, often for extra pay.",simple:"Extra hours of work after your normal hours.",ex:["I did two hours of overtime yesterday.","Nurses often work overtime at weekends."]},
+"retail":{w:"retail",g:"Words Connected with Work (section 1)",ipa:"/ˈriːteɪl/",pos:"(n.)",def:"Retail is the business of selling goods to the public, usually in shops.",simple:"Selling things to customers in shops.",ex:["She has worked in retail for five years.","Many young people get their first job in retail."]},
+"finance":{w:"finance",g:"Words Connected with Work (section 1)",ipa:"/ˈfaɪnæns/",pos:"(n.)",def:"Finance is the business of managing and investing money, for example in banks and other companies.",simple:"Working with money, banks and investments.",ex:["He has a good job in finance in the city centre.","My sister studies finance at university."]},
+
+/* ---------- Compound adjectives (section 2) ---------- */
+"compound-adjective":{w:"compound adjective",g:"Compound Adjectives (section 2)",ipa:"/ˈkɑːmpaʊnd ˈædʒɪktɪv/",pos:"(n.)",def:"A compound adjective is an adjective made by joining two or more words, usually with a hyphen, for example 'hard-working'.",simple:"An adjective made from two words joined together.",ex:["'Good-looking' is a compound adjective.","Compound adjectives usually have a hyphen between the two words."]},
+"hyphen":{w:"hyphen",g:"Compound Adjectives (section 2)",ipa:"/ˈhaɪfn/",pos:"(n.)",def:"A hyphen is the short line (-) that you use to join two words together or to join the parts of a word.",simple:"The short line (-) that joins two words.",ex:["Don't forget the hyphen in 'well-known'.","We write 'part-time' with a hyphen."]},
+"full-time":{w:"full-time",g:"Compound Adjectives (section 2)",ipa:"/ˌfʊl ˈtaɪm/",pos:"(adj.)",def:"A full-time job takes all of the normal working week, usually about 35 to 40 hours.",simple:"For the whole working week.",ex:["She has a full-time job in a bank.","He studies full-time at university."]},
+"well-known":{w:"well-known",g:"Compound Adjectives (section 2)",ipa:"/ˌwel ˈnoʊn/",pos:"(adj.)",def:"If someone or something is well-known, a lot of people know about them.",simple:"Known by many people.",ex:["She's a well-known actress.","Paris is well known for its food and art."]},
+"badly-paid":{w:"badly-paid",g:"Compound Adjectives (section 2)",ipa:"/ˌbædli ˈpeɪd/",pos:"(adj.)",def:"A badly-paid job gives you very little money for the work that you do.",simple:"Getting little money for your work.",ex:["Many badly-paid workers have two jobs.","Teaching assistants are often badly paid."]},
+"18-year-old":{w:"18-year-old",g:"Compound Adjectives (section 2)",ipa:"/ˌeɪˈtiːn jɪr ˈoʊld/",pos:"(adj. / n.)",def:"An 18-year-old person is someone who is eighteen years old. You can change the number to give any age. After a number, the word 'year' stays singular.",simple:"A person who is 18 years old.",ex:["My brother is an 18-year-old student.","A 12-year-old girl won the competition."]},
+"well-off":{w:"well-off",g:"Compound Adjectives (section 2)",ipa:"/ˌwel ˈɔːf/",pos:"(adj.)",def:"If someone is well-off, they have enough money to live comfortably.",simple:"Rich, or having plenty of money.",ex:["They live in a well-off part of the city.","His parents are well-off, so he never worried about money."]},
+"forward-thinking":{w:"forward-thinking",g:"Compound Adjectives (section 2)",ipa:"/ˌfɔːrwərd ˈθɪŋkɪŋ/",pos:"(adj.)",def:"A forward-thinking person plans for the future and has modern ideas about what will be useful or necessary.",simple:"Planning for the future with new ideas.",ex:["A forward-thinking company trains its workers for new technology.","She's a forward-thinking manager who listens to young people."]},
+
+/* ---------- Listening words (section 4) ---------- */
+"ravenmaster":{w:"ravenmaster",g:"Listening Words (section 4)",ipa:"/ˈreɪvnmæstər/",pos:"(n.)",def:"The ravenmaster is the person at the Tower of London whose job is to look after the ravens that live there.",simple:"The person who looks after the ravens at the Tower of London.",ex:["The ravenmaster feeds the birds every morning.","From the listening: &ldquo;I've just finished a great book called <b>Ravenmaster</b>.&rdquo;"]},
+"raven":{w:"raven",g:"Listening Words (section 4)",ipa:"/ˈreɪvn/",pos:"(n.)",def:"A raven is a very large black bird with shiny feathers. Ravens are related to crows.",simple:"A big black bird.",re:"ravens?",ex:["A raven was sitting on the fence.","From the listening: &ldquo;If the six <b>ravens</b> at the Tower of London fly away, the Kingdom and the Tower of London will fall.&rdquo;"]},
+"legend":{w:"legend",g:"Listening Words (section 4)",ipa:"/ˈledʒənd/",pos:"(n.)",def:"A legend is a very old story that people have told for many years. It may be partly true, but it is not completely proved.",simple:"A very old story that may not be completely true.",ex:["There's a legend that a dragon once lived in this cave.","From the listening: &ldquo;Isn't there a <b>legend</b> about the ravens?&rdquo;"]},
+"put-on-weight":{w:"put on weight",g:"Listening Words (section 4)",ipa:"/pʊt ɑːn weɪt/",pos:"(v. phr.)",def:"If you put on weight, your body becomes heavier because you gain fat.",simple:"To become heavier.",re:"put(?:s|ting)? on weight",ex:["He put on weight during the winter because he exercised less.","From the listening: &ldquo;If I ate ice cream every day, I'd <b>put on weight</b> really fast!&rdquo;"]},
+"military-experience":{w:"military experience",g:"Listening Words (section 4)",ipa:"/ˈmɪləteri ɪkˈspɪriəns/",pos:"(n. phr.)",def:"Military experience is the time that you have spent working in the army, navy or air force, and the skills that you have learned there.",simple:"Time spent working in the army or other armed forces.",ex:["The job asks for ten years of military experience.","From the listening: &ldquo;You must have at least 22 years of <b>military experience</b>.&rdquo;"]},
+"qualifications":{w:"qualifications",g:"Listening Words (section 4)",ipa:"/ˌkwɑːləfɪˈkeɪʃnz/",pos:"(n.)",def:"Qualifications are the exams that you have passed, the courses that you have completed or the experience that you need to do a particular job.",simple:"Exams, courses or experience that you need for a job.",re:"qualifications?",ex:["What qualifications do I need to become a vet?","From the listening: &ldquo;What <b>qualifications</b> do you need for a job like that?&rdquo;"]},
+"get-tired-of":{w:"get tired of",g:"Listening Words (section 4)",ipa:"/ɡet ˈtaɪərd əv/",pos:"(v. phr.)",def:"If you get tired of something, you stop enjoying it because you have done it or seen it too many times.",simple:"To stop enjoying something because you have had too much of it.",re:"get(?:s|ting)? tired of",ex:["I'd get tired of pizza if I ate it every day.","From the listening: &ldquo;If I did that job I'd <b>get tired of</b> it.&rdquo;"]},
+"in-charge-of":{w:"in charge of",g:"Listening Words (section 4)",ipa:"/ɪn tʃɑːrdʒ əv/",pos:"(adj. phr.)",def:"If you are in charge of something or someone, you are the person who controls it and is responsible for it.",simple:"Responsible for something or for people.",ex:["Who's in charge of the school trip?","From the listening: &ldquo;She's <b>in charge of</b> tasting ice cream for a big UK supermarket.&rdquo;"]},
+
+/* ---------- Video words (section 3) ---------- */
+"illustrator":{w:"illustrator",g:"Video Words (section 3)",ipa:"/ˈɪləstreɪtər/",pos:"(n.)",def:"An illustrator is an artist who draws pictures for books, magazines or other printed materials.",simple:"An artist who draws pictures for books and magazines.",ex:["The illustrator drew all the pictures in the children's book.","From the video: &ldquo;She's an <b>illustrator</b>, and she lives right here, next to a river.&rdquo;"]},
+"survival-course":{w:"survival course",g:"Video Words (section 3)",ipa:"/sərˈvaɪvl kɔːrs/",pos:"(n. phr.)",def:"A survival course is a class that teaches you how to stay alive in difficult situations, especially in nature.",simple:"A class that teaches you how to stay alive outdoors.",re:"survival courses?",ex:["We learned how to make a fire on a survival course.","From the video: &ldquo;He teaches <b>survival courses</b> where he shows we don't need as much as we think.&rdquo;"]},
+"addicted":{w:"addicted",g:"Video Words (section 3)",ipa:"/əˈdɪktɪd/",pos:"(adj.)",def:"If you are addicted to something, you want it so much that it is very difficult for you to stop using or doing it.",simple:"Unable to stop doing or using something.",ex:["Some people are addicted to their phones.","From the video: &ldquo;He believes people are <b>addicted</b> to them.&rdquo;"]},
+"primitive":{w:"primitive",g:"Video Words (section 3)",ipa:"/ˈprɪmətɪv/",pos:"(adj.)",def:"Something that is primitive is very simple and basic, as if it comes from a very early time, and it does not use modern technology.",simple:"Very simple, with no modern technology.",ex:["The campers lived in primitive conditions without electricity.","From the text: &ldquo;Their eating habits are quite <b>primitive</b> and simple.&rdquo;"]},
+"gadget":{w:"gadget",g:"Video Words (section 3)",ipa:"/ˈɡædʒɪt/",pos:"(n.)",def:"A gadget is a small piece of equipment, often electronic, that does something useful.",simple:"A small useful machine or tool.",re:"gadgets?",ex:["My uncle loves new kitchen gadgets.","From the text: &ldquo;They don't mind living without modern <b>gadgets</b>.&rdquo;"]},
+"bark":{w:"bark",g:"Video Words (section 3)",ipa:"/bɑːrk/",pos:"(n.)",def:"Bark is the hard outer covering of a tree.",simple:"The hard outside layer of a tree.",ex:["The squirrel ran up the rough bark of the tree.","From the video: &ldquo;He uses the <b>bark</b> from trees and the skins of animals to produce soft, natural leather.&rdquo;"]},
+"leather":{w:"leather",g:"Video Words (section 3)",ipa:"/ˈleðər/",pos:"(n.)",def:"Leather is a strong material made from animal skin. It is used to make shoes, bags and belts.",simple:"A strong material made from animal skin.",ex:["She bought a leather jacket.","From the video: &ldquo;He uses the bark from trees and the skins of animals to produce soft, natural <b>leather</b>.&rdquo;"]},
+"distraction":{w:"distraction",g:"Video Words (section 3)",ipa:"/dɪˈstrækʃn/",pos:"(n.)",def:"A distraction is something that stops you from giving your full attention to what you are doing.",simple:"Something that stops you from paying attention.",re:"distractions?",ex:["My phone is a big distraction when I do my homework.","From the video: &ldquo;Without the <b>distractions</b> of the Internet or other people, she has more time to be creative.&rdquo;"]},
+
+/* ---------- more jobs (model answers, section 1) ---------- */
+"secretary":{w:"secretary",g:"Jobs (section 1)",ipa:"/ˈsekrəteri/",pos:"(n.)",def:"A secretary is a person whose job is to answer phone calls, write letters, arrange meetings and do other office work for a company or another person.",simple:"A person who helps in an office with calls, letters and plans.",ex:["The secretary booked a meeting room for ten o'clock.","My mother works as a secretary in a law firm."]},
+"childminder":{w:"childminder",g:"Jobs (section 1)",ipa:"/ˈtʃaɪldmaɪndər/",pos:"(n.)",def:"A childminder is a person whose job is to look after other people's children, usually in their own home, while the parents are at work.",simple:"A person who looks after other people's children as a job.",ex:["The childminder picks the children up from school every afternoon.","She is a childminder, so she looks after four small children all day."]},
+"builder":{w:"builder",g:"Jobs (section 1)",ipa:"/ˈbɪldər/",pos:"(n.)",def:"A builder is a person whose job is to build or repair houses and other buildings.",simple:"A person who builds houses.",ex:["The builders finished the new school in July.","My uncle is a builder, so he works outdoors in all weather."]},
+"accountant":{w:"accountant",g:"Jobs (section 1)",ipa:"/əˈkaʊntənt/",pos:"(n.)",def:"An accountant is a person whose job is to keep or check the money records of a person or a company and to deal with taxes.",simple:"A person who keeps and checks money records for a business.",ex:["The accountant checked the company's figures.","You need to be good with numbers to be an accountant."]},
+"surgeon":{w:"surgeon",g:"Jobs (section 1)",ipa:"/ˈsɜːrdʒən/",pos:"(n.)",def:"A surgeon is a doctor who is trained to do operations, cutting into a patient's body to repair or remove a part of it.",simple:"A doctor who does operations.",ex:["The surgeon operated on the patient for three hours.","A surgeon has to stay calm and have steady hands."]},
+"doctor":{w:"doctor",g:"Jobs (section 1)",ipa:"/ˈdɑːktər/",pos:"(n.)",def:"A doctor is a person who is trained to treat people who are ill or injured.",simple:"A person who treats sick people.",ex:["I went to see the doctor because I had a bad cough.","Doctors often work overtime and at night."]},
+"banker":{w:"banker",g:"Jobs (section 1)",ipa:"/ˈbæŋkər/",pos:"(n.)",def:"A banker is a person who has an important job in a bank, for example managing money and giving advice about loans and investments.",simple:"A person who works in a bank in an important job.",ex:["The banker explained how the loan would work.","Many bankers work in finance in big cities."]},
+
+/* ---------- useful words from the text (section 1) ---------- */
+"specific":{w:"specific",g:"Useful Words (section 1)",ipa:"/spəˈsɪfɪk/",pos:"(adj.)",def:"Specific means relating to one particular thing only, and not to anything else; it can also mean clear and exact.",simple:"Particular; clear and exact.",ex:["You need a specific qualification to be a pilot.","Can you give me a specific example?","From the text: &ldquo;There are jobs where you need to have a <b>specific</b> skill or personal quality.&rdquo;"]},
+"i-e":{w:"i.e.",g:"Useful Words (section 1)",ipa:"/ˌaɪ ˈiː/",pos:"(abbr.)",def:"The abbreviation 'i.e.' is used before you explain what you have just said in other words. It means 'that is' or 'in other words'.",simple:"A short way to write 'that is' or 'in other words'.",re:"i\\.e\\.",ex:["I'm free at the weekend, i.e. Saturday and Sunday.","Use a formal ending, i.e. 'Yours sincerely'.","From the text: &ldquo;it's always important to be well-organised, <b>i.e.</b> to plan things carefully.&rdquo;"]},
+"exactly":{w:"exactly",g:"Useful Words (section 1)",ipa:"/ɪɡˈzæktli/",pos:"(adv.)",def:"You use 'exactly' to emphasise that something is completely correct or accurate, with no difference at all.",simple:"In a completely correct way, with no mistakes.",ex:["It's exactly ten o'clock.","I know exactly what I want to do after school.","From the text: &ldquo;to plan things carefully and know <b>exactly</b> what you're doing.&rdquo;"]},
+"adapt-to":{w:"adapt to",g:"Useful Words (section 1)",ipa:"/əˈdæpt tu/",pos:"(v. phr.)",def:"If you adapt to something, you change your behaviour or your ideas so that you can deal well with a new situation.",simple:"To change so that you can deal with a new situation.",re:"adapt(?:s|ed|ing)? to",ex:["It took me a month to adapt to my new school.","Animals have to adapt to a changing climate.","From the text: &ldquo;It's also important to be flexible so that you <b>adapt to</b> changing situations.&rdquo;"]},
+"vital":{w:"vital",g:"Useful Words (section 1)",ipa:"/ˈvaɪtl/",pos:"(adj.)",def:"If something is vital, it is extremely important or necessary.",simple:"Very important; you must have it.",ex:["Water is vital for all living things.","It is vital to arrive on time for a job interview.","From the text: &ldquo;It's <b>vital</b> that you are reliable and responsible, too.&rdquo;"]},
+"panic":{w:"to panic",g:"Useful Words (section 1)",ipa:"/ˈpænɪk/",pos:"(v.)",def:"If you panic, you suddenly feel so afraid or worried that you cannot think clearly or behave sensibly.",simple:"To feel so afraid or worried that you cannot think well.",re:"panic(?:s|ked|king)?",ex:["Don't panic – there is plenty of time.","The students panicked when the fire alarm rang.","From the text: &ldquo;so that you don't <b>panic</b> or get angry when things start to go wrong.&rdquo;"]},
+"be-a-big-success":{w:"to be a big success",g:"Useful Words (section 1)",ipa:"/tu bi ə bɪɡ səkˈses/",pos:"(v. phr.)",def:"If you are a big success, you do very well at something, for example in your job, and many people admire what you do.",simple:"To do very well and be admired by many people.",re:"to be a big success",ex:["The new film was a big success.","She wants to be a big success as a designer.","From the text: &ldquo;it's OK to be ambitious and to want <b>to be a big success</b> in your job!&rdquo;"]},
+"definitely":{w:"definitely",g:"Useful Words (section 1)",ipa:"/ˈdefɪnətli/",pos:"(adv.)",def:"You use 'definitely' to emphasise that something is certain and that there is no doubt about it.",simple:"Without any doubt; for sure.",ex:["I'm definitely going to the concert on Friday.","He is definitely not interested in working in an office.","From the text: &ldquo;Which two are you <b>definitely</b> not interested in doing?&rdquo;"]},
+"justify":{w:"justify",g:"Useful Words (section 1)",ipa:"/ˈdʒʌstɪfaɪ/",pos:"(v.)",def:"If you justify something, you give good reasons or examples to show that it is right or reasonable.",simple:"To give reasons to show that your answer or idea is right.",re:"justify",ex:["Can you justify your opinion with an example?","He tried to justify his decision to leave the team.","From the text: &ldquo;Which qualities in 4a can you use to describe yourself? <b>Justify</b> your answer.&rdquo;"]},
+
+/* ---------- compound adjective (section 2) ---------- */
+"easy-going":{w:"easy-going",g:"Compound Adjectives (section 2)",ipa:"/ˌiːzi ˈɡoʊɪŋ/",pos:"(adj.)",def:"An easy-going person is relaxed and does not get worried or annoyed easily. They accept other people and situations as they are.",simple:"Relaxed; not easily worried or annoyed.",ex:["Our teacher is easy-going and never shouts.","He is an easy-going boy who gets on with everyone."]},
+
+/* ---------- useful words (section 3) ---------- */
+"suggest":{w:"suggest",g:"Useful Words (section 3)",ipa:"/səɡˈdʒest/",pos:"(v.)",def:"If you suggest something, you offer an idea or a plan for someone to think about.",simple:"To offer an idea for someone to think about.",re:"suggest(?:s|ed|ing)?",ex:["I suggest we meet at the station at nine.","She suggested a good book for him to read.","From the text: &ldquo;<b>Suggest</b> jobs for your partner according to the marks they gave.&rdquo;"]},
+
+/* ---------- speaking skills (section 5) ---------- */
+"ict-skills":{w:"ICT skills",g:"Speaking Skills (section 5)",ipa:"/ˌaɪ siː ˈtiː skɪlz/",pos:"(n. phr.)",def:"ICT skills are the abilities that you need to use computers and other technology well. ICT stands for Information and Communication Technology.",simple:"Being good at using computers and technology.",re:"ICT skills",ex:["Many jobs need good ICT skills.","My grandfather asked me to help him because I have good ICT skills."]},
+"leadership":{w:"leadership",g:"Speaking Skills (section 5)",ipa:"/ˈliːdərʃɪp/",pos:"(n.)",def:"Leadership is the ability to guide and control a group of people and to help them to achieve something together.",simple:"The ability to guide a group of people.",ex:["The captain showed great leadership during the match.","Leadership means helping the team to do its best."]}
+};
+
+const VOCAB_GROUP_ORDER = ["Jobs (section 1)","Personal Qualities (section 1)","Words Connected with Work (section 1)","Useful Words (section 1)","Compound Adjectives (section 2)","Video Words (section 3)","Useful Words (section 3)","Listening Words (section 4)","Speaking Skills (section 5)"];
+
+
+let currentWordKey = null;
+let showingSimple = false;
+
+function renderWordModal(){
+  const d = WORD_DEFS[currentWordKey];
+  if(!d) return;
+  document.getElementById('wm-word').textContent = d.w;
+  document.getElementById('wm-pos').textContent = d.pos;
+  document.getElementById('wm-ipa').textContent = d.ipa;
+  document.getElementById('wm-def').textContent = showingSimple ? d.simple : d.def;
+  document.getElementById('wm-simplify-btn').textContent = showingSimple ? 'Show standard definition' : 'Show simplified definition';
+  document.getElementById('wm-examples').innerHTML = d.ex.map(e=>'<div class="mex">'+e+'</div>').join('');
+  document.getElementById('wm-lookup').href = 'https://www.google.com/search?q=' + encodeURIComponent(d.w + ' ' + d.pos + " meaning '" + d.simple + "'. define this specific meaning in simple language suitable for A2 level. make it brief and to the point with at least 5 examples matching this meaning") + '&newwindow=1';
+}
+function openWordModal(key){
+  if(!WORD_DEFS[key]) return;
+  currentWordKey = key;
+  showingSimple = false;
+  renderWordModal();
+  document.getElementById('wordModal').classList.add('open');
+}
+function toggleSimple(){
+  showingSimple = !showingSimple;
+  renderWordModal();
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function buildVocabChips(){
+  const box = document.getElementById('vocabGroups');
+  const byGroup = {};
+  Object.keys(WORD_DEFS).forEach(k=>{
+    const g = WORD_DEFS[k].g || 'Additional Vocabulary';
+    (byGroup[g] = byGroup[g] || []).push(k);
+  });
+  let html = '';
+  VOCAB_GROUP_ORDER.forEach(g=>{
+    if(!byGroup[g]) return;
+    html += '<div class="vlgrouphead">'+g+'</div><div class="chiprow">';
+    html += byGroup[g].map(k=>'<div class="chip" onclick="closeModal(\'vocabListModal\');openWordModal(\''+k+'\')">'+WORD_DEFS[k].w+'</div>').join('');
+    html += '</div>';
+  });
+  box.innerHTML = html;
+}
+document.getElementById('vocabListBtn').addEventListener('click', ()=>{ buildVocabChips(); document.getElementById('vocabListModal').classList.add('open'); });
+document.querySelectorAll('.modal-backdrop').forEach(m=>{
+  m.addEventListener('click', (e)=>{ if(e.target===m) m.classList.remove('open'); });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ document.querySelectorAll('.modal-backdrop.open').forEach(m=>m.classList.remove('open')); }
+});
+
+/* =====================================================================
+   Make each vocabulary item a clickable .wterm at its FIRST occurrence
+   in page order. Pass 1 looks at visible text only; pass 2 lets a word
+   that appears only inside a hidden answer be nested inside it.
+   ===================================================================== */
+(function wrapFirstOccurrences(){
+  const root = document.getElementById('content');
+  const done = new Set();
+  root.querySelectorAll('.wterm[data-word]').forEach(el=>done.add(el.dataset.word));
+  const entries = Object.keys(WORD_DEFS).map(k=>{
+    const d = WORD_DEFS[k];
+    const src = d.re || d.w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    return { key:k, rx:new RegExp('(?<![A-Za-z0-9])(?:'+src+')(?![A-Za-z0-9])','i') };
+  });
+  const SKIP = 'script,style,button,audio,video,.wterm,mark,.modal-backdrop';
+  function pass(allowAnswers){
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node=>{
+      const par = node.parentElement;
+      if(!par || par.closest(SKIP)) return;
+      if(!allowAnswers && par.closest('.ans-ph,.model-ans')) return;
+      const text = node.nodeValue;
+      const hits = [];
+      entries.forEach(en=>{
+        if(done.has(en.key)) return;
+        const m = en.rx.exec(text);
+        if(m) hits.push({ key:en.key, start:m.index, end:m.index+m[0].length });
+      });
+      if(!hits.length) return;
+      hits.sort((a,b)=>a.start-b.start || b.end-a.end);
+      const chosen = []; let lastEnd = 0;
+      hits.forEach(h=>{ if(h.start>=lastEnd){ chosen.push(h); lastEnd = h.end; } });
+      const frag = document.createDocumentFragment();
+      let pos = 0;
+      chosen.forEach(h=>{
+        if(h.start>pos) frag.appendChild(document.createTextNode(text.slice(pos,h.start)));
+        const span = document.createElement('span');
+        span.className = 'wterm';
+        span.dataset.word = h.key;
+        span.textContent = text.slice(h.start,h.end);
+        frag.appendChild(span);
+        done.add(h.key);
+        pos = h.end;
+      });
+      if(pos<text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+  pass(false);
+  pass(true);
+  window.__unwrappedWords = entries.filter(en=>!done.has(en.key)).map(en=>en.key);
+})();
+document.addEventListener('click', e=>{
+  const t = e.target.closest && e.target.closest('.wterm[data-word]');
+  if(t && !highlightMode && !eraseMode) openWordModal(t.dataset.word);
+});
+
+/* =====================================================================
+   Answer lock — one passcode per page, plus a master code for the
+   teacher. Nothing is remembered between visits (resets on reload).
+   To change codes, just edit the values below.
+   ===================================================================== */
+const PAGES = {
+  p84: { label:'Section 1', code:'salary'     },
+  p87: { label:'Section 2', code:'hyphen'     },
+  p88: { label:'Section 3', code:'outdoors'   },
+  p90: { label:'Section 4', code:'raven'      },
+  p92: { label:'Section 5', code:'basketball' }
+};
+const MASTER_CODE = 'robot234';
+const unlockedPages = new Set();
+
+function isUnlocked(page){ return !page || unlockedPages.has(page); }
+
+function tryUnlock(page, code){
+  if(code === MASTER_CODE){
+    Object.keys(PAGES).forEach(p=>{ unlockedPages.add(p); refreshLockUI(p); });
+    return true;
+  }
+  if(PAGES[page] && code === PAGES[page].code){
+    unlockedPages.add(page);
+    refreshLockUI(page);
+    return true;
+  }
+  return false;
+}
+
+function refreshLockUI(page){
+  document.querySelectorAll('.revealbtn[data-group="'+page+'"]').forEach(b=>{
+    b.classList.remove('locked');
+  });
+}
+
+let pendingUnlock = null; // { page, onSuccess }
+function openLockModal(page, onSuccess){
+  pendingUnlock = { page: page, onSuccess: onSuccess };
+  document.getElementById('lockTitle').innerHTML = '&#128274; ' + (PAGES[page] ? PAGES[page].label : 'Answers') + ' is locked';
+  document.getElementById('lockMsg').textContent = '';
+  const input = document.getElementById('lockInput');
+  input.value = '';
+  document.getElementById('lockModal').classList.add('open');
+  setTimeout(()=>input.focus(), 50);
+}
+function submitLockCode(){
+  if(!pendingUnlock) return;
+  const input = document.getElementById('lockInput');
+  const val = (input.value || '').trim();
+  if(tryUnlock(pendingUnlock.page, val)){
+    const cb = pendingUnlock.onSuccess;
+    pendingUnlock = null;
+    closeModal('lockModal');
+    if(cb) cb();
+  } else {
+    document.getElementById('lockMsg').textContent = 'Incorrect code. Try again.';
+    input.value = '';
+    input.focus();
+  }
+}
+document.getElementById('lockGo').addEventListener('click', submitLockCode);
+document.getElementById('lockInput').addEventListener('keydown', e=>{ if(e.key==='Enter') submitLockCode(); });
+
+/* =====================================================================
+   Reveal-answers, one item per click. Locked pages open the passcode
+   modal first; the reveal resumes automatically once unlocked.
+   ===================================================================== */
+function toggleAnswers(btn, wrapId, page){
+  if(page && !isUnlocked(page)){
+    openLockModal(page, ()=> toggleAnswers(btn, wrapId, page));
+    return;
+  }
+  const wrap = document.getElementById(wrapId);
+  const items = Array.from(wrap.querySelectorAll('.ans-ph, .model-ans'));
+  const total = items.length;
+  const isModel = btn.classList.contains('model');
+  const baseLabel = btn.dataset.label;
+  const hideLabel = isModel ? (total>1?'Hide Model Answers':'Hide Model Answer') : (total>1?'Hide Answers':'Hide Answer');
+  let count = parseInt(wrap.dataset.revealed || '0', 10);
+
+  if(count < total){
+    const item = items[count];
+    item.classList.add('shown');
+    const bp = item.closest('.blank-ph');
+    if(bp) bp.classList.add('shown');
+    if(item.classList.contains('mc-marker')){
+      const li = item.closest('li');
+      const letter = li && li.dataset.correct;
+      if(li && letter){
+        const opt = li.querySelector('.mcopt[data-letter="'+letter+'"]');
+        if(opt) opt.classList.add('circled');
+      }
+    }
+    count++;
+    wrap.dataset.revealed = count;
+    btn.textContent = (count < total) ? baseLabel+' ('+count+'/'+total+')' : hideLabel;
+  } else {
+    items.forEach(it=>{
+      it.classList.remove('shown');
+      const bp = it.closest('.blank-ph');
+      if(bp) bp.classList.remove('shown');
+    });
+    wrap.querySelectorAll('.mcopt.circled').forEach(o=>o.classList.remove('circled'));
+    wrap.dataset.revealed = 0;
+    btn.textContent = baseLabel;
+  }
+}
+document.querySelectorAll('.revealbtn:not(.ts)').forEach(b=>{ b.dataset.label = b.textContent; });
+
+/* Lock every answer button whose page hasn't been unlocked yet (i.e. all of them, on load) */
+document.querySelectorAll('.revealbtn[data-group]').forEach(b=>{
+  if(!isUnlocked(b.getAttribute('data-group'))) b.classList.add('locked');
+});
+
+/* =====================================================================
+   Timestamps — show/hide clickable time chips; clicking one jumps the
+   linked audio/video player to that point and plays it. Not gated.
+   ===================================================================== */
+function toggleTimestamps(btn, wrapId){
+  const wrap = document.getElementById(wrapId);
+  const on = wrap.classList.toggle('ts-visible');
+  btn.textContent = on ? 'Hide Timestamps' : 'Show Timestamps';
+}
+function jumpTo(el){
+  const t = parseFloat(el.dataset.t);
+  const media = document.getElementById(el.dataset.audio);
+  if(media && !isNaN(t)){
+    media.currentTime = t;
+    media.play();
+  }
+}
+
+/* Script reveal — gated behind the same page passcode as the answers. */
+function toggleScript(btn, boxId, page){
+  if(page && !isUnlocked(page)){
+    openLockModal(page, ()=> toggleScript(btn, boxId, page));
+    return;
+  }
+  const box = document.getElementById(boxId);
+  const on = box.classList.toggle('shown');
+  btn.textContent = on ? 'Hide Script' : 'Show Script';
+}
+
+/* =====================================================================
+   Highlighter / eraser tool
+   ===================================================================== */
+let highlightMode=false, eraseMode=false;
+const hlBtn=document.getElementById('highlightBtn'), erBtn=document.getElementById('eraseBtn');
+hlBtn.addEventListener('click', ()=>{
+  highlightMode=!highlightMode; eraseMode=false;
+  hlBtn.classList.toggle('on',highlightMode); erBtn.classList.remove('on');
+});
+erBtn.addEventListener('click', ()=>{
+  eraseMode=!eraseMode; highlightMode=false;
+  erBtn.classList.toggle('on',eraseMode); hlBtn.classList.remove('on');
+});
+document.addEventListener('mouseup', (e)=>{
+  if(!highlightMode) return;
+  if(e.target.closest('#pagenav')||e.target.closest('#brandbar')||e.target.closest('#rightctrl')||e.target.closest('.modal-backdrop')) return;
+  const sel = window.getSelection();
+  if(!sel || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  if(range.collapsed) return;
+  const mark = document.createElement('mark');
+  mark.className='user-highlight';
+  try{
+    range.surroundContents(mark);
+  }catch(err){
+    const frag = range.extractContents();
+    mark.appendChild(frag);
+    range.insertNode(mark);
+  }
+  sel.removeAllRanges();
+});
+document.addEventListener('click', (e)=>{
+  if(!eraseMode) return;
+  const mk = e.target.closest('mark.user-highlight');
+  if(mk){
+    const parent = mk.parentNode;
+    while(mk.firstChild) parent.insertBefore(mk.firstChild, mk);
+    parent.removeChild(mk);
+  }
+});
+
+/* =====================================================================
+   Zoom control — scales the whole continuous document at once
+   ===================================================================== */
+const BASE_ZOOM = 1.2;
+let relScale = 1.0;
+const contentEl = document.getElementById('content');
+function applyZoom(){
+  const doc = document.documentElement;
+  const maxScrollBefore = Math.max(1, doc.scrollHeight - window.innerHeight);
+  const scrollFrac = doc.scrollTop / maxScrollBefore;
+  const prevBehavior = doc.style.scrollBehavior;
+  doc.style.scrollBehavior = 'auto';
+
+  contentEl.style.transform = 'scale(' + (relScale*BASE_ZOOM) + ')';
+  contentEl.style.width = (100/(relScale*BASE_ZOOM)) + '%';
+  document.getElementById('zoomlabel').textContent = Math.round(relScale*100) + '%';
+
+  requestAnimationFrame(()=>{
+    const maxScrollAfter = Math.max(1, doc.scrollHeight - window.innerHeight);
+    doc.scrollTop = scrollFrac * maxScrollAfter;
+    doc.style.scrollBehavior = prevBehavior;
+  });
+}
+document.getElementById('zoomIn').addEventListener('click', ()=>{ relScale = Math.min(relScale+0.1, 1.8); applyZoom(); });
+document.getElementById('zoomOut').addEventListener('click', ()=>{ relScale = Math.max(relScale-0.1, 0.6); applyZoom(); });
+applyZoom();
+
+/* =====================================================================
+   Active page-number highlighting while scrolling
+   ===================================================================== */
+const pageAnchors = ['p84','p87','p88','p90','p92'].map(id=>document.getElementById(id)).filter(Boolean);
+const pagenavLinks = {};
+document.querySelectorAll('#pagenav a').forEach(a=> pagenavLinks[a.getAttribute('data-p')] = a);
+function updateActivePage(){
+  let current = pageAnchors[0];
+  const refY = 100;
+  for(const a of pageAnchors){
+    const rect = a.getBoundingClientRect();
+    if(rect.top - refY <= 0) current = a; else break;
+  }
+  Object.values(pagenavLinks).forEach(a=>a.classList.remove('active'));
+  if(current && pagenavLinks[current.id]) pagenavLinks[current.id].classList.add('active');
+}
+window.addEventListener('scroll', updateActivePage, {passive:true});
+window.addEventListener('resize', updateActivePage);
+setTimeout(updateActivePage, 300);
+</script>
+</body>
+</html>
