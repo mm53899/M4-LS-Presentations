@@ -241,6 +241,7 @@ ol.numlist li .t{flex:1;}
 .mpos-row{display:flex;align-items:baseline;gap:12px;margin:0 4px 14px;flex-wrap:wrap;}
 .modal-box .mpos{color:#777;font-style:italic;font-size:19px;}
 .modal-box .mipa{color:#888;font-size:18px;font-family:'Segoe UI',Arial,sans-serif;}
+.modal-box .mlabel{font-size:12px;font-weight:800;letter-spacing:.5px;color:var(--pink-dark);margin-right:2px;}
 .modal-box .mdef{font-size:21px;line-height:1.5;margin:0 4px 10px;}
 .simplifybtn{position:absolute;top:12px;right:46px;background:var(--pink-tint);color:var(--pink-dark);border:1px solid var(--pink-border);padding:5px 12px;border-radius:16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
 .simplifybtn:hover{background:#fadde2;}
@@ -277,6 +278,145 @@ mark.user-highlight{background:#fff176;padding:0 1px;}
 
 <div id="content">
 <div id="doctitle">Unit 7: Get to the top!</div>
+
+<!-- ===== Warm-up: Hangman - Jobs (hidden behind a button) ===== -->
+<style>
+#hmToggle{display:block;margin:-8px auto 22px;background:var(--ink);color:#fff;border:2px solid var(--pink);border-radius:22px;padding:9px 26px;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:.3px;}
+#hmToggle:hover{background:var(--pink-dark);}
+#hmToggle.open{background:var(--pink);}
+#hangman{display:none;border:2px solid var(--pink);border-radius:12px;background:#fff7f9;padding:18px 22px 20px;margin:0 0 26px;}
+#hangman.open{display:block;}
+#hangman .hm-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+#hangman .hm-title{font-size:18px;font-weight:800;color:var(--pink-dark);}
+#hangman .hm-stats{font-size:13.5px;font-weight:700;color:#444;}
+#hangman .hm-main{display:flex;gap:26px;align-items:center;flex-wrap:wrap;justify-content:center;}
+#hangman svg{width:170px;height:190px;flex:0 0 auto;color:#333;}
+#hangman svg .part{display:none;stroke:var(--red);}
+#hangman svg .part.on{display:inline;}
+#hangman .hm-right{flex:1 1 360px;min-width:280px;}
+#hmWord{display:flex;flex-wrap:wrap;gap:8px 6px;justify-content:center;margin:6px 0 10px;min-height:48px;}
+#hmWord .ch{display:inline-block;width:30px;text-align:center;font-size:28px;font-weight:800;border-bottom:3px solid #555;line-height:1.2;min-height:36px;}
+#hmWord .ch.gap{border-bottom-color:transparent;width:16px;}
+#hmWord .ch.missed{color:var(--red);}
+#hmMsg{text-align:center;font-weight:800;font-size:17px;min-height:26px;margin-bottom:8px;}
+#hmMsg.win{color:#2e7d32;} #hmMsg.lose{color:var(--red);}
+#hmKeys{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+#hmKeys button{width:38px;height:38px;border-radius:8px;border:2px solid #b8c0cc;background:#fff;font-size:16px;font-weight:800;cursor:pointer;color:var(--ink);}
+#hmKeys button:hover:not(:disabled){background:var(--pink-tint);border-color:var(--pink);}
+#hmKeys button.hit{background:#c8e6c9;border-color:#2e7d32;color:#1b5e20;}
+#hmKeys button.miss{background:#ffcdd2;border-color:var(--red);color:#8e1c12;}
+#hmKeys button:disabled{cursor:default;}
+#hangman .hm-btns{display:flex;gap:10px;justify-content:center;margin-top:14px;}
+#hangman .hm-btns button{background:var(--pink-dark);color:#fff;border:none;border-radius:16px;padding:7px 18px;font-size:13px;font-weight:700;cursor:pointer;}
+#hangman .hm-btns button.alt{background:#555;}
+#hangman .hm-btns button:disabled{background:#bbb;cursor:default;}
+</style>
+
+<button id="hmToggle" type="button">&#127922; Hangman &ndash; Jobs</button>
+<div id="hangman">
+  <div class="hm-top"><span class="hm-title">Hangman &ndash; Jobs</span><span class="hm-stats" id="hmStats"></span></div>
+  <div class="hm-main">
+    <svg viewBox="0 0 170 190" aria-label="Hangman drawing" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round">
+      <line x1="15" y1="180" x2="105" y2="180"/><line x1="40" y1="180" x2="40" y2="15"/><line x1="40" y1="15" x2="120" y2="15"/><line x1="120" y1="15" x2="120" y2="38"/>
+      <circle class="part" cx="120" cy="56" r="18"/>
+      <line class="part" x1="120" y1="74" x2="120" y2="122"/>
+      <line class="part" x1="120" y1="86" x2="98" y2="106"/>
+      <line class="part" x1="120" y1="86" x2="142" y2="106"/>
+      <line class="part" x1="120" y1="122" x2="102" y2="156"/>
+      <line class="part" x1="120" y1="122" x2="138" y2="156"/>
+    </svg>
+    <div class="hm-right">
+      <div id="hmWord"></div>
+      <div id="hmMsg"></div>
+      <div id="hmKeys"></div>
+      <div class="hm-btns"><button type="button" id="hmNext" disabled>Next job &#9654;</button><button type="button" id="hmRestart" class="alt">Restart</button></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const BANK = ['teacher','doctor','nurse','driver','farmer','engineer','cook','dentist','lawyer','police officer','pilot','mechanic','plumber','electrician','firefighter','waiter','baker','butcher','builder','carpenter','painter','singer','actor','writer','journalist','photographer','vet','pharmacist','secretary','accountant','banker','cashier','hairdresser','soldier','scientist','receptionist','surgeon','architect','designer','shop assistant'];
+  const ROUND_SIZE = 10;
+  let JOBS = BANK.slice(0, ROUND_SIZE); // the 10 jobs of the current game, redrawn from BANK on every start/restart
+  const MAX_WRONG = 6;
+  const panel = document.getElementById('hangman'), toggle = document.getElementById('hmToggle');
+  const wordEl = document.getElementById('hmWord'), msgEl = document.getElementById('hmMsg'), keysEl = document.getElementById('hmKeys');
+  const statsEl = document.getElementById('hmStats'), nextBtn = document.getElementById('hmNext');
+  const parts = panel.querySelectorAll('svg .part');
+  let order = [], idx = 0, word = '', guessed = new Set(), wrong = 0, over = false, score = 0;
+
+  function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  function buildKeys(){
+    keysEl.innerHTML = '';
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(L=>{
+      const b = document.createElement('button'); b.type='button'; b.textContent = L; b.dataset.l = L.toLowerCase();
+      b.addEventListener('click', ()=>guess(L.toLowerCase())); keysEl.appendChild(b);
+    });
+  }
+  function render(reveal){
+    wordEl.innerHTML = '';
+    word.split('').forEach(c=>{
+      const s = document.createElement('span'); s.className = 'ch';
+      if(c===' '){ s.classList.add('gap'); s.innerHTML='&nbsp;'; }
+      else if(guessed.has(c)) s.textContent = c.toUpperCase();
+      else if(reveal){ s.textContent = c.toUpperCase(); s.classList.add('missed'); }
+      else s.innerHTML = '&nbsp;';
+      wordEl.appendChild(s);
+    });
+    parts.forEach((p,i)=>p.classList.toggle('on', i < wrong));
+    statsEl.textContent = 'Job ' + (idx+1) + ' of ' + JOBS.length + '  ·  Score: ' + score + '  ·  Wrong: ' + wrong + '/' + MAX_WRONG;
+  }
+  function startRound(){
+    word = order[idx]; guessed = new Set(); wrong = 0; over = false;
+    msgEl.textContent = ''; msgEl.className = ''; nextBtn.disabled = true;
+    keysEl.querySelectorAll('button').forEach(b=>{ b.disabled=false; b.className=''; });
+    render(false);
+  }
+  function endGame(){
+    wordEl.innerHTML = '';
+    msgEl.className = 'win'; msgEl.textContent = 'Finished! You guessed ' + score + ' out of ' + JOBS.length + ' jobs.';
+    nextBtn.textContent = 'Play again ▶'; nextBtn.disabled = false; nextBtn.dataset.again = '1';
+    statsEl.textContent = 'Final score: ' + score + '/' + JOBS.length;
+    parts.forEach(p=>p.classList.remove('on'));
+    keysEl.querySelectorAll('button').forEach(b=>b.disabled=true);
+  }
+  function guess(l){
+    if(over || guessed.has(l)) return;
+    guessed.add(l);
+    const btn = keysEl.querySelector('button[data-l="'+l+'"]');
+    if(word.indexOf(l) >= 0){ btn.className = 'hit'; } else { btn.className = 'miss'; wrong++; }
+    btn.disabled = true;
+    const solved = word.split('').every(c=>c===' ' || guessed.has(c));
+    if(solved){ over = true; score++; msgEl.className='win'; msgEl.textContent = '✔ Well done!'; }
+    else if(wrong >= MAX_WRONG){ over = true; msgEl.className='lose'; msgEl.textContent = '✘ The job was: ' + word.toUpperCase(); }
+    render(over && !solved);
+    if(over){
+      keysEl.querySelectorAll('button').forEach(b=>b.disabled=true);
+      nextBtn.textContent = (idx === JOBS.length-1) ? 'See score ▶' : 'Next job ▶'; nextBtn.dataset.again = ''; nextBtn.disabled = false;
+    }
+  }
+  function restart(){ JOBS = shuffle(BANK).slice(0, ROUND_SIZE); order = JOBS.slice(); idx = 0; score = 0; nextBtn.dataset.again=''; nextBtn.textContent='Next job ▶'; startRound(); }
+  nextBtn.addEventListener('click', ()=>{
+    if(nextBtn.dataset.again === '1'){ restart(); return; }
+    if(idx === JOBS.length-1){ endGame(); return; }
+    idx++; startRound();
+  });
+  document.getElementById('hmRestart').addEventListener('click', restart);
+  toggle.addEventListener('click', ()=>{
+    const open = panel.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.innerHTML = open ? '&#10006; Close Hangman' : '&#127922; Hangman &ndash; Jobs';
+    if(open && !order.length){ buildKeys(); restart(); }
+  });
+  document.addEventListener('keydown', e=>{
+    if(!panel.classList.contains('open') || e.ctrlKey || e.metaKey || e.altKey) return;
+    if(document.querySelector('.modal-backdrop.open')) return;
+    const t = e.target && e.target.tagName; if(t==='INPUT' || t==='TEXTAREA') return;
+    if(/^[a-z]$/i.test(e.key)) guess(e.key.toLowerCase());
+  });
+})();
+</script>
+
 
 
 <div class="page-divider"><span>SECTION 1 &middot; VOCABULARY IN CONTEXT</span></div>
@@ -342,6 +482,51 @@ mark.user-highlight{background:#fff176;padding:0 1px;}
 <div class="btnrow"><button class="revealbtn model" data-group="p84" onclick="toggleAnswers(this,'ex84_3','p84')">Show Model Answers</button></div>
 </div>
 
+<div class="exblock sec-vocab" id="s84mime">
+<style>
+#mimeBtn{background:#8e44ad;color:#fff;border:none;border-radius:20px;padding:8px 20px;font-size:14px;font-weight:800;cursor:pointer;}
+#mimeBtn:hover{background:#6f2f88;}
+.extra-badge{display:inline-block;background:#8e44ad;color:#fff;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 9px;border-radius:10px;margin-right:8px;vertical-align:middle;}
+#mimePanel{display:none;background:#faf5ff;border:1px solid #e0d0f0;border-left:5px solid #8e44ad;border-radius:0 6px 6px 0;padding:14px 18px;margin:12px 0 4px;font-size:14px;}
+#mimePanel.open{display:block;}
+#mimePanel h4{margin:0 0 6px;font-size:16px;color:#5e2d75;}
+#mimePanel ol,#mimePanel ul{margin:6px 0 10px;padding-left:22px;}
+#mimePanel li{margin-bottom:4px;}
+</style>
+<span class="extra-badge">Extra activity</span><button id="mimeBtn" type="button">&#127917; Mime and Guess</button>
+<div id="mimePanel">
+<h4>Mime and Guess</h4>
+<p style="margin:0 0 6px;">One student mimes a job without speaking, and the others ask yes/no questions to find out which job it is.</p>
+<ol>
+<li>The mimer acts out the job. No words!</li>
+<li>The class asks yes/no questions using the sentences from Exercise 1 (see the question prompts below). The mimer can only answer &ldquo;Yes, I do&rdquo; or &ldquo;No, I don&rsquo;t.&rdquo;</li>
+<li>The student who guesses the job says: &ldquo;Are you a &hellip;?&rdquo; If they are right, they mime next.</li>
+</ol>
+<b>Question prompts</b>
+<ol>
+<li>Do you work outdoors?</li>
+<li>Do you work with the public?</li>
+<li>Do you do paperwork?</li>
+<li>Do you look after people?</li>
+<li>Do you do manual work?</li>
+<li>Do you work in a team?</li>
+<li>Do you work in an office, with figures or with computers?</li>
+<li>Do you earn a high salary?</li>
+<li>Do you often work overtime?</li>
+<li>Do you work in retail or finance?</li>
+</ol>
+</div>
+<script>
+(function(){
+  const panel = document.getElementById('mimePanel'), btn = document.getElementById('mimeBtn');
+  btn.addEventListener('click', ()=>{
+    const open = panel.classList.toggle('open');
+    btn.innerHTML = open ? '&#10006; Close Mime and Guess' : '&#127917; Mime and Guess';
+  });
+})();
+</script>
+</div>
+
 <div class="exblock sec-vocab" id="s84e">
 <h3 class="exline"><span class="exlabel">4a</span> Complete the text with some of these words.</h3>
 <div class="audiorow">
@@ -364,14 +549,86 @@ There are jobs where you need to have a specific skill or personal quality. But 
 <audio controls id="audio-84-4b" src="media/Gateway_B1_U7_track51_EssentialQualities.mp3"></audio>
 </div>
 
+<div class="exblock sec-vocab" id="s84qj">
+<style>
+.extra-badge{display:inline-block;background:#8e44ad;color:#fff;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 9px;border-radius:10px;margin-right:8px;vertical-align:middle;}
+#qjBtn{background:#8e44ad;color:#fff;border:none;border-radius:20px;padding:8px 20px;font-size:14px;font-weight:800;cursor:pointer;}
+#qjBtn:hover{background:#6f2f88;}
+#qjPanel{display:none;background:#faf5ff;border:1px solid #e0d0f0;border-left:5px solid #8e44ad;border-radius:0 6px 6px 0;padding:14px 18px;margin:12px 0 4px;font-size:14px;}
+#qjPanel.open{display:block;}
+#qjPanel h4{margin:0 0 6px;font-size:16px;color:#5e2d75;}
+#qjPanel ol,#qjPanel ul{margin:6px 0 10px;padding-left:22px;}
+#qjPanel li{margin-bottom:4px;}
+#qjPanel .patterns{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 10px;}
+#qjPanel .patterns>div{flex:1 1 280px;background:#fff;border:1px solid #e0d0f0;border-radius:8px;padding:8px 14px;}
+#qjPanel .patterns b{color:#5e2d75;}
+#qjPanel .patterns ul{margin:4px 0 0;}
+#qjPanel .mline{margin:0 0 8px;min-height:1.5em;}
+#qjPanel .qj-model{color:var(--modelblue);font-weight:600;}
+#qjPanel .mhead{font-weight:800;color:#5e2d75;margin:8px 0 4px;}
+</style>
+<span class="extra-badge">Extra activity</span><button id="qjBtn" type="button">&#128188; Qualities and Jobs</button>
+<div id="qjPanel">
+<h4>Qualities and Jobs</h4>
+<p style="margin:0 0 6px;">Work in groups.</p>
+<ol>
+<li>Each student picks <b>three personal qualities</b> from the box in 4a that describe them, and thinks of an <b>example</b> for each quality.</li>
+<li>Take turns to tell the group your three qualities and your examples.</li>
+<li>The group tells the speaker which jobs match their qualities.</li>
+<li>The speaker says if they would like to do the job or not, and gives reasons.</li>
+</ol>
+<div class="patterns">
+<div><b>Speaker: your qualities</b>
+<ul>
+<li>I&rsquo;m &hellip;, &hellip; and &hellip;.</li>
+<li>For example, I &hellip;, so I&rsquo;m &hellip;.</li>
+<li>I think I&rsquo;m &hellip; because I &hellip;.</li>
+</ul></div>
+<div><b>Group: matching jobs</b>
+<ul>
+<li>I think you&rsquo;d be a good &hellip; because you&rsquo;re &hellip;.</li>
+<li>I think you could be a &hellip; because you&rsquo;re &hellip;.</li>
+<li>You&rsquo;re &hellip;, so you&rsquo;d be a good &hellip;.</li>
+<li>Have you thought about being a &hellip;?</li>
+</ul></div>
+<div><b>Speaker: agree</b>
+<ul>
+<li>Yes, I&rsquo;d love to be a &hellip; because &hellip;.</li>
+<li>That&rsquo;s a good idea. I&rsquo;d like to be a &hellip; because &hellip;.</li>
+</ul></div>
+<div><b>Speaker: disagree</b>
+<ul>
+<li>I don&rsquo;t think I&rsquo;d like to be a &hellip; because &hellip;.</li>
+<li>No, I wouldn&rsquo;t enjoy that job because &hellip;.</li>
+<li>I&rsquo;d hate to be a &hellip; because &hellip;.</li>
+</ul></div>
+</div>
+<div id="ex84_qj">
+<div class="mline"><span class="qj-model"><b>Speaker:</b> I&rsquo;m creative, sociable and hard-working. For example, I love drawing and making videos, so I&rsquo;m creative. I always talk to new classmates, so I&rsquo;m sociable. I do my homework every day before I play, so I&rsquo;m hard-working.</span></div>
+<div class="mline"><span class="qj-model"><b>Group:</b> I think you&rsquo;d be a good graphic designer because you&rsquo;re creative. I think you could also be a tour guide because you&rsquo;re sociable.</span></div>
+<div class="mline"><span class="qj-model"><b>Speaker (agrees):</b> Yes, I&rsquo;d love to be a graphic designer because I enjoy drawing and I like having new ideas.</span></div>
+<div class="mline"><span class="qj-model"><b>Speaker (disagrees):</b> I don&rsquo;t think I&rsquo;d like to be a tour guide because I don&rsquo;t like speaking in front of big groups. I&rsquo;d prefer to work in a quiet place.</span></div>
+</div>
+</div>
+<script>
+(function(){
+  const panel = document.getElementById('qjPanel'), btn = document.getElementById('qjBtn');
+  btn.addEventListener('click', ()=>{
+    const open = panel.classList.toggle('open');
+    btn.innerHTML = open ? '&#10006; Close Qualities and Jobs' : '&#128188; Qualities and Jobs';
+  });
+})();
+</script>
+</div>
+
 <div class="exblock sec-vocab" id="s84h">
 <div class="exbox"><span class="exbox-title">Use it &hellip; don&rsquo;t lose it!</span>
 <h3 class="exline" style="margin-top:4px;"><span class="exlabel">5</span> <span class="spk">SPEAKING</span>Ask and answer the questions.</h3>
 <div id="ex84_6" class="exwrap">
 <ol class="numlist">
 <li><span class="n">1</span><span class="t">Which of the things in 1 would you like in your future job? Which would you not like?<br><span class="model-ans">I&rsquo;d like to work in a team and earn a high salary. I wouldn&rsquo;t like to work overtime or do paperwork all day.</span></span></li>
-<li><span class="n">2</span><span class="t">Which two jobs in 2 would you be interested in doing in the future? Which two are you definitely not interested in doing?<br><span class="model-ans">I&rsquo;d be interested in being a vet and a photographer. I&rsquo;m definitely not interested in being a lawyer or an economist.</span></span></li>
-<li><span class="n">3</span><span class="t">Is there another job, not in 2, that you think you would like to do? If so, which?<br><span class="model-ans">Yes, I think I&rsquo;d like to be a pilot because I love travelling.</span></span></li>
+<li><span class="n">2</span><span class="t">Which two jobs in 2 would you be interested in doing in the future? Which two are you definitely not interested in doing? Why?<br><span class="model-ans">I&rsquo;d be interested in being a vet and a photographer because I love animals and taking photos. I&rsquo;m definitely not interested in being a lawyer or an economist because I don&rsquo;t like doing a lot of paperwork.</span></span></li>
+<li><span class="n">3</span><span class="t">Is there another job, not in 2, that you think you would like to do? If so, which? Why?<br><span class="model-ans">Yes, I think I&rsquo;d like to be a pilot because I love travelling.</span></span></li>
 <li><span class="n">4</span><span class="t">Which qualities in 4a can you use to describe yourself? Justify your answer.<br><span class="model-ans">I think I&rsquo;m creative and sociable. For example, I love making videos with my friends, and I always talk to new classmates.</span></span></li>
 </ol>
 </div>
@@ -847,7 +1104,8 @@ A <span class="nb"><b>(a)</b><span class="blank-ph tight sm">&#8203;<span class=
     <h3 id="wm-word"></h3>
     <div class="mpos-row">
       <span class="mpos" id="wm-pos"></span>
-      <span class="mipa" id="wm-ipa"></span>
+      <span class="mipa"><b class="mlabel">UK</b> <span id="wm-ipa-uk"></span></span>
+      <span class="mipa"><b class="mlabel">US</b> <span id="wm-ipa-us"></span></span>
     </div>
     <div class="mdef" id="wm-def"></div>
     <div id="wm-examples"></div>
@@ -886,117 +1144,118 @@ A <span class="nb"><b>(a)</b><span class="blank-ph tight sm">&#8203;<span class=
    ===================================================================== */
 const WORD_DEFS = {
 /* ---------- Jobs (section 1) ---------- */
-"architect":{w:"architect",g:"Jobs (section 1)",ipa:"/ˈɑːrkɪtekt/",pos:"(n.)",def:"An architect is a person whose job is to design buildings and to plan how they will be built.",simple:"A person who plans and draws new buildings.",ex:["The architect drew plans for a new library.","My aunt is an architect, so she looks at buildings differently."]},
-"au-pair":{w:"au pair",g:"Jobs (section 1)",ipa:"/ˌoʊ ˈper/",pos:"(n.)",def:"An au pair is a young person, usually from another country, who lives with a family and helps look after their children in exchange for a room, food and a little money.",simple:"A young person who lives with a family and looks after the children.",ex:["They have an au pair from Spain who speaks to the children in Spanish.","Being an au pair is a good way to learn a language."]},
-"chef":{w:"chef",g:"Jobs (section 1)",ipa:"/ʃef/",pos:"(n.)",def:"A chef is a professional cook, especially the main cook in a restaurant or hotel.",simple:"A person who cooks food as a job in a restaurant.",ex:["The chef prepares all the dishes in the kitchen.","She trained for three years to become a chef."]},
-"company-director":{w:"company director",g:"Jobs (section 1)",ipa:"/ˈkʌmpəni dəˈrektər/",pos:"(n.)",def:"A company director is a person at a senior level who helps to manage a company and make important decisions about it.",simple:"A person who helps to run a company.",ex:["The company director welcomed all the new employees.","A company director often has to make difficult decisions."]},
-"construction-worker":{w:"construction worker",g:"Jobs (section 1)",ipa:"/kənˈstrʌkʃn ˌwɜːrkər/",pos:"(n.)",def:"A construction worker is a person whose job is to build or repair buildings, roads and bridges.",simple:"A person who builds houses, roads and bridges.",ex:["Construction workers wear hard hats on building sites.","My uncle is a construction worker and he works outdoors all year."]},
-"economist":{w:"economist",g:"Jobs (section 1)",ipa:"/ɪˈkɑːnəmɪst/",pos:"(n.)",def:"An economist is a person who studies or has expert knowledge of how money, trade and industry work in a country or in the world.",simple:"A person who studies money, jobs and business in a country.",ex:["The economist explained why prices were going up.","An economist works with a lot of figures."]},
-"fashion-designer":{w:"fashion designer",g:"Jobs (section 1)",ipa:"/ˈfæʃn dɪˌzaɪnər/",pos:"(n.)",def:"A fashion designer is a person whose job is to create new styles of clothes.",simple:"A person who creates new clothes.",ex:["The fashion designer showed her new collection in Paris.","You need to be creative to be a fashion designer."]},
-"firefighter":{w:"firefighter",g:"Jobs (section 1)",ipa:"/ˈfaɪərfaɪtər/",pos:"(n.)",def:"A firefighter is a person whose job is to stop fires and to rescue people from dangerous situations.",simple:"A person who puts out fires and saves people.",ex:["The firefighters arrived within five minutes.","Firefighters have to be fit, strong and calm."]},
-"journalist":{w:"journalist",g:"Jobs (section 1)",ipa:"/ˈdʒɜːrnəlɪst/",pos:"(n.)",def:"A journalist is a person whose job is to collect and write news stories for newspapers, magazines, websites, television or radio.",simple:"A person who writes or reports the news.",ex:["The journalist interviewed the mayor.","Journalists produce articles and reports every day."]},
-"lawyer":{w:"lawyer",g:"Jobs (section 1)",ipa:"/ˈlɔːjər/",pos:"(n.)",def:"A lawyer is a person who is trained and qualified to give advice about the law and to speak for people in court.",simple:"A person who gives advice about the law and speaks for people in court.",ex:["She hired a lawyer to help with the contract.","A lawyer does a lot of paperwork."]},
-"mechanic":{w:"mechanic",g:"Jobs (section 1)",ipa:"/məˈkænɪk/",pos:"(n.)",def:"A mechanic is a person whose job is to repair and look after machines, especially car engines.",simple:"A person who repairs cars and machines.",ex:["The mechanic found the problem with my car.","He works as a mechanic in a garage."]},
-"nurse":{w:"nurse",g:"Jobs (section 1)",ipa:"/nɜːrs/",pos:"(n.)",def:"A nurse is a person whose job is to look after people who are ill or injured, usually in a hospital or clinic.",simple:"A person who looks after sick people in a hospital.",ex:["The nurse checked the patient's temperature.","Nurses often work long hours and at night."]},
-"photographer":{w:"photographer",g:"Jobs (section 1)",ipa:"/fəˈtɑːɡrəfər/",pos:"(n.)",def:"A photographer is a person whose job is to take photographs.",simple:"A person who takes photos as a job.",ex:["The wedding photographer took hundreds of pictures.","A nature photographer often works outdoors."]},
-"plumber":{w:"plumber",g:"Jobs (section 1)",ipa:"/ˈplʌmər/",pos:"(n.)",def:"A plumber is a person whose job is to fit and repair water pipes, toilets, sinks and heating systems.",simple:"A person who fixes water pipes and taps.",ex:["We called a plumber because the kitchen sink was leaking.","The plumber fixed the pipe in ten minutes."]},
-"police-officer":{w:"police officer",g:"Jobs (section 1)",ipa:"/pəˈliːs ˌɔːfɪsər/",pos:"(n.)",def:"A police officer is a member of the police force, whose job is to protect people, prevent crime and make sure that people obey the law.",simple:"A person who works for the police and keeps people safe.",ex:["A police officer stopped the traffic.","Police officers must stay calm in difficult situations."]},
-"receptionist":{w:"receptionist",g:"Jobs (section 1)",ipa:"/rɪˈsepʃənɪst/",pos:"(n.)",def:"A receptionist is a person whose job is to welcome visitors, answer the phone and deal with enquiries in an office, hotel or clinic.",simple:"A person who welcomes visitors and answers the phone in an office or hotel.",ex:["The receptionist asked me to wait in the lobby.","A receptionist works with the public every day."]},
-"shop-assistant":{w:"shop assistant",g:"Jobs (section 1)",ipa:"/ʃɑːp əˈsɪstənt/",pos:"(n.)",def:"A shop assistant is a person whose job is to serve customers and sell things in a shop.",simple:"A person who works in a shop and helps customers.",ex:["The shop assistant helped me find the right size.","Many students work as shop assistants at weekends."]},
-"vet":{w:"vet",g:"Jobs (section 1)",ipa:"/vet/",pos:"(n.)",def:"A vet is a doctor for animals. The word is short for 'veterinarian' (US) or 'veterinary surgeon' (UK).",simple:"A doctor who looks after animals.",ex:["We took our cat to the vet because she wasn't eating.","A vet has to love animals."]},
+"architect":{w:"architect",g:"Jobs (section 1)",ipa:"/ˈɑːkɪtekt/",ipaUS:"/ˈɑːrkɪtekt/",pos:"(n.)",def:"An architect is a person whose job is to design buildings and to plan how they will be built.",simple:"A person who plans and draws new buildings.",ex:["The architect drew plans for a new library.","My aunt is an architect, so she looks at buildings differently."]},
+"au-pair":{w:"au pair",g:"Jobs (section 1)",ipa:"/ˌəʊ ˈpeə/",ipaUS:"/ˌoʊ ˈper/",pos:"(n.)",def:"An au pair is a young person, usually from another country, who lives with a family and helps look after their children in exchange for a room, food and a little money.",simple:"A young person who lives with a family and looks after the children.",ex:["They have an au pair from Spain who speaks to the children in Spanish.","Being an au pair is a good way to learn a language."]},
+"chef":{w:"chef",g:"Jobs (section 1)",ipa:"/ʃef/",ipaUS:"/ʃef/",pos:"(n.)",def:"A chef is a professional cook, especially the main cook in a restaurant or hotel.",simple:"A person who cooks food as a job in a restaurant.",ex:["The chef prepares all the dishes in the kitchen.","She trained for three years to become a chef."]},
+"company-director":{w:"company director",g:"Jobs (section 1)",ipa:"/ˈkʌmpəni dəˈrektə/",ipaUS:"/ˈkʌmpəni dəˈrektər/",pos:"(n.)",def:"A company director is a person at a senior level who helps to manage a company and make important decisions about it.",simple:"A person who helps to run a company.",ex:["The company director welcomed all the new employees.","A company director often has to make difficult decisions."]},
+"construction-worker":{w:"construction worker",g:"Jobs (section 1)",ipa:"/kənˈstrʌkʃn ˌwɜːkə/",ipaUS:"/kənˈstrʌkʃn ˌwɜːrkər/",pos:"(n.)",def:"A construction worker is a person whose job is to build or repair buildings, roads and bridges.",simple:"A person who builds houses, roads and bridges.",ex:["Construction workers wear hard hats on building sites.","My uncle is a construction worker and he works outdoors all year."]},
+"economist":{w:"economist",g:"Jobs (section 1)",ipa:"/ɪˈkɒnəmɪst/",ipaUS:"/ɪˈkɑːnəmɪst/",pos:"(n.)",def:"An economist is a person who studies or has expert knowledge of how money, trade and industry work in a country or in the world.",simple:"A person who studies money, jobs and business in a country.",ex:["The economist explained why prices were going up.","An economist works with a lot of figures."]},
+"fashion-designer":{w:"fashion designer",g:"Jobs (section 1)",ipa:"/ˈfæʃn dɪˌzaɪnə/",ipaUS:"/ˈfæʃn dɪˌzaɪnər/",pos:"(n.)",def:"A fashion designer is a person whose job is to create new styles of clothes.",simple:"A person who creates new clothes.",ex:["The fashion designer showed her new collection in Paris.","You need to be creative to be a fashion designer."]},
+"firefighter":{w:"firefighter",g:"Jobs (section 1)",ipa:"/ˈfaɪəfaɪtə/",ipaUS:"/ˈfaɪərfaɪtər/",pos:"(n.)",def:"A firefighter is a person whose job is to stop fires and to rescue people from dangerous situations.",simple:"A person who puts out fires and saves people.",ex:["The firefighters arrived within five minutes.","Firefighters have to be fit, strong and calm."]},
+"journalist":{w:"journalist",g:"Jobs (section 1)",ipa:"/ˈdʒɜːnəlɪst/",ipaUS:"/ˈdʒɜːrnəlɪst/",pos:"(n.)",def:"A journalist is a person whose job is to collect and write news stories for newspapers, magazines, websites, television or radio.",simple:"A person who writes or reports the news.",ex:["The journalist interviewed the mayor.","Journalists produce articles and reports every day."]},
+"lawyer":{w:"lawyer",g:"Jobs (section 1)",ipa:"/ˈlɔɪə/",ipaUS:"/ˈlɔɪər/",pos:"(n.)",def:"A lawyer is a person who is trained and qualified to give advice about the law and to speak for people in court.",simple:"A person who gives advice about the law and speaks for people in court.",ex:["She hired a lawyer to help with the contract.","A lawyer does a lot of paperwork."]},
+"mechanic":{w:"mechanic",g:"Jobs (section 1)",ipa:"/məˈkænɪk/",ipaUS:"/məˈkænɪk/",pos:"(n.)",def:"A mechanic is a person whose job is to repair and look after machines, especially car engines.",simple:"A person who repairs cars and machines.",ex:["The mechanic found the problem with my car.","He works as a mechanic in a garage."]},
+"nurse":{w:"nurse",g:"Jobs (section 1)",ipa:"/nɜːs/",ipaUS:"/nɜːrs/",pos:"(n.)",def:"A nurse is a person whose job is to look after people who are ill or injured, usually in a hospital or clinic.",simple:"A person who looks after sick people in a hospital.",ex:["The nurse checked the patient's temperature.","Nurses often work long hours and at night."]},
+"photographer":{w:"photographer",g:"Jobs (section 1)",ipa:"/fəˈtɒɡrəfə/",ipaUS:"/fəˈtɑːɡrəfər/",pos:"(n.)",def:"A photographer is a person whose job is to take photographs.",simple:"A person who takes photos as a job.",ex:["The wedding photographer took hundreds of pictures.","A nature photographer often works outdoors."]},
+"plumber":{w:"plumber",g:"Jobs (section 1)",ipa:"/ˈplʌmə/",ipaUS:"/ˈplʌmər/",pos:"(n.)",def:"A plumber is a person whose job is to fit and repair water pipes, toilets, sinks and heating systems.",simple:"A person who fixes water pipes and taps.",ex:["We called a plumber because the kitchen sink was leaking.","The plumber fixed the pipe in ten minutes."]},
+"police-officer":{w:"police officer",g:"Jobs (section 1)",ipa:"/pəˈliːs ˌɒfɪsə/",ipaUS:"/pəˈliːs ˌɔːfɪsər/",pos:"(n.)",def:"A police officer is a member of the police force, whose job is to protect people, prevent crime and make sure that people obey the law.",simple:"A person who works for the police and keeps people safe.",ex:["A police officer stopped the traffic.","Police officers must stay calm in difficult situations."]},
+"receptionist":{w:"receptionist",g:"Jobs (section 1)",ipa:"/rɪˈsepʃənɪst/",ipaUS:"/rɪˈsepʃənɪst/",pos:"(n.)",def:"A receptionist is a person whose job is to welcome visitors, answer the phone and deal with enquiries in an office, hotel or clinic.",simple:"A person who welcomes visitors and answers the phone in an office or hotel.",ex:["The receptionist asked me to wait in the lobby.","A receptionist works with the public every day."]},
+"shop-assistant":{w:"shop assistant",g:"Jobs (section 1)",ipa:"/ʃɒp əˈsɪstənt/",ipaUS:"/ʃɑːp əˈsɪstənt/",pos:"(n.)",def:"A shop assistant is a person whose job is to serve customers and sell things in a shop.",simple:"A person who works in a shop and helps customers.",ex:["The shop assistant helped me find the right size.","Many students work as shop assistants at weekends."]},
+"vet":{w:"vet",g:"Jobs (section 1)",ipa:"/vet/",ipaUS:"/vet/",pos:"(n.)",def:"A vet is a doctor for animals. The word is short for 'veterinarian' (US) or 'veterinary surgeon' (UK).",simple:"A doctor who looks after animals.",ex:["We took our cat to the vet because she wasn't eating.","A vet has to love animals."]},
 
 /* ---------- Personal qualities (section 1) ---------- */
-"ambitious":{w:"ambitious",g:"Personal Qualities (section 1)",ipa:"/æmˈbɪʃəs/",pos:"(adj.)",def:"If you are ambitious, you have a strong wish to be successful, powerful or famous, and you are willing to work hard to achieve it.",simple:"Wanting very much to be successful.",ex:["She is very ambitious and wants to be a company director by the age of 30.","Ambitious people often set big goals for themselves."]},
-"calm":{w:"calm",g:"Personal Qualities (section 1)",ipa:"/kɑːm/",pos:"(adj.)",def:"If you are calm, you are relaxed and quiet, and you do not feel angry, nervous or worried.",simple:"Quiet and relaxed, not worried or angry.",ex:["Firefighters have to stay calm in an emergency.","He took a deep breath and tried to stay calm."]},
-"caring":{w:"caring",g:"Personal Qualities (section 1)",ipa:"/ˈkerɪŋ/",pos:"(adj.)",def:"A caring person is kind and shows that they care about other people and want to help them.",simple:"Kind and wanting to help other people.",ex:["Nurses need to be caring and patient.","She is a caring older sister who always helps with homework."]},
-"clever-bright":{w:"clever/bright",g:"Personal Qualities (section 1)",ipa:"/ˈklevər/ · /braɪt/",pos:"(adj.)",def:"If you are clever or bright, you can learn and understand things quickly and easily, and you can find good solutions to problems.",simple:"Able to learn and think quickly.",re:"clever/bright",ex:["She's a bright student who always finds a quick way to solve problems.","It was a clever idea to bring an umbrella."]},
-"confident":{w:"confident",g:"Personal Qualities (section 1)",ipa:"/ˈkɑːnfɪdənt/",pos:"(adj.)",def:"If you are confident, you believe in yourself and your abilities and you do not feel nervous or afraid.",simple:"Sure about yourself and not nervous.",ex:["He felt confident before the job interview.","A confident speaker looks at the audience and smiles."]},
-"creative":{w:"creative",g:"Personal Qualities (section 1)",ipa:"/kriˈeɪtɪv/",pos:"(adj.)",def:"If you are creative, you are good at thinking of new ideas or making new things.",simple:"Good at having new ideas.",ex:["Artists and designers need to be creative.","She found a creative way to solve the problem."]},
-"determined":{w:"determined",g:"Personal Qualities (section 1)",ipa:"/dɪˈtɜːrmɪnd/",pos:"(adj.)",def:"If you are determined, you have made a firm decision to do something and you will not let anything stop you.",simple:"Not giving up, even when things are difficult.",ex:["She was determined to win the race.","A determined student never gives up when exams are hard."]},
-"fit":{w:"fit",g:"Personal Qualities (section 1)",ipa:"/fɪt/",pos:"(adj.)",def:"If you are fit, your body is healthy and strong, especially because you exercise regularly.",simple:"Healthy and strong because you exercise.",ex:["Firefighters have to be very fit.","He plays football three times a week to keep fit."]},
-"flexible":{w:"flexible",g:"Personal Qualities (section 1)",ipa:"/ˈfleksəbl/",pos:"(adj.)",def:"If you are flexible, you are able to change your plans or the way you do things easily when a situation changes.",simple:"Able to change your plans easily.",ex:["I'm flexible, so I can start work at 8 or at 10.","A flexible worker can adapt to changing situations."]},
-"hard-working":{w:"hard-working",g:"Personal Qualities (section 1)",ipa:"/ˌhɑːrd ˈwɜːrkɪŋ/",pos:"(adj.)",def:"A hard-working person puts a lot of effort and energy into their work and does it carefully and properly.",simple:"Working a lot and trying hard.",ex:["She's the most hard-working student in the class.","Hard-working employees often get promoted."]},
-"patient":{w:"patient",g:"Personal Qualities (section 1)",ipa:"/ˈpeɪʃnt/",pos:"(adj.)",def:"If you are patient, you can wait for a long time or deal with problems or difficult people without becoming angry or upset.",simple:"Able to wait calmly and not get angry.",ex:["Teachers have to be patient with young children.","Be patient – the bus will be here soon."]},
-"reliable":{w:"reliable",g:"Personal Qualities (section 1)",ipa:"/rɪˈlaɪəbl/",pos:"(adj.)",def:"A reliable person or thing can be trusted to do what you expect them to do.",simple:"Someone you can trust to do what they say.",ex:["Tom is a reliable friend – he always arrives on time.","We need a reliable person to look after the shop."]},
-"responsible":{w:"responsible",g:"Personal Qualities (section 1)",ipa:"/rɪˈspɑːnsəbl/",pos:"(adj.)",def:"If you are responsible, you behave sensibly and can be trusted to do your duty or to look after something or someone.",simple:"Sensible and able to be trusted with important things.",ex:["She is responsible enough to look after her little brother.","A responsible person always finishes their work on time."]},
-"sensitive":{w:"sensitive",g:"Personal Qualities (section 1)",ipa:"/ˈsensətɪv/",pos:"(adj.)",def:"If you are sensitive, you think about other people's feelings and understand them well. A sensitive person can also be easily upset.",simple:"Understanding other people's feelings.",ex:["A sensitive teacher notices when a student feels sad.","He's very sensitive and gets upset if people are unkind."]},
-"sociable-friendly":{w:"sociable/friendly",g:"Personal Qualities (section 1)",ipa:"/ˈsoʊʃəbl/ · /ˈfrendli/",pos:"(adj.)",def:"If you are sociable or friendly, you like being with other people and talking to them, and you are kind and pleasant to them.",simple:"Liking to be with people and being kind to them.",re:"sociable/friendly",ex:["A receptionist should be friendly to everyone who comes in.","She's very sociable and has friends in every class."]},
-"strong":{w:"strong",g:"Personal Qualities (section 1)",ipa:"/strɔːŋ/",pos:"(adj.)",def:"If you are strong, you have a powerful body (strong physically) or you can deal with problems without being badly affected by them (strong mentally).",simple:"Having a powerful body or a powerful mind.",ex:["Construction workers have to be strong to lift heavy things.","She's mentally strong, so she doesn't give up after a bad day."]},
-"well-organised":{w:"well-organised",g:"Personal Qualities (section 1)",ipa:"/ˌwel ˈɔːrɡənaɪzd/",pos:"(adj.)",def:"A well-organised person plans things carefully and knows exactly what they are doing.",simple:"Planning things carefully so that nothing goes wrong.",ex:["A well-organised student never forgets their homework.","He's so well-organised that he wrote a list for every day."]},
+"ambitious":{w:"ambitious",g:"Personal Qualities (section 1)",ipa:"/æmˈbɪʃəs/",ipaUS:"/æmˈbɪʃəs/",pos:"(adj.)",def:"If you are ambitious, you have a strong wish to be successful, powerful or famous, and you are willing to work hard to achieve it.",simple:"Wanting very much to be successful.",ex:["She is very ambitious and wants to be a company director by the age of 30.","Ambitious people often set big goals for themselves."]},
+"calm":{w:"calm",g:"Personal Qualities (section 1)",ipa:"/kɑːm/",ipaUS:"/kɑːm/",pos:"(adj.)",def:"If you are calm, you are relaxed and quiet, and you do not feel angry, nervous or worried.",simple:"Quiet and relaxed, not worried or angry.",ex:["Firefighters have to stay calm in an emergency.","He took a deep breath and tried to stay calm."]},
+"caring":{w:"caring",g:"Personal Qualities (section 1)",ipa:"/ˈkeərɪŋ/",ipaUS:"/ˈkerɪŋ/",pos:"(adj.)",def:"A caring person is kind and shows that they care about other people and want to help them.",simple:"Kind and wanting to help other people.",ex:["Nurses need to be caring and patient.","She is a caring older sister who always helps with homework."]},
+"clever-bright":{w:"clever/bright",g:"Personal Qualities (section 1)",ipa:"/ˈklevə/ · /braɪt/",ipaUS:"/ˈklevər/ · /braɪt/",pos:"(adj.)",def:"If you are clever or bright, you can learn and understand things quickly and easily, and you can find good solutions to problems.",simple:"Able to learn and think quickly.",re:"clever/bright",ex:["She's a bright student who always finds a quick way to solve problems.","It was a clever idea to bring an umbrella."]},
+"confident":{w:"confident",g:"Personal Qualities (section 1)",ipa:"/ˈkɒnfɪdənt/",ipaUS:"/ˈkɑːnfɪdənt/",pos:"(adj.)",def:"If you are confident, you believe in yourself and your abilities and you do not feel nervous or afraid.",simple:"Sure about yourself and not nervous.",ex:["He felt confident before the job interview.","A confident speaker looks at the audience and smiles."]},
+"creative":{w:"creative",g:"Personal Qualities (section 1)",ipa:"/kriˈeɪtɪv/",ipaUS:"/kriˈeɪtɪv/",pos:"(adj.)",def:"If you are creative, you are good at thinking of new ideas or making new things.",simple:"Good at having new ideas.",ex:["Artists and designers need to be creative.","She found a creative way to solve the problem."]},
+"determined":{w:"determined",g:"Personal Qualities (section 1)",ipa:"/dɪˈtɜːmɪnd/",ipaUS:"/dɪˈtɜːrmɪnd/",pos:"(adj.)",def:"If you are determined, you have made a firm decision to do something and you will not let anything stop you.",simple:"Not giving up, even when things are difficult.",ex:["She was determined to win the race.","A determined student never gives up when exams are hard."]},
+"fit":{w:"fit",g:"Personal Qualities (section 1)",ipa:"/fɪt/",ipaUS:"/fɪt/",pos:"(adj.)",def:"If you are fit, your body is healthy and strong, especially because you exercise regularly.",simple:"Healthy and strong because you exercise.",ex:["Firefighters have to be very fit.","He plays football three times a week to keep fit."]},
+"flexible":{w:"flexible",g:"Personal Qualities (section 1)",ipa:"/ˈfleksəbl/",ipaUS:"/ˈfleksəbl/",pos:"(adj.)",def:"If you are flexible, you are able to change your plans or the way you do things easily when a situation changes.",simple:"Able to change your plans easily.",ex:["I'm flexible, so I can start work at 8 or at 10.","A flexible worker can adapt to changing situations."]},
+"hard-working":{w:"hard-working",g:"Personal Qualities (section 1)",ipa:"/ˌhɑːd ˈwɜːkɪŋ/",ipaUS:"/ˌhɑːrd ˈwɜːrkɪŋ/",pos:"(adj.)",def:"A hard-working person puts a lot of effort and energy into their work and does it carefully and properly.",simple:"Working a lot and trying hard.",ex:["She's the most hard-working student in the class.","Hard-working employees often get promoted."]},
+"patient":{w:"patient",g:"Personal Qualities (section 1)",ipa:"/ˈpeɪʃnt/",ipaUS:"/ˈpeɪʃnt/",pos:"(adj.)",def:"If you are patient, you can wait for a long time or deal with problems or difficult people without becoming angry or upset.",simple:"Able to wait calmly and not get angry.",ex:["Teachers have to be patient with young children.","Be patient – the bus will be here soon."]},
+"reliable":{w:"reliable",g:"Personal Qualities (section 1)",ipa:"/rɪˈlaɪəbl/",ipaUS:"/rɪˈlaɪəbl/",pos:"(adj.)",def:"A reliable person or thing can be trusted to do what you expect them to do.",simple:"Someone you can trust to do what they say.",ex:["Tom is a reliable friend – he always arrives on time.","We need a reliable person to look after the shop."]},
+"responsible":{w:"responsible",g:"Personal Qualities (section 1)",ipa:"/rɪˈspɒnsəbl/",ipaUS:"/rɪˈspɑːnsəbl/",pos:"(adj.)",def:"If you are responsible, you behave sensibly and can be trusted to do your duty or to look after something or someone.",simple:"Sensible and able to be trusted with important things.",ex:["She is responsible enough to look after her little brother.","A responsible person always finishes their work on time."]},
+"sensitive":{w:"sensitive",g:"Personal Qualities (section 1)",ipa:"/ˈsensətɪv/",ipaUS:"/ˈsensətɪv/",pos:"(adj.)",def:"If you are sensitive, you think about other people's feelings and understand them well. A sensitive person can also be easily upset.",simple:"Understanding other people's feelings.",ex:["A sensitive teacher notices when a student feels sad.","He's very sensitive and gets upset if people are unkind."]},
+"sociable-friendly":{w:"sociable/friendly",g:"Personal Qualities (section 1)",ipa:"/ˈsəʊʃəbl/ · /ˈfrendli/",ipaUS:"/ˈsoʊʃəbl/ · /ˈfrendli/",pos:"(adj.)",def:"If you are sociable or friendly, you like being with other people and talking to them, and you are kind and pleasant to them.",simple:"Liking to be with people and being kind to them.",re:"sociable/friendly",ex:["A receptionist should be friendly to everyone who comes in.","She's very sociable and has friends in every class."]},
+"strong":{w:"strong",g:"Personal Qualities (section 1)",ipa:"/strɒŋ/",ipaUS:"/strɔːŋ/",pos:"(adj.)",def:"If you are strong, you have a powerful body (strong physically) or you can deal with problems without being badly affected by them (strong mentally).",simple:"Having a powerful body or a powerful mind.",ex:["Construction workers have to be strong to lift heavy things.","She's mentally strong, so she doesn't give up after a bad day."]},
+"well-organised":{w:"well-organised",g:"Personal Qualities (section 1)",ipa:"/ˌwel ˈɔːɡənaɪzd/",ipaUS:"/ˌwel ˈɔːrɡənaɪzd/",pos:"(adj.)",def:"A well-organised person plans things carefully and knows exactly what they are doing.",simple:"Planning things carefully so that nothing goes wrong.",ex:["A well-organised student never forgets their homework.","He's so well-organised that he wrote a list for every day."]},
 
 /* ---------- Words connected with work (section 1) ---------- */
-"outdoors":{w:"outdoors",g:"Words Connected with Work (section 1)",ipa:"/ˌaʊtˈdɔːrz/",pos:"(adv.)",def:"If you do something outdoors, you do it outside a building, in the open air.",simple:"Outside, not inside a building.",re:"outdoors",ex:["Gardeners work outdoors in all kinds of weather.","We eat outdoors in the summer."]},
-"the-public":{w:"the public",g:"Words Connected with Work (section 1)",ipa:"/ðə ˈpʌblɪk/",pos:"(n.)",def:"The public means ordinary people in general, rather than people who belong to a special group or organisation.",simple:"People in general.",re:"the public",ex:["The museum is open to the public every day.","Shop assistants work with the public all day."]},
-"paperwork":{w:"paperwork",g:"Words Connected with Work (section 1)",ipa:"/ˈpeɪpərwɜːrk/",pos:"(n.)",def:"Paperwork is the part of a job that involves written documents, such as filling in forms, writing reports and answering letters.",simple:"Writing and filling in forms, reports and letters.",ex:["I have a lot of paperwork to finish before Friday.","Doctors don't like the paperwork, but they have to do it."]},
-"look-after":{w:"look after",g:"Words Connected with Work (section 1)",ipa:"/lʊk ˈæftər/",pos:"(v. phr.)",def:"If you look after someone or something, you make sure that they are safe and healthy and have everything they need.",simple:"To take care of someone or something.",re:"look(?:s|ed|ing)? after",ex:["Can you look after my dog while I'm on holiday?","Au pairs look after children when the parents are at work."]},
-"manual-work":{w:"manual work",g:"Words Connected with Work (section 1)",ipa:"/ˈmænjuəl wɜːrk/",pos:"(n.)",def:"Manual work is physical work that you do with your hands or your body, rather than work that you do with your mind.",simple:"Work that uses your hands and body.",ex:["Building a wall is hard manual work.","He left his job in the office and now does manual work on a farm."]},
-"teamwork":{w:"teamwork",g:"Words Connected with Work (section 1)",ipa:"/ˈtiːmwɜːrk/",pos:"(n.)",def:"Teamwork is the work that people do together as a team, when everyone helps to achieve something.",simple:"Working together with other people.",ex:["Good teamwork helped us finish the project early.","Teamwork is important for firefighters."]},
-"figures":{w:"figures",g:"Words Connected with Work (section 1)",ipa:"/ˈfɪɡjərz/",pos:"(n.)",def:"Figures are numbers, especially numbers that show amounts of money or other facts that you need to count or calculate.",simple:"Numbers that you count or work with.",re:"figures?",ex:["The accountant checked all the figures twice.","I'm not good with figures – I use a calculator."]},
-"earn":{w:"earn",g:"Words Connected with Work (section 1)",ipa:"/ɜːrn/",pos:"(v.)",def:"If you earn money, you receive it as payment for the work that you do.",simple:"To get money for the work you do.",re:"earn(?:s|ed|ing)?",ex:["She earns a good salary as a lawyer.","How much do nurses earn in your country?"]},
-"salary":{w:"salary",g:"Words Connected with Work (section 1)",ipa:"/ˈsæləri/",pos:"(n.)",def:"A salary is a fixed amount of money that you receive every month or year from your job.",simple:"The money you get every month from your job.",ex:["He gets a salary of 2,000 euros a month.","A high salary isn't the most important thing for everyone."]},
-"overtime":{w:"overtime",g:"Words Connected with Work (section 1)",ipa:"/ˈoʊvərtaɪm/",pos:"(n.)",def:"Overtime is extra time that you work at your job after your normal working hours, often for extra pay.",simple:"Extra hours of work after your normal hours.",ex:["I did two hours of overtime yesterday.","Nurses often work overtime at weekends."]},
-"retail":{w:"retail",g:"Words Connected with Work (section 1)",ipa:"/ˈriːteɪl/",pos:"(n.)",def:"Retail is the business of selling goods to the public, usually in shops.",simple:"Selling things to customers in shops.",ex:["She has worked in retail for five years.","Many young people get their first job in retail."]},
-"finance":{w:"finance",g:"Words Connected with Work (section 1)",ipa:"/ˈfaɪnæns/",pos:"(n.)",def:"Finance is the business of managing and investing money, for example in banks and other companies.",simple:"Working with money, banks and investments.",ex:["He has a good job in finance in the city centre.","My sister studies finance at university."]},
+"outdoors":{w:"outdoors",g:"Words Connected with Work (section 1)",ipa:"/ˌaʊtˈdɔːz/",ipaUS:"/ˌaʊtˈdɔːrz/",pos:"(adv.)",def:"If you do something outdoors, you do it outside a building, in the open air.",simple:"Outside, not inside a building.",re:"outdoors",ex:["Gardeners work outdoors in all kinds of weather.","We eat outdoors in the summer."]},
+"the-public":{w:"the public",g:"Words Connected with Work (section 1)",ipa:"/ðə ˈpʌblɪk/",ipaUS:"/ðə ˈpʌblɪk/",pos:"(n.)",def:"The public means ordinary people in general, rather than people who belong to a special group or organisation.",simple:"People in general.",re:"the public",ex:["The museum is open to the public every day.","Shop assistants work with the public all day."]},
+"paperwork":{w:"paperwork",g:"Words Connected with Work (section 1)",ipa:"/ˈpeɪpəwɜːk/",ipaUS:"/ˈpeɪpərwɜːrk/",pos:"(n.)",def:"Paperwork is the part of a job that involves written documents, such as filling in forms, writing reports and answering letters.",simple:"Writing and filling in forms, reports and letters.",ex:["I have a lot of paperwork to finish before Friday.","Doctors don't like the paperwork, but they have to do it."]},
+"look-after":{w:"look after",g:"Words Connected with Work (section 1)",ipa:"/lʊk ˈɑːftə/",ipaUS:"/lʊk ˈæftər/",pos:"(v. phr.)",def:"If you look after someone or something, you make sure that they are safe and healthy and have everything they need.",simple:"To take care of someone or something.",re:"look(?:s|ed|ing)? after",ex:["Can you look after my dog while I'm on holiday?","Au pairs look after children when the parents are at work."]},
+"manual-work":{w:"manual work",g:"Words Connected with Work (section 1)",ipa:"/ˈmænjuəl wɜːk/",ipaUS:"/ˈmænjuəl wɜːrk/",pos:"(n.)",def:"Manual work is physical work that you do with your hands or your body, rather than work that you do with your mind.",simple:"Work that uses your hands and body.",ex:["Building a wall is hard manual work.","He left his job in the office and now does manual work on a farm."]},
+"teamwork":{w:"teamwork",g:"Words Connected with Work (section 1)",ipa:"/ˈtiːmwɜːk/",ipaUS:"/ˈtiːmwɜːrk/",pos:"(n.)",def:"Teamwork is the work that people do together as a team, when everyone helps to achieve something.",simple:"Working together with other people.",ex:["Good teamwork helped us finish the project early.","Teamwork is important for firefighters."]},
+"figures":{w:"figures",g:"Words Connected with Work (section 1)",ipa:"/ˈfɪɡəz/",ipaUS:"/ˈfɪɡjərz/",pos:"(n.)",def:"Figures are numbers, especially numbers that show amounts of money or other facts that you need to count or calculate.",simple:"Numbers that you count or work with.",re:"figures?",ex:["The accountant checked all the figures twice.","I'm not good with figures – I use a calculator."]},
+"earn":{w:"earn",g:"Words Connected with Work (section 1)",ipa:"/ɜːn/",ipaUS:"/ɜːrn/",pos:"(v.)",def:"If you earn money, you receive it as payment for the work that you do.",simple:"To get money for the work you do.",re:"earn(?:s|ed|ing)?",ex:["She earns a good salary as a lawyer.","How much do nurses earn in your country?"]},
+"salary":{w:"salary",g:"Words Connected with Work (section 1)",ipa:"/ˈsæləri/",ipaUS:"/ˈsæləri/",pos:"(n.)",def:"A salary is a fixed amount of money that you receive every month or year from your job.",simple:"The money you get every month from your job.",ex:["He gets a salary of 2,000 euros a month.","A high salary isn't the most important thing for everyone."]},
+"overtime":{w:"overtime",g:"Words Connected with Work (section 1)",ipa:"/ˈəʊvətaɪm/",ipaUS:"/ˈoʊvərtaɪm/",pos:"(n.)",def:"Overtime is extra time that you work at your job after your normal working hours, often for extra pay.",simple:"Extra hours of work after your normal hours.",ex:["I did two hours of overtime yesterday.","Nurses often work overtime at weekends."]},
+"retail":{w:"retail",g:"Words Connected with Work (section 1)",ipa:"/ˈriːteɪl/",ipaUS:"/ˈriːteɪl/",pos:"(n.)",def:"Retail is the business of selling goods to the public, usually in shops.",simple:"Selling things to customers in shops.",ex:["She has worked in retail for five years.","Many young people get their first job in retail."]},
+"finance":{w:"finance",g:"Words Connected with Work (section 1)",ipa:"/ˈfaɪnæns/",ipaUS:"/ˈfaɪnæns/",pos:"(n.)",def:"Finance is the business of managing and investing money, for example in banks and other companies.",simple:"Working with money, banks and investments.",ex:["He has a good job in finance in the city centre.","My sister studies finance at university."]},
 
 /* ---------- Compound adjectives (section 2) ---------- */
-"compound-adjective":{w:"compound adjective",g:"Compound Adjectives (section 2)",ipa:"/ˈkɑːmpaʊnd ˈædʒɪktɪv/",pos:"(n.)",def:"A compound adjective is an adjective made by joining two or more words, usually with a hyphen, for example 'hard-working'.",simple:"An adjective made from two words joined together.",ex:["'Good-looking' is a compound adjective.","Compound adjectives usually have a hyphen between the two words."]},
-"hyphen":{w:"hyphen",g:"Compound Adjectives (section 2)",ipa:"/ˈhaɪfn/",pos:"(n.)",def:"A hyphen is the short line (-) that you use to join two words together or to join the parts of a word.",simple:"The short line (-) that joins two words.",ex:["Don't forget the hyphen in 'well-known'.","We write 'part-time' with a hyphen."]},
-"full-time":{w:"full-time",g:"Compound Adjectives (section 2)",ipa:"/ˌfʊl ˈtaɪm/",pos:"(adj.)",def:"A full-time job takes all of the normal working week, usually about 35 to 40 hours.",simple:"For the whole working week.",ex:["She has a full-time job in a bank.","He studies full-time at university."]},
-"well-known":{w:"well-known",g:"Compound Adjectives (section 2)",ipa:"/ˌwel ˈnoʊn/",pos:"(adj.)",def:"If someone or something is well-known, a lot of people know about them.",simple:"Known by many people.",ex:["She's a well-known actress.","Paris is well known for its food and art."]},
-"badly-paid":{w:"badly-paid",g:"Compound Adjectives (section 2)",ipa:"/ˌbædli ˈpeɪd/",pos:"(adj.)",def:"A badly-paid job gives you very little money for the work that you do.",simple:"Getting little money for your work.",ex:["Many badly-paid workers have two jobs.","Teaching assistants are often badly paid."]},
-"18-year-old":{w:"18-year-old",g:"Compound Adjectives (section 2)",ipa:"/ˌeɪˈtiːn jɪr ˈoʊld/",pos:"(adj. / n.)",def:"An 18-year-old person is someone who is eighteen years old. You can change the number to give any age. After a number, the word 'year' stays singular.",simple:"A person who is 18 years old.",ex:["My brother is an 18-year-old student.","A 12-year-old girl won the competition."]},
-"well-off":{w:"well-off",g:"Compound Adjectives (section 2)",ipa:"/ˌwel ˈɔːf/",pos:"(adj.)",def:"If someone is well-off, they have enough money to live comfortably.",simple:"Rich, or having plenty of money.",ex:["They live in a well-off part of the city.","His parents are well-off, so he never worried about money."]},
-"forward-thinking":{w:"forward-thinking",g:"Compound Adjectives (section 2)",ipa:"/ˌfɔːrwərd ˈθɪŋkɪŋ/",pos:"(adj.)",def:"A forward-thinking person plans for the future and has modern ideas about what will be useful or necessary.",simple:"Planning for the future with new ideas.",ex:["A forward-thinking company trains its workers for new technology.","She's a forward-thinking manager who listens to young people."]},
+"compound-adjective":{w:"compound adjective",g:"Compound Adjectives (section 2)",ipa:"/ˈkɒmpaʊnd ˈædʒɪktɪv/",ipaUS:"/ˈkɑːmpaʊnd ˈædʒɪktɪv/",pos:"(n.)",def:"A compound adjective is an adjective made by joining two or more words, usually with a hyphen, for example 'hard-working'.",simple:"An adjective made from two words joined together.",ex:["'Good-looking' is a compound adjective.","Compound adjectives usually have a hyphen between the two words."]},
+"hyphen":{w:"hyphen",g:"Compound Adjectives (section 2)",ipa:"/ˈhaɪfn/",ipaUS:"/ˈhaɪfn/",pos:"(n.)",def:"A hyphen is the short line (-) that you use to join two words together or to join the parts of a word.",simple:"The short line (-) that joins two words.",ex:["Don't forget the hyphen in 'well-known'.","We write 'part-time' with a hyphen."]},
+"full-time":{w:"full-time",g:"Compound Adjectives (section 2)",ipa:"/ˌfʊl ˈtaɪm/",ipaUS:"/ˌfʊl ˈtaɪm/",pos:"(adj.)",def:"A full-time job takes all of the normal working week, usually about 35 to 40 hours.",simple:"For the whole working week.",ex:["She has a full-time job in a bank.","He studies full-time at university."]},
+"well-known":{w:"well-known",g:"Compound Adjectives (section 2)",ipa:"/ˌwel ˈnəʊn/",ipaUS:"/ˌwel ˈnoʊn/",pos:"(adj.)",def:"If someone or something is well-known, a lot of people know about them.",simple:"Known by many people.",ex:["She's a well-known actress.","Paris is well known for its food and art."]},
+"badly-paid":{w:"badly-paid",g:"Compound Adjectives (section 2)",ipa:"/ˌbædli ˈpeɪd/",ipaUS:"/ˌbædli ˈpeɪd/",pos:"(adj.)",def:"A badly-paid job gives you very little money for the work that you do.",simple:"Getting little money for your work.",ex:["Many badly-paid workers have two jobs.","Teaching assistants are often badly paid."]},
+"18-year-old":{w:"18-year-old",g:"Compound Adjectives (section 2)",ipa:"/ˌeɪˈtiːn jɪə ˈəʊld/",ipaUS:"/ˌeɪˈtiːn jɪr ˈoʊld/",pos:"(adj. / n.)",def:"An 18-year-old person is someone who is eighteen years old. You can change the number to give any age. After a number, the word 'year' stays singular.",simple:"A person who is 18 years old.",ex:["My brother is an 18-year-old student.","A 12-year-old girl won the competition."]},
+"well-off":{w:"well-off",g:"Compound Adjectives (section 2)",ipa:"/ˌwel ˈɒf/",ipaUS:"/ˌwel ˈɔːf/",pos:"(adj.)",def:"If someone is well-off, they have enough money to live comfortably.",simple:"Rich, or having plenty of money.",ex:["They live in a well-off part of the city.","His parents are well-off, so he never worried about money."]},
+"forward-thinking":{w:"forward-thinking",g:"Compound Adjectives (section 2)",ipa:"/ˌfɔːwəd ˈθɪŋkɪŋ/",ipaUS:"/ˌfɔːrwərd ˈθɪŋkɪŋ/",pos:"(adj.)",def:"A forward-thinking person plans for the future and has modern ideas about what will be useful or necessary.",simple:"Planning for the future with new ideas.",ex:["A forward-thinking company trains its workers for new technology.","She's a forward-thinking manager who listens to young people."]},
 
 /* ---------- Listening words (section 4) ---------- */
-"ravenmaster":{w:"ravenmaster",g:"Listening Words (section 4)",ipa:"/ˈreɪvnmæstər/",pos:"(n.)",def:"The ravenmaster is the person at the Tower of London whose job is to look after the ravens that live there.",simple:"The person who looks after the ravens at the Tower of London.",ex:["The ravenmaster feeds the birds every morning.","From the listening: &ldquo;I've just finished a great book called <b>Ravenmaster</b>.&rdquo;"]},
-"raven":{w:"raven",g:"Listening Words (section 4)",ipa:"/ˈreɪvn/",pos:"(n.)",def:"A raven is a very large black bird with shiny feathers. Ravens are related to crows.",simple:"A big black bird.",re:"ravens?",ex:["A raven was sitting on the fence.","From the listening: &ldquo;If the six <b>ravens</b> at the Tower of London fly away, the Kingdom and the Tower of London will fall.&rdquo;"]},
-"legend":{w:"legend",g:"Listening Words (section 4)",ipa:"/ˈledʒənd/",pos:"(n.)",def:"A legend is a very old story that people have told for many years. It may be partly true, but it is not completely proved.",simple:"A very old story that may not be completely true.",ex:["There's a legend that a dragon once lived in this cave.","From the listening: &ldquo;Isn't there a <b>legend</b> about the ravens?&rdquo;"]},
-"put-on-weight":{w:"put on weight",g:"Listening Words (section 4)",ipa:"/pʊt ɑːn weɪt/",pos:"(v. phr.)",def:"If you put on weight, your body becomes heavier because you gain fat.",simple:"To become heavier.",re:"put(?:s|ting)? on weight",ex:["He put on weight during the winter because he exercised less.","From the listening: &ldquo;If I ate ice cream every day, I'd <b>put on weight</b> really fast!&rdquo;"]},
-"military-experience":{w:"military experience",g:"Listening Words (section 4)",ipa:"/ˈmɪləteri ɪkˈspɪriəns/",pos:"(n. phr.)",def:"Military experience is the time that you have spent working in the army, navy or air force, and the skills that you have learned there.",simple:"Time spent working in the army or other armed forces.",ex:["The job asks for ten years of military experience.","From the listening: &ldquo;You must have at least 22 years of <b>military experience</b>.&rdquo;"]},
-"qualifications":{w:"qualifications",g:"Listening Words (section 4)",ipa:"/ˌkwɑːləfɪˈkeɪʃnz/",pos:"(n.)",def:"Qualifications are the exams that you have passed, the courses that you have completed or the experience that you need to do a particular job.",simple:"Exams, courses or experience that you need for a job.",re:"qualifications?",ex:["What qualifications do I need to become a vet?","From the listening: &ldquo;What <b>qualifications</b> do you need for a job like that?&rdquo;"]},
-"get-tired-of":{w:"get tired of",g:"Listening Words (section 4)",ipa:"/ɡet ˈtaɪərd əv/",pos:"(v. phr.)",def:"If you get tired of something, you stop enjoying it because you have done it or seen it too many times.",simple:"To stop enjoying something because you have had too much of it.",re:"get(?:s|ting)? tired of",ex:["I'd get tired of pizza if I ate it every day.","From the listening: &ldquo;If I did that job I'd <b>get tired of</b> it.&rdquo;"]},
-"in-charge-of":{w:"in charge of",g:"Listening Words (section 4)",ipa:"/ɪn tʃɑːrdʒ əv/",pos:"(adj. phr.)",def:"If you are in charge of something or someone, you are the person who controls it and is responsible for it.",simple:"Responsible for something or for people.",ex:["Who's in charge of the school trip?","From the listening: &ldquo;She's <b>in charge of</b> tasting ice cream for a big UK supermarket.&rdquo;"]},
+"ravenmaster":{w:"ravenmaster",g:"Listening Words (section 4)",ipa:"/ˈreɪvnmɑːstə/",ipaUS:"/ˈreɪvnmæstər/",pos:"(n.)",def:"The ravenmaster is the person at the Tower of London whose job is to look after the ravens that live there.",simple:"The person who looks after the ravens at the Tower of London.",ex:["The ravenmaster feeds the birds every morning.","From the listening: &ldquo;I've just finished a great book called <b>Ravenmaster</b>.&rdquo;"]},
+"raven":{w:"raven",g:"Listening Words (section 4)",ipa:"/ˈreɪvn/",ipaUS:"/ˈreɪvn/",pos:"(n.)",def:"A raven is a very large black bird with shiny feathers. Ravens are related to crows.",simple:"A big black bird.",re:"ravens?",ex:["A raven was sitting on the fence.","From the listening: &ldquo;If the six <b>ravens</b> at the Tower of London fly away, the Kingdom and the Tower of London will fall.&rdquo;"]},
+"legend":{w:"legend",g:"Listening Words (section 4)",ipa:"/ˈledʒənd/",ipaUS:"/ˈledʒənd/",pos:"(n.)",def:"A legend is a very old story that people have told for many years. It may be partly true, but it is not completely proved.",simple:"A very old story that may not be completely true.",ex:["There's a legend that a dragon once lived in this cave.","From the listening: &ldquo;Isn't there a <b>legend</b> about the ravens?&rdquo;"]},
+"put-on-weight":{w:"put on weight",g:"Listening Words (section 4)",ipa:"/pʊt ɒn weɪt/",ipaUS:"/pʊt ɑːn weɪt/",pos:"(v. phr.)",def:"If you put on weight, your body becomes heavier because you gain fat.",simple:"To become heavier.",re:"put(?:s|ting)? on weight",ex:["He put on weight during the winter because he exercised less.","From the listening: &ldquo;If I ate ice cream every day, I'd <b>put on weight</b> really fast!&rdquo;"]},
+"military-experience":{w:"military experience",g:"Listening Words (section 4)",ipa:"/ˈmɪlɪtri ɪkˈspɪəriəns/",ipaUS:"/ˈmɪləteri ɪkˈspɪriəns/",pos:"(n. phr.)",def:"Military experience is the time that you have spent working in the army, navy or air force, and the skills that you have learned there.",simple:"Time spent working in the army or other armed forces.",ex:["The job asks for ten years of military experience.","From the listening: &ldquo;You must have at least 22 years of <b>military experience</b>.&rdquo;"]},
+"qualifications":{w:"qualifications",g:"Listening Words (section 4)",ipa:"/ˌkwɒlɪfɪˈkeɪʃnz/",ipaUS:"/ˌkwɑːləfɪˈkeɪʃnz/",pos:"(n.)",def:"Qualifications are the exams that you have passed, the courses that you have completed or the experience that you need to do a particular job.",simple:"Exams, courses or experience that you need for a job.",re:"qualifications?",ex:["What qualifications do I need to become a vet?","From the listening: &ldquo;What <b>qualifications</b> do you need for a job like that?&rdquo;"]},
+"get-tired-of":{w:"get tired of",g:"Listening Words (section 4)",ipa:"/ɡet ˈtaɪəd əv/",ipaUS:"/ɡet ˈtaɪərd əv/",pos:"(v. phr.)",def:"If you get tired of something, you stop enjoying it because you have done it or seen it too many times.",simple:"To stop enjoying something because you have had too much of it.",re:"get(?:s|ting)? tired of",ex:["I'd get tired of pizza if I ate it every day.","From the listening: &ldquo;If I did that job I'd <b>get tired of</b> it.&rdquo;"]},
+"in-charge-of":{w:"in charge of",g:"Listening Words (section 4)",ipa:"/ɪn tʃɑːdʒ əv/",ipaUS:"/ɪn tʃɑːrdʒ əv/",pos:"(adj. phr.)",def:"If you are in charge of something or someone, you are the person who controls it and is responsible for it.",simple:"Responsible for something or for people.",ex:["Who's in charge of the school trip?","From the listening: &ldquo;She's <b>in charge of</b> tasting ice cream for a big UK supermarket.&rdquo;"]},
 
 /* ---------- Video words (section 3) ---------- */
-"illustrator":{w:"illustrator",g:"Video Words (section 3)",ipa:"/ˈɪləstreɪtər/",pos:"(n.)",def:"An illustrator is an artist who draws pictures for books, magazines or other printed materials.",simple:"An artist who draws pictures for books and magazines.",ex:["The illustrator drew all the pictures in the children's book.","From the video: &ldquo;She's an <b>illustrator</b>, and she lives right here, next to a river.&rdquo;"]},
-"survival-course":{w:"survival course",g:"Video Words (section 3)",ipa:"/sərˈvaɪvl kɔːrs/",pos:"(n. phr.)",def:"A survival course is a class that teaches you how to stay alive in difficult situations, especially in nature.",simple:"A class that teaches you how to stay alive outdoors.",re:"survival courses?",ex:["We learned how to make a fire on a survival course.","From the video: &ldquo;He teaches <b>survival courses</b> where he shows we don't need as much as we think.&rdquo;"]},
-"addicted":{w:"addicted",g:"Video Words (section 3)",ipa:"/əˈdɪktɪd/",pos:"(adj.)",def:"If you are addicted to something, you want it so much that it is very difficult for you to stop using or doing it.",simple:"Unable to stop doing or using something.",ex:["Some people are addicted to their phones.","From the video: &ldquo;He believes people are <b>addicted</b> to them.&rdquo;"]},
-"primitive":{w:"primitive",g:"Video Words (section 3)",ipa:"/ˈprɪmətɪv/",pos:"(adj.)",def:"Something that is primitive is very simple and basic, as if it comes from a very early time, and it does not use modern technology.",simple:"Very simple, with no modern technology.",ex:["The campers lived in primitive conditions without electricity.","From the text: &ldquo;Their eating habits are quite <b>primitive</b> and simple.&rdquo;"]},
-"gadget":{w:"gadget",g:"Video Words (section 3)",ipa:"/ˈɡædʒɪt/",pos:"(n.)",def:"A gadget is a small piece of equipment, often electronic, that does something useful.",simple:"A small useful machine or tool.",re:"gadgets?",ex:["My uncle loves new kitchen gadgets.","From the text: &ldquo;They don't mind living without modern <b>gadgets</b>.&rdquo;"]},
-"bark":{w:"bark",g:"Video Words (section 3)",ipa:"/bɑːrk/",pos:"(n.)",def:"Bark is the hard outer covering of a tree.",simple:"The hard outside layer of a tree.",ex:["The squirrel ran up the rough bark of the tree.","From the video: &ldquo;He uses the <b>bark</b> from trees and the skins of animals to produce soft, natural leather.&rdquo;"]},
-"leather":{w:"leather",g:"Video Words (section 3)",ipa:"/ˈleðər/",pos:"(n.)",def:"Leather is a strong material made from animal skin. It is used to make shoes, bags and belts.",simple:"A strong material made from animal skin.",ex:["She bought a leather jacket.","From the video: &ldquo;He uses the bark from trees and the skins of animals to produce soft, natural <b>leather</b>.&rdquo;"]},
-"distraction":{w:"distraction",g:"Video Words (section 3)",ipa:"/dɪˈstrækʃn/",pos:"(n.)",def:"A distraction is something that stops you from giving your full attention to what you are doing.",simple:"Something that stops you from paying attention.",re:"distractions?",ex:["My phone is a big distraction when I do my homework.","From the video: &ldquo;Without the <b>distractions</b> of the Internet or other people, she has more time to be creative.&rdquo;"]},
+"illustrator":{w:"illustrator",g:"Video Words (section 3)",ipa:"/ˈɪləstreɪtə/",ipaUS:"/ˈɪləstreɪtər/",pos:"(n.)",def:"An illustrator is an artist who draws pictures for books, magazines or other printed materials.",simple:"An artist who draws pictures for books and magazines.",ex:["The illustrator drew all the pictures in the children's book.","From the video: &ldquo;She's an <b>illustrator</b>, and she lives right here, next to a river.&rdquo;"]},
+"survival-course":{w:"survival course",g:"Video Words (section 3)",ipa:"/səˈvaɪvl kɔːs/",ipaUS:"/sərˈvaɪvl kɔːrs/",pos:"(n. phr.)",def:"A survival course is a class that teaches you how to stay alive in difficult situations, especially in nature.",simple:"A class that teaches you how to stay alive outdoors.",re:"survival courses?",ex:["We learned how to make a fire on a survival course.","From the video: &ldquo;He teaches <b>survival courses</b> where he shows we don't need as much as we think.&rdquo;"]},
+"addicted":{w:"addicted",g:"Video Words (section 3)",ipa:"/əˈdɪktɪd/",ipaUS:"/əˈdɪktɪd/",pos:"(adj.)",def:"If you are addicted to something, you want it so much that it is very difficult for you to stop using or doing it.",simple:"Unable to stop doing or using something.",ex:["Some people are addicted to their phones.","From the video: &ldquo;He believes people are <b>addicted</b> to them.&rdquo;"]},
+"primitive":{w:"primitive",g:"Video Words (section 3)",ipa:"/ˈprɪmətɪv/",ipaUS:"/ˈprɪmətɪv/",pos:"(adj.)",def:"Something that is primitive is very simple and basic, as if it comes from a very early time, and it does not use modern technology.",simple:"Very simple, with no modern technology.",ex:["The campers lived in primitive conditions without electricity.","From the text: &ldquo;Their eating habits are quite <b>primitive</b> and simple.&rdquo;"]},
+"gadget":{w:"gadget",g:"Video Words (section 3)",ipa:"/ˈɡædʒɪt/",ipaUS:"/ˈɡædʒɪt/",pos:"(n.)",def:"A gadget is a small piece of equipment, often electronic, that does something useful.",simple:"A small useful machine or tool.",re:"gadgets?",ex:["My uncle loves new kitchen gadgets.","From the text: &ldquo;They don't mind living without modern <b>gadgets</b>.&rdquo;"]},
+"bark":{w:"bark",g:"Video Words (section 3)",ipa:"/bɑːk/",ipaUS:"/bɑːrk/",pos:"(n.)",def:"Bark is the hard outer covering of a tree.",simple:"The hard outside layer of a tree.",ex:["The squirrel ran up the rough bark of the tree.","From the video: &ldquo;He uses the <b>bark</b> from trees and the skins of animals to produce soft, natural leather.&rdquo;"]},
+"leather":{w:"leather",g:"Video Words (section 3)",ipa:"/ˈleðə/",ipaUS:"/ˈleðər/",pos:"(n.)",def:"Leather is a strong material made from animal skin. It is used to make shoes, bags and belts.",simple:"A strong material made from animal skin.",ex:["She bought a leather jacket.","From the video: &ldquo;He uses the bark from trees and the skins of animals to produce soft, natural <b>leather</b>.&rdquo;"]},
+"distraction":{w:"distraction",g:"Video Words (section 3)",ipa:"/dɪˈstrækʃn/",ipaUS:"/dɪˈstrækʃn/",pos:"(n.)",def:"A distraction is something that stops you from giving your full attention to what you are doing.",simple:"Something that stops you from paying attention.",re:"distractions?",ex:["My phone is a big distraction when I do my homework.","From the video: &ldquo;Without the <b>distractions</b> of the Internet or other people, she has more time to be creative.&rdquo;"]},
 
 /* ---------- more jobs (model answers, section 1) ---------- */
-"secretary":{w:"secretary",g:"Jobs (section 1)",ipa:"/ˈsekrəteri/",pos:"(n.)",def:"A secretary is a person whose job is to answer phone calls, write letters, arrange meetings and do other office work for a company or another person.",simple:"A person who helps in an office with calls, letters and plans.",ex:["The secretary booked a meeting room for ten o'clock.","My mother works as a secretary in a law firm."]},
-"childminder":{w:"childminder",g:"Jobs (section 1)",ipa:"/ˈtʃaɪldmaɪndər/",pos:"(n.)",def:"A childminder is a person whose job is to look after other people's children, usually in their own home, while the parents are at work.",simple:"A person who looks after other people's children as a job.",ex:["The childminder picks the children up from school every afternoon.","She is a childminder, so she looks after four small children all day."]},
-"builder":{w:"builder",g:"Jobs (section 1)",ipa:"/ˈbɪldər/",pos:"(n.)",def:"A builder is a person whose job is to build or repair houses and other buildings.",simple:"A person who builds houses.",ex:["The builders finished the new school in July.","My uncle is a builder, so he works outdoors in all weather."]},
-"accountant":{w:"accountant",g:"Jobs (section 1)",ipa:"/əˈkaʊntənt/",pos:"(n.)",def:"An accountant is a person whose job is to keep or check the money records of a person or a company and to deal with taxes.",simple:"A person who keeps and checks money records for a business.",ex:["The accountant checked the company's figures.","You need to be good with numbers to be an accountant."]},
-"surgeon":{w:"surgeon",g:"Jobs (section 1)",ipa:"/ˈsɜːrdʒən/",pos:"(n.)",def:"A surgeon is a doctor who is trained to do operations, cutting into a patient's body to repair or remove a part of it.",simple:"A doctor who does operations.",ex:["The surgeon operated on the patient for three hours.","A surgeon has to stay calm and have steady hands."]},
-"doctor":{w:"doctor",g:"Jobs (section 1)",ipa:"/ˈdɑːktər/",pos:"(n.)",def:"A doctor is a person who is trained to treat people who are ill or injured.",simple:"A person who treats sick people.",ex:["I went to see the doctor because I had a bad cough.","Doctors often work overtime and at night."]},
-"banker":{w:"banker",g:"Jobs (section 1)",ipa:"/ˈbæŋkər/",pos:"(n.)",def:"A banker is a person who has an important job in a bank, for example managing money and giving advice about loans and investments.",simple:"A person who works in a bank in an important job.",ex:["The banker explained how the loan would work.","Many bankers work in finance in big cities."]},
+"secretary":{w:"secretary",g:"Jobs (section 1)",ipa:"/ˈsekrətri/",ipaUS:"/ˈsekrəteri/",pos:"(n.)",def:"A secretary is a person whose job is to answer phone calls, write letters, arrange meetings and do other office work for a company or another person.",simple:"A person who helps in an office with calls, letters and plans.",ex:["The secretary booked a meeting room for ten o'clock.","My mother works as a secretary in a law firm."]},
+"childminder":{w:"childminder",g:"Jobs (section 1)",ipa:"/ˈtʃaɪldmaɪndə/",ipaUS:"/ˈtʃaɪldmaɪndər/",pos:"(n.)",def:"A childminder is a person whose job is to look after other people's children, usually in their own home, while the parents are at work.",simple:"A person who looks after other people's children as a job.",ex:["The childminder picks the children up from school every afternoon.","She is a childminder, so she looks after four small children all day."]},
+"builder":{w:"builder",g:"Jobs (section 1)",ipa:"/ˈbɪldə/",ipaUS:"/ˈbɪldər/",pos:"(n.)",def:"A builder is a person whose job is to build or repair houses and other buildings.",simple:"A person who builds houses.",ex:["The builders finished the new school in July.","My uncle is a builder, so he works outdoors in all weather."]},
+"accountant":{w:"accountant",g:"Jobs (section 1)",ipa:"/əˈkaʊntənt/",ipaUS:"/əˈkaʊntənt/",pos:"(n.)",def:"An accountant is a person whose job is to keep or check the money records of a person or a company and to deal with taxes.",simple:"A person who keeps and checks money records for a business.",ex:["The accountant checked the company's figures.","You need to be good with numbers to be an accountant."]},
+"surgeon":{w:"surgeon",g:"Jobs (section 1)",ipa:"/ˈsɜːdʒən/",ipaUS:"/ˈsɜːrdʒən/",pos:"(n.)",def:"A surgeon is a doctor who is trained to do operations, cutting into a patient's body to repair or remove a part of it.",simple:"A doctor who does operations.",ex:["The surgeon operated on the patient for three hours.","A surgeon has to stay calm and have steady hands."]},
+"doctor":{w:"doctor",g:"Jobs (section 1)",ipa:"/ˈdɒktə/",ipaUS:"/ˈdɑːktər/",pos:"(n.)",def:"A doctor is a person who is trained to treat people who are ill or injured.",simple:"A person who treats sick people.",ex:["I went to see the doctor because I had a bad cough.","Doctors often work overtime and at night."]},
+"banker":{w:"banker",g:"Jobs (section 1)",ipa:"/ˈbæŋkə/",ipaUS:"/ˈbæŋkər/",pos:"(n.)",def:"A banker is a person who has an important job in a bank, for example managing money and giving advice about loans and investments.",simple:"A person who works in a bank in an important job.",ex:["The banker explained how the loan would work.","Many bankers work in finance in big cities."]},
 
 /* ---------- useful words from the text (section 1) ---------- */
-"specific":{w:"specific",g:"Useful Words (section 1)",ipa:"/spəˈsɪfɪk/",pos:"(adj.)",def:"Specific means relating to one particular thing only, and not to anything else; it can also mean clear and exact.",simple:"Particular; clear and exact.",ex:["You need a specific qualification to be a pilot.","Can you give me a specific example?","From the text: &ldquo;There are jobs where you need to have a <b>specific</b> skill or personal quality.&rdquo;"]},
-"i-e":{w:"i.e.",g:"Useful Words (section 1)",ipa:"/ˌaɪ ˈiː/",pos:"(abbr.)",def:"The abbreviation 'i.e.' is used before you explain what you have just said in other words. It means 'that is' or 'in other words'.",simple:"A short way to write 'that is' or 'in other words'.",re:"i\\.e\\.",ex:["I'm free at the weekend, i.e. Saturday and Sunday.","Use a formal ending, i.e. 'Yours sincerely'.","From the text: &ldquo;it's always important to be well-organised, <b>i.e.</b> to plan things carefully.&rdquo;"]},
-"exactly":{w:"exactly",g:"Useful Words (section 1)",ipa:"/ɪɡˈzæktli/",pos:"(adv.)",def:"You use 'exactly' to emphasise that something is completely correct or accurate, with no difference at all.",simple:"In a completely correct way, with no mistakes.",ex:["It's exactly ten o'clock.","I know exactly what I want to do after school.","From the text: &ldquo;to plan things carefully and know <b>exactly</b> what you're doing.&rdquo;"]},
-"adapt-to":{w:"adapt to",g:"Useful Words (section 1)",ipa:"/əˈdæpt tu/",pos:"(v. phr.)",def:"If you adapt to something, you change your behaviour or your ideas so that you can deal well with a new situation.",simple:"To change so that you can deal with a new situation.",re:"adapt(?:s|ed|ing)? to",ex:["It took me a month to adapt to my new school.","Animals have to adapt to a changing climate.","From the text: &ldquo;It's also important to be flexible so that you <b>adapt to</b> changing situations.&rdquo;"]},
-"vital":{w:"vital",g:"Useful Words (section 1)",ipa:"/ˈvaɪtl/",pos:"(adj.)",def:"If something is vital, it is extremely important or necessary.",simple:"Very important; you must have it.",ex:["Water is vital for all living things.","It is vital to arrive on time for a job interview.","From the text: &ldquo;It's <b>vital</b> that you are reliable and responsible, too.&rdquo;"]},
-"panic":{w:"to panic",g:"Useful Words (section 1)",ipa:"/ˈpænɪk/",pos:"(v.)",def:"If you panic, you suddenly feel so afraid or worried that you cannot think clearly or behave sensibly.",simple:"To feel so afraid or worried that you cannot think well.",re:"panic(?:s|ked|king)?",ex:["Don't panic – there is plenty of time.","The students panicked when the fire alarm rang.","From the text: &ldquo;so that you don't <b>panic</b> or get angry when things start to go wrong.&rdquo;"]},
-"be-a-big-success":{w:"to be a big success",g:"Useful Words (section 1)",ipa:"/tu bi ə bɪɡ səkˈses/",pos:"(v. phr.)",def:"If you are a big success, you do very well at something, for example in your job, and many people admire what you do.",simple:"To do very well and be admired by many people.",re:"to be a big success",ex:["The new film was a big success.","She wants to be a big success as a designer.","From the text: &ldquo;it's OK to be ambitious and to want <b>to be a big success</b> in your job!&rdquo;"]},
-"definitely":{w:"definitely",g:"Useful Words (section 1)",ipa:"/ˈdefɪnətli/",pos:"(adv.)",def:"You use 'definitely' to emphasise that something is certain and that there is no doubt about it.",simple:"Without any doubt; for sure.",ex:["I'm definitely going to the concert on Friday.","He is definitely not interested in working in an office.","From the text: &ldquo;Which two are you <b>definitely</b> not interested in doing?&rdquo;"]},
-"justify":{w:"justify",g:"Useful Words (section 1)",ipa:"/ˈdʒʌstɪfaɪ/",pos:"(v.)",def:"If you justify something, you give good reasons or examples to show that it is right or reasonable.",simple:"To give reasons to show that your answer or idea is right.",re:"justify",ex:["Can you justify your opinion with an example?","He tried to justify his decision to leave the team.","From the text: &ldquo;Which qualities in 4a can you use to describe yourself? <b>Justify</b> your answer.&rdquo;"]},
+"specific":{w:"specific",g:"Useful Words (section 1)",ipa:"/spəˈsɪfɪk/",ipaUS:"/spəˈsɪfɪk/",pos:"(adj.)",def:"Specific means relating to one particular thing only, and not to anything else; it can also mean clear and exact.",simple:"Particular; clear and exact.",ex:["You need a specific qualification to be a pilot.","Can you give me a specific example?","From the text: &ldquo;There are jobs where you need to have a <b>specific</b> skill or personal quality.&rdquo;"]},
+"i-e":{w:"i.e.",g:"Useful Words (section 1)",ipa:"/ˌaɪ ˈiː/",ipaUS:"/ˌaɪ ˈiː/",pos:"(abbr.)",def:"The abbreviation 'i.e.' is used before you explain what you have just said in other words. It means 'that is' or 'in other words'.",simple:"A short way to write 'that is' or 'in other words'.",re:"i\\.e\\.",ex:["I'm free at the weekend, i.e. Saturday and Sunday.","Use a formal ending, i.e. 'Yours sincerely'.","From the text: &ldquo;it's always important to be well-organised, <b>i.e.</b> to plan things carefully.&rdquo;"]},
+"exactly":{w:"exactly",g:"Useful Words (section 1)",ipa:"/ɪɡˈzæktli/",ipaUS:"/ɪɡˈzæktli/",pos:"(adv.)",def:"You use 'exactly' to emphasise that something is completely correct or accurate, with no difference at all.",simple:"In a completely correct way, with no mistakes.",ex:["It's exactly ten o'clock.","I know exactly what I want to do after school.","From the text: &ldquo;to plan things carefully and know <b>exactly</b> what you're doing.&rdquo;"]},
+"adapt-to":{w:"adapt to",g:"Useful Words (section 1)",ipa:"/əˈdæpt tuː/",ipaUS:"/əˈdæpt tu/",pos:"(v. phr.)",def:"If you adapt to something, you change your behaviour or your ideas so that you can deal well with a new situation.",simple:"To change so that you can deal with a new situation.",re:"adapt(?:s|ed|ing)? to",ex:["It took me a month to adapt to my new school.","Animals have to adapt to a changing climate.","From the text: &ldquo;It's also important to be flexible so that you <b>adapt to</b> changing situations.&rdquo;"]},
+"vital":{w:"vital",g:"Useful Words (section 1)",ipa:"/ˈvaɪtl/",ipaUS:"/ˈvaɪtl/",pos:"(adj.)",def:"If something is vital, it is extremely important or necessary.",simple:"Very important; you must have it.",ex:["Water is vital for all living things.","It is vital to arrive on time for a job interview.","From the text: &ldquo;It's <b>vital</b> that you are reliable and responsible, too.&rdquo;"]},
+"essential":{w:"essential",g:"Useful Words (section 1)",ipa:"/ɪˈsenʃl/",ipaUS:"/ɪˈsenʃl/",pos:"(adj.)",def:"If something is essential, it is absolutely necessary or extremely important.",simple:"Very important; you must have it.",ex:["Water is essential for life.","It is essential to arrive on time for a job interview.","From the text: &ldquo;Being creative isn't just a quality that artists and writers need &ndash; it's <b>essential</b> in any job where you need imagination.&rdquo;"]},
+"panic":{w:"to panic",g:"Useful Words (section 1)",ipa:"/ˈpænɪk/",ipaUS:"/ˈpænɪk/",pos:"(v.)",def:"If you panic, you suddenly feel so afraid or worried that you cannot think clearly or behave sensibly.",simple:"To feel so afraid or worried that you cannot think well.",re:"panic(?:s|ked|king)?",ex:["Don't panic – there is plenty of time.","The students panicked when the fire alarm rang.","From the text: &ldquo;so that you don't <b>panic</b> or get angry when things start to go wrong.&rdquo;"]},
+"be-a-big-success":{w:"to be a big success",g:"Useful Words (section 1)",ipa:"/tə bi ə bɪɡ səkˈses/",ipaUS:"/tu bi ə bɪɡ səkˈses/",pos:"(v. phr.)",def:"If you are a big success, you do very well at something, for example in your job, and many people admire what you do.",simple:"To do very well and be admired by many people.",re:"to be a big success",ex:["The new film was a big success.","She wants to be a big success as a designer.","From the text: &ldquo;it's OK to be ambitious and to want <b>to be a big success</b> in your job!&rdquo;"]},
+"definitely":{w:"definitely",g:"Useful Words (section 1)",ipa:"/ˈdefɪnətli/",ipaUS:"/ˈdefɪnətli/",pos:"(adv.)",def:"You use 'definitely' to emphasise that something is certain and that there is no doubt about it.",simple:"Without any doubt; for sure.",ex:["I'm definitely going to the concert on Friday.","He is definitely not interested in working in an office.","From the text: &ldquo;Which two are you <b>definitely</b> not interested in doing?&rdquo;"]},
+"justify":{w:"justify",g:"Useful Words (section 1)",ipa:"/ˈdʒʌstɪfaɪ/",ipaUS:"/ˈdʒʌstɪfaɪ/",pos:"(v.)",def:"If you justify something, you give good reasons or examples to show that it is right or reasonable.",simple:"To give reasons to show that your answer or idea is right.",re:"justify",ex:["Can you justify your opinion with an example?","He tried to justify his decision to leave the team.","From the text: &ldquo;Which qualities in 4a can you use to describe yourself? <b>Justify</b> your answer.&rdquo;"]},
 
 /* ---------- compound adjective (section 2) ---------- */
-"easy-going":{w:"easy-going",g:"Compound Adjectives (section 2)",ipa:"/ˌiːzi ˈɡoʊɪŋ/",pos:"(adj.)",def:"An easy-going person is relaxed and does not get worried or annoyed easily. They accept other people and situations as they are.",simple:"Relaxed; not easily worried or annoyed.",ex:["Our teacher is easy-going and never shouts.","He is an easy-going boy who gets on with everyone."]},
+"easy-going":{w:"easy-going",g:"Compound Adjectives (section 2)",ipa:"/ˌiːzi ˈɡəʊɪŋ/",ipaUS:"/ˌiːzi ˈɡoʊɪŋ/",pos:"(adj.)",def:"An easy-going person is relaxed and does not get worried or annoyed easily. They accept other people and situations as they are.",simple:"Relaxed; not easily worried or annoyed.",ex:["Our teacher is easy-going and never shouts.","He is an easy-going boy who gets on with everyone."]},
 
 /* ---------- useful words (section 3) ---------- */
-"suggest":{w:"suggest",g:"Useful Words (section 3)",ipa:"/səɡˈdʒest/",pos:"(v.)",def:"If you suggest something, you offer an idea or a plan for someone to think about.",simple:"To offer an idea for someone to think about.",re:"suggest(?:s|ed|ing)?",ex:["I suggest we meet at the station at nine.","She suggested a good book for him to read.","From the text: &ldquo;<b>Suggest</b> jobs for your partner according to the marks they gave.&rdquo;"]},
+"suggest":{w:"suggest",g:"Useful Words (section 3)",ipa:"/səˈdʒest/",ipaUS:"/səɡˈdʒest/",pos:"(v.)",def:"If you suggest something, you offer an idea or a plan for someone to think about.",simple:"To offer an idea for someone to think about.",re:"suggest(?:s|ed|ing)?",ex:["I suggest we meet at the station at nine.","She suggested a good book for him to read.","From the text: &ldquo;<b>Suggest</b> jobs for your partner according to the marks they gave.&rdquo;"]},
 
 /* ---------- speaking skills (section 5) ---------- */
-"ict-skills":{w:"ICT skills",g:"Speaking Skills (section 5)",ipa:"/ˌaɪ siː ˈtiː skɪlz/",pos:"(n. phr.)",def:"ICT skills are the abilities that you need to use computers and other technology well. ICT stands for Information and Communication Technology.",simple:"Being good at using computers and technology.",re:"ICT skills",ex:["Many jobs need good ICT skills.","My grandfather asked me to help him because I have good ICT skills."]},
-"leadership":{w:"leadership",g:"Speaking Skills (section 5)",ipa:"/ˈliːdərʃɪp/",pos:"(n.)",def:"Leadership is the ability to guide and control a group of people and to help them to achieve something together.",simple:"The ability to guide a group of people.",ex:["The captain showed great leadership during the match.","Leadership means helping the team to do its best."]}
+"ict-skills":{w:"ICT skills",g:"Speaking Skills (section 5)",ipa:"/ˌaɪ siː ˈtiː skɪlz/",ipaUS:"/ˌaɪ siː ˈtiː skɪlz/",pos:"(n. phr.)",def:"ICT skills are the abilities that you need to use computers and other technology well. ICT stands for Information and Communication Technology.",simple:"Being good at using computers and technology.",re:"ICT skills",ex:["Many jobs need good ICT skills.","My grandfather asked me to help him because I have good ICT skills."]},
+"leadership":{w:"leadership",g:"Speaking Skills (section 5)",ipa:"/ˈliːdəʃɪp/",ipaUS:"/ˈliːdərʃɪp/",pos:"(n.)",def:"Leadership is the ability to guide and control a group of people and to help them to achieve something together.",simple:"The ability to guide a group of people.",ex:["The captain showed great leadership during the match.","Leadership means helping the team to do its best."]}
 };
 
 const VOCAB_GROUP_ORDER = ["Jobs (section 1)","Personal Qualities (section 1)","Words Connected with Work (section 1)","Useful Words (section 1)","Compound Adjectives (section 2)","Video Words (section 3)","Useful Words (section 3)","Listening Words (section 4)","Speaking Skills (section 5)"];
@@ -1010,7 +1269,8 @@ function renderWordModal(){
   if(!d) return;
   document.getElementById('wm-word').textContent = d.w;
   document.getElementById('wm-pos').textContent = d.pos;
-  document.getElementById('wm-ipa').textContent = d.ipa;
+  document.getElementById('wm-ipa-uk').textContent = d.ipa;
+  document.getElementById('wm-ipa-us').textContent = d.ipaUS || d.ipa;
   document.getElementById('wm-def').textContent = showingSimple ? d.simple : d.def;
   document.getElementById('wm-simplify-btn').textContent = showingSimple ? 'Show standard definition' : 'Show simplified definition';
   document.getElementById('wm-examples').innerHTML = d.ex.map(e=>'<div class="mex">'+e+'</div>').join('');
